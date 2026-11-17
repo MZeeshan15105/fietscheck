@@ -10,6 +10,6 @@ FietsCheck is a free web app for cyclists in Groningen. Tap the part of your bik
 - Works offline after the first visit.
 - No account, no tracking. Saved bikes stay on your own device.
 
-FietsCheck is a prototype built for a master's research project (MSc International Business and Management, Hanze University of Applied Sciences). It is not a replacement for a mechanic.
+FietsCheck gives guidance, not a guarantee. It is not a replacement for a mechanic.
 
 [Privacy](privacy.html) · [Terms](terms.html)

@@ -653,7 +653,7 @@ details.fold[open]>summary{margin-bottom:8px}
     <div class="card" id="priceList"></div>
     <div class="card">
       <h3>Is it worth repairing?</h3>
-      <p class="hint" style="font-size:14px">Student guides list second-hand bikes in Groningen at roughly €70 to €200. FietsCheck compares the repair with what your bike is worth now: up to 40% repair it, 40 to 70% get a second quote, over 70% think about replacing it. This is a rule of thumb that our survey will test.</p>
+      <p class="hint" style="font-size:14px">Student guides list second-hand bikes in Groningen at roughly €70 to €200. FietsCheck compares the repair with what your bike is worth now: up to 40% repair it, 40 to 70% get a second quote, over 70% think about replacing it. This is a rule of thumb, not a guarantee.</p>
       <p class="src">Sources: <a href="https://www.ns.nl/en/bicycle-storage/fiets-en-service.html" target="_blank" rel="noopener">NS Fiets &amp; Service</a> (read 2 Oct 2026), <a href="https://radar.avrotros.nl/artikel/wat-kost-een-fietsenmaker-normaal-gesproken-51075" target="_blank" rel="noopener">Radar price guide</a> (Aug 2021), <a href="https://www.bikesgroningen.nl/en/guides/goedkope-tweedehands-fiets-groningen-studenten" target="_blank" rel="noopener">Bikes Groningen</a>, <a href="https://www.domakin.nl/blog/student-bikes-groningen" target="_blank" rel="noopener">Domakin</a>.</p>
     </div>
   </section>
@@ -1527,7 +1527,7 @@ function renderGarage(){
   if(!S.checks.length)h+='<p class="hint" style="padding:12px 0">Your checks will appear here after your first diagnosis.</p>';
   h+=S.checks.map(c=>'<button class="hrow" type="button" data-check="'+esc(c.id)+'"><span class="dotc '+SAFETY[c.safety||'amber'].k+'" aria-hidden="true"></span><span class="tx"><b>'+esc(c.faultName||'Check')+'</b><span class="hint">'+dateLabel(c.ts)+(c.paid!=null?' · paid '+eur(c.paid):'')+'</span></span><span class="pr">'+(c.estLo!=null?range(c.estLo,c.estHi):'')+'</span></button>').join('')+'</div></div>';
   h+='<div class="card"><h3>Privacy</h3><p class="hint" style="margin-bottom:12px">'+(S.local?'Your bikes and checks are saved only on this device. Nobody else can see them, including us. Clearing your browser or app data deletes them.':'Your bikes and checks are stored under your own account and are not visible to other users, including the app owner.')+'</p>'+
-    '<label class="switch"><input type="checkbox" id="shareBox" '+(S.prefs.share?'checked':'')+(S.canWrite?'':' disabled')+'><span><b>Share anonymous results with the research project</b><span class="hint" style="display:block">Sends only the fault type, a price band and the verdict. No name, no account id.</span></span></label>'+
+    '<label class="switch"><input type="checkbox" id="shareBox" '+(S.prefs.share?'checked':'')+(S.canWrite?'':' disabled')+'><span><b>Share anonymous results to improve FietsCheck</b><span class="hint" style="display:block">Sends only the fault type, a price band and the verdict. No name, no account id.</span></span></label>'+
     (S.canWrite?'<p style="margin-top:14px"><button class="linkbtn" id="wipe" type="button">Delete all my garage data</button></p>':'')+'</div>';
   el.innerHTML=h;
   if(S.local){const sw=el.querySelector('.switch');if(sw)sw.remove()}
