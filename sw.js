@@ -1,5 +1,5 @@
 /* FietsCheck offline support. Change VERSION whenever you upload new files. */
-const VERSION = 'fietscheck-v1.1.0';
+const VERSION = 'fietscheck-v1.2.0';
 const FILES = ['./', 'index.html', 'privacy.html', 'terms.html', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/favicon-32.png', 'icons/apple-touch-icon.png',
   'fonts/inter-400.woff', 'fonts/inter-500.woff', 'fonts/inter-600.woff', 'fonts/inter-700.woff', 'fonts/inter-800.woff'];

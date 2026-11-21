@@ -1,4 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.ticket .langt{font:inherit;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--on-asphalt);background:transparent;border:1.5px solid #3A4654;border-radius:99px;padding:0 12px;min-height:44px;margin:-12px -6px -12px 0;cursor:pointer}.ticket.nlonly .en,.ticket.nlonly .perf{display:none}.ticket .scode{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #2A343F;font-size:12px;color:var(--mute-asphalt)}.ticket .scode b{white-space:nowrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.04em;color:var(--on-asphalt)}.ticket .scode .btn{margin-left:auto;min-height:44px;min-width:44px;padding:0 14px;font-size:13px}
+.whcard{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}select.field{min-height:48px;appearance:auto}input.field{min-height:48px}.whchk{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font:400 14.5px var(--f-body);color:var(--ink);padding:10px 0;min-height:44px;margin:0}.whchk input{width:22px;height:22px;flex:0 0 22px;margin-top:1px;accent-color:var(--signal)}
 </style><meta name="description" content="FietsCheck: tap the part of your bike that feels off and see the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic."><meta name="theme-color" content="#11161C"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FietsCheck"><meta property="og:title" content="FietsCheck: know the likely fault before you pay"><meta property="og:description" content="Tap the part of your bike that feels wrong. See the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic."><meta property="og:image" content="https://mzeeshan15105.github.io/fietscheck/icons/og.png">
 <meta property="og:image:width" content="1024">
 <meta property="og:image:height" content="500">
@@ -624,6 +625,7 @@ details.fold[open]>summary{margin-bottom:8px}
       <p class="hint" style="text-align:center">24 faults · tools and time · Dutch price check · mechanic note</p>
       <div id="season"></div>
       <details class="diy" id="quick"><summary>60-second safety check before you ride</summary><ol id="quickList"></ol></details>
+      <div class="card whcard"><div style="min-width:0;flex:1 1 200px"><h3 style="margin:0">E-bike under warranty?</h3><p class="hint">We check if it is likely covered and write the support email for you.</p></div><button class="btn dark" id="whOpenBtn" type="button">Warranty helper</button></div>
       <p><button class="linkbtn" id="demo" type="button">Try an example</button></p>
     </div>
 
@@ -1217,6 +1219,92 @@ $('demo').addEventListener('click',()=>{
   store('fc_cost','120');store('fc_age','0.8');
   W.step='B';stepB();
 });
+
+/* ---------- Warranty helper ---------- */
+const WH_BRANDS={
+  fiido:{name:'Fiido',email:'support@fiido.com',src:'https://eu.fiido.com/pages/warranty-policy',checked:'21 November 2026',
+    months:{display:24,battery:24,motor:24,frame:36,lights:3,brakes:3,other:null},
+    repair:'Fiido lets you use any local bike shop for a warranty repair, but only after Fiido approves the shop’s diagnosis or estimate. After the repair, send Fiido the itemised invoice for reimbursement. Do not send anything back to Fiido without their approval.'},
+  other:{name:'',email:'',src:'',checked:'',months:{},repair:'Ask the brand or the seller whether you may use a local bike shop, and get their approval in writing before any work starts.'}
+};
+const WH_AREAS={display:'Display or power button',battery:'Battery or charging',motor:'Motor or pedal assist',brakes:'Brakes or brake levers',lights:'Lights',frame:'Frame',other:'Something else'};
+const WH_CHECKS=['The battery is fully charged and correctly locked in place.','The battery’s own power switch is on.','The cable connections look secure and undamaged.','Neither brake lever is stuck in the pressed position.'];
+function whMonthsSince(d){const p=new Date(d),n=new Date();if(isNaN(p))return null;return (n.getFullYear()-p.getFullYear())*12+(n.getMonth()-p.getMonth())-(n.getDate()<p.getDate()?1:0)}
+function whOpen(){
+  const w=JSON.parse(store('fc_wh_v1')||'{}');
+  const opt=(o,v)=>Object.keys(o).map(k=>'<option value="'+k+'"'+(k===v?' selected':'')+'>'+esc(o[k])+'</option>').join('');
+  const inp=(id,l,t,ph)=>'<div><label for="'+id+'">'+l+'</label><input class="field" id="'+id+'" type="'+t+'" placeholder="'+(ph||'')+'" value="'+esc(w[id]||'')+'"></div>';
+  openSheet('<div class="shead"><h2 id="sheetTitle">Warranty helper</h2><button class="iconbtn" id="shClose" type="button" aria-label="Close">'+IC.close+'</button></div>'+
+  '<p class="hint" style="margin-top:4px">Tell us what broke. We check if it is likely covered and write the support email for you.</p>'+
+  '<div class="stack" style="gap:12px;margin-top:12px">'+
+   '<div><label for="whBrand">Brand</label><select class="field" id="whBrand"><option value="fiido"'+(w.whBrand!=='other'?' selected':'')+'>Fiido</option><option value="other"'+(w.whBrand==='other'?' selected':'')+'>Other brand</option></select></div>'+
+   '<div id="whOtherBox"'+(w.whBrand==='other'?'':' hidden')+'>'+inp('whBrandName','Brand name','text','e.g. VanMoof')+inp('whEmail','Support email (from the brand’s website)','email','support@brand.com')+'</div>'+
+   inp('whModel','Model','text','e.g. C11')+
+   '<div><label for="whArea">What broke?</label><select class="field" id="whArea">'+opt(WH_AREAS,w.whArea||'display')+'</select></div>'+
+   '<div><label for="whDesc">What happens exactly?</label><textarea class="field" id="whDesc" placeholder="e.g. Pressing the power button on the display does nothing, the screen stays off.">'+esc(w.whDesc||'')+'</textarea></div>'+
+   inp('whSince','Since when?','date')+
+   inp('whDate','Purchase date','date')+
+   '<div><label for="whFrom">Where did you buy it?</label><select class="field" id="whFrom"><option value="brand"'+(w.whFrom!=='shop'?' selected':'')+'>The brand’s own website</option><option value="shop"'+(w.whFrom==='shop'?' selected':'')+'>A shop or another platform</option></select></div>'+
+   inp('whOrder','Order number','text','From your order email')+
+   inp('whFrame','Frame number','text','Stamped on the frame, often under the bottom bracket')+
+   '<div><span class="label">What have you already checked?</span>'+WH_CHECKS.map((c,i)=>'<label class="whchk"><input type="checkbox" data-c="'+i+'"'+((w.checks||[]).includes(i)?' checked':'')+'> <span>'+esc(c)+'</span></label>').join('')+'</div>'+
+   inp('whName','Your name','text')+
+   '<button class="btn primary" id="whGo" type="button">Write my email</button>'+
+   '<div id="whOut" class="stack" style="gap:12px"></div>'+
+  '</div>',sh=>{
+    sh.querySelector('#shClose').onclick=closeSheet;
+    sh.querySelector('#whBrand').onchange=e=>{sh.querySelector('#whOtherBox').hidden=e.target.value!=='other'};
+    sh.querySelector('#whGo').onclick=()=>whBuild(sh);
+  });
+}
+function whBuild(sh){
+  const g=id=>(sh.querySelector('#'+id).value||'').trim();
+  const d={whBrand:g('whBrand'),whBrandName:g('whBrandName'),whEmail:g('whEmail'),whModel:g('whModel'),whArea:g('whArea'),whDesc:g('whDesc'),whSince:g('whSince'),whDate:g('whDate'),whFrom:g('whFrom'),whOrder:g('whOrder'),whFrame:g('whFrame'),whName:g('whName'),checks:[...sh.querySelectorAll('.whchk input:checked')].map(x=>+x.dataset.c)};
+  store('fc_wh_v1',JSON.stringify(d));
+  const B=WH_BRANDS[d.whBrand]||WH_BRANDS.other;
+  const brand=d.whBrand==='other'?(d.whBrandName||'[BRAND]'):B.name;
+  const model=(brand+' '+(d.whModel||'')).trim();
+  const area=WH_AREAS[d.whArea];
+  const age=d.whDate?whMonthsSince(d.whDate):null;
+  const lim=B.months[d.whArea];
+  let status='',covered=null;
+  if(d.whBrand==='fiido'&&lim){
+    if(age==null)status='Fiido covers this part for <b>'+lim+' months</b>. Add your purchase date to check if you are still within it.';
+    else{covered=age<lim;status=covered?'Likely covered: Fiido gives <b>'+lim+' months</b> on this part, and your bike is about <b>'+age+' months</b> old.':'Outside Fiido’s <b>'+lim+'-month</b> warranty for this part (your bike is about <b>'+age+' months</b> old). Dutch legal guarantee may still help, see below.'}
+    if(d.whArea==='display')status+=' Tip: describe it as a <b>display</b> fault. Fiido covers the display for 24 months but separate switches for only 3.';
+  }else status='We have no checked warranty data for this brand yet. Look up its warranty page before you send.';
+  const fromShop=d.whFrom==='shop';
+  const to=fromShop?'':(d.whBrand==='other'?d.whEmail:B.email);
+  const date=s=>{if(!s)return '';const p=s.split('-');return p.length===3?p[2]+'-'+p[1]+'-'+p[0]:s};
+  const ask=covered===false
+   ?'Although the factory warranty period for this part has passed, I believe this is a defect the product should not have at this age. I would like to know what repair or replacement options you can offer.'
+   :'I would like a replacement '+area.toLowerCase()+' part to be sent to me. Alternatively, please approve a repair at a local bike shop, so I can submit the shop’s invoice for reimbursement.';
+  const body='Dear '+(fromShop?'Customer Service':brand+' After-Sales Team')+',\n\n'+
+   'I would like to file a warranty claim for my '+model+'. '+(d.whDesc||'[DESCRIBE THE PROBLEM]')+'\n\n'+
+   'Bike details\n- Model: '+model+'\n- Order number: '+(d.whOrder||'[ORDER NUMBER]')+'\n- Purchase date: '+(date(d.whDate)||'[DD-MM-YYYY]')+'\n- Frame number: '+(d.whFrame||'[FRAME NUMBER]')+'\n- Country: the Netherlands\n\n'+
+   'The problem\n- Part: '+area+'\n- Since: '+(date(d.whSince)||'[DATE]')+'\n\n'+
+   (d.checks.length?'What I have already checked\n'+d.checks.map(i=>'- '+WH_CHECKS[i]).join('\n')+'\nThe problem remains.\n\n':'')+
+   'What I am asking for\n'+ask+'\n\n'+
+   'Attached\n- A short video showing the problem\n- Photos of the part, its label and the frame number\n- My order confirmation or invoice\n\n'+
+   'I would appreciate a reply within a few working days. Thank you for your help.\n\nKind regards,\n'+(d.whName||'[YOUR NAME]');
+  const subject='Warranty claim: '+model+' '+area.toLowerCase()+' problem'+(d.whOrder?' (Order '+d.whOrder+')':'');
+  const out=sh.querySelector('#whOut');
+  out.innerHTML=
+   '<div class="card"><span class="label">Warranty check</span><p style="font-size:14.5px">'+status+'</p>'+(B.src?'<p class="fine" style="margin-top:6px">Source: <a href="'+B.src+'" target="_blank" rel="noopener">'+esc(brand)+' warranty policy</a>, checked '+B.checked+'.</p>':'')+'</div>'+
+   (fromShop?'<div class="card"><span class="label">Who to send it to</span><p style="font-size:14.5px">You bought it from a shop or platform, so send this to <b>that seller</b>. In the Netherlands the seller is responsible for a faulty product.</p></div>':'')+
+   '<div><label for="whMail">Your email (edit anything)</label><textarea class="field" id="whMail" style="min-height:260px">'+esc(body)+'</textarea></div>'+
+   '<div class="btns">'+(to?'<a class="btn primary" id="whSend" href="#">Open in my mail app</a>':'')+'<button class="btn" id="whCopy" type="button">Copy email</button></div><p class="msg" id="whMsg" role="status"></p>'+
+   '<div class="card"><span class="label">Before you send</span><ul class="dots"><li>Film a short video of the problem.</li><li>Photograph the part, its label and the frame number.</li><li>Attach your order confirmation or invoice.</li></ul></div>'+
+   '<div class="card"><span class="label">Where to get it repaired</span><p style="font-size:14.5px">'+esc(B.repair)+'</p><p style="margin-top:8px"><button class="linkbtn" id="whShops" type="button">See bike shops in Groningen</button></p></div>'+
+   '<div class="card"><span class="label">Your rights in the Netherlands</span><p style="font-size:14.5px">The seller must fix a faulty product, whatever the factory warranty says. In the first year after purchase, the seller has to prove you caused the fault.</p><p class="fine" style="margin-top:6px">General information, not legal advice. <a href="https://www.acm.nl/nl/onderwerpen/consumentenrecht/garantie-en-conformiteit/recht-op-een-deugdelijk-product/" target="_blank" rel="noopener">Read the official ACM page</a>.</p></div>';
+  const ta=out.querySelector('#whMail');
+  const send=out.querySelector('#whSend');
+  if(send)send.onclick=e=>{e.preventDefault();location.href='mailto:'+to+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(ta.value)};
+  out.querySelector('#whCopy').onclick=async()=>{const t='Subject: '+subject+'\n\n'+ta.value;try{await navigator.clipboard.writeText(t);out.querySelector('#whMsg').textContent='Copied. Paste it into your email.'}catch(e){ta.select();out.querySelector('#whMsg').textContent='Selected. Copy it with your phone’s menu.'}};
+  out.querySelector('#whShops').onclick=()=>{closeSheet();setTimeout(()=>{const t=document.querySelector('[data-tab="shops"]');if(t)t.click()},400)};
+  setTimeout(()=>{try{out.firstChild.scrollIntoView({behavior:REDUCE()?'auto':'smooth',block:'start'})}catch(e){}},60);
+}
+$('whOpenBtn').addEventListener('click',whOpen);
 
 /* ---------- Offline (guided) diagnosis ---------- */
 function guided(text,chip){
