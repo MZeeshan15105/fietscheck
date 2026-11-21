@@ -1268,7 +1268,7 @@ const WH_BRANDS={
  cowboy:{name:'Cowboy',kind:'direct',email:'hello@cowboy.com',link:'https://help.cowboy.com',linkLabel:'Cowboy help centre',models:['Classic','Cruiser','Cross','Cruiser ST'],
   months:{display:24,battery:24,motor:24,brakes:24,lights:24,frame:24,other:24},
   note:'2 years of legal guarantee on defects in workmanship and materials, extendable by 1 year to 3 years in total. Parts and labour by Cowboy-approved service are included.',
-  claim:'Email hello@cowboy.com, or use the chat in the Cowboy app (fastest, as it sees your bike data). Repairs are done by Cowboy mobile mechanics, Cowboy stores or certified partner shops.',
+  claim:'Send the email below, or use the chat in the Cowboy app (fastest, as it sees your bike data). Repairs are done by Cowboy mobile mechanics, Cowboy stores or certified partner shops.',
   src:'https://cowboy.com/pages/warranty'},
  fiido:{name:'Fiido',kind:'direct',email:'support@fiido.com',models:['C11','C21','D11','D3 Pro','T1','X'],
   months:{display:24,battery:24,motor:24,brakes:3,lights:3,frame:36,other:null},
@@ -1303,33 +1303,39 @@ function whOpen(){
   const cur=w.whBrand||'fiido';
   const brandOpts=WH_GROUPS.map(([g,ks])=>'<optgroup label="'+esc(g)+'">'+ks.map(k=>'<option value="'+k+'"'+(k===cur?' selected':'')+'>'+esc(WH_BRANDS[k].name)+'</option>').join('')+'</optgroup>').join('')+'<option value="other"'+(cur==='other'?' selected':'')+'>Other brand</option>';
   openSheet('<div class="shead"><h2 id="sheetTitle">Warranty helper</h2><button class="iconbtn" id="shClose" type="button" aria-label="Close">'+IC.close+'</button></div>'+
-  '<p class="hint" style="margin-top:4px">For normal bikes and e-bikes. Tell us what broke: we check if it is likely covered, tell you where to go and write the email for you.</p>'+
+  '<p class="hint" style="margin-top:4px">Normal bikes and e-bikes. Four quick questions to see if the repair should be free.</p>'+
   '<div class="stack" style="gap:12px;margin-top:12px">'+
    '<div><label for="whBrand">Brand</label><select class="field" id="whBrand">'+brandOpts+'</select></div>'+
    '<div id="whBrandInfo"></div>'+
    '<div id="whOtherBox"'+(cur==='other'?'':' hidden')+'>'+inp('whBrandName','Brand name','text','e.g. Giant')+inp('whEmail','Support email (from the brand’s website)','email','support@brand.com')+'</div>'+
    inp('whModel','Model','text','e.g. C11',' list="whModels" autocomplete="off"')+'<datalist id="whModels"></datalist>'+
    '<div><label for="whArea">What broke?</label><select class="field" id="whArea">'+opt(WH_AREAS,w.whArea||'display')+'</select></div>'+
+   inp('whDate','When did you buy it?','date')+
+   '<div><label for="whFrom">Where did you buy it?</label><select class="field" id="whFrom"><option value="brand"'+(w.whFrom!=='shop'?' selected':'')+'>From the brand (website or store)</option><option value="shop"'+(w.whFrom==='shop'?' selected':'')+'>From a bike shop or other website</option></select></div>'+
+   '<button class="btn primary" id="whCheck" type="button">Check my warranty</button>'+
+   '<div id="whRes" class="stack" style="gap:12px"></div>'+
+   '<div id="whMore" class="stack" style="gap:12px" hidden><h3 style="margin:8px 0 0">Write the claim email</h3><p class="hint">Optional details. Skip anything you don\u2019t know: it stays in [brackets] for you to fill in.</p>'+
    '<div><label for="whDesc">What happens exactly?</label><textarea class="field" id="whDesc" placeholder="e.g. Pressing the power button on the display does nothing, the screen stays off.">'+esc(w.whDesc||'')+'</textarea></div>'+
    inp('whSince','Since when?','date')+
-   inp('whDate','Purchase date','date')+
-   '<div><label for="whFrom">Where did you buy it?</label><select class="field" id="whFrom"><option value="brand"'+(w.whFrom!=='shop'?' selected':'')+'>From the brand itself (website or brand store)</option><option value="shop"'+(w.whFrom==='shop'?' selected':'')+'>From a bike shop or another platform</option></select></div>'+
    inp('whOrder','Order or receipt number','text','From your order email or receipt')+
    inp('whFrame','Frame number','text','Stamped on the frame, often under the bottom bracket')+
    '<div><span class="label">What have you already checked?</span>'+WH_CHECKS.map((c,i)=>'<label class="whchk"><input type="checkbox" data-c="'+i+'"'+((w.checks||[]).includes(i)?' checked':'')+'> <span>'+esc(c)+'</span></label>').join('')+'</div>'+
    inp('whName','Your name','text')+
-   '<button class="btn primary" id="whGo" type="button">Check and write my email</button>'+
+   '<button class="btn primary" id="whGo" type="button">Write my email</button></div>'+
    '<div id="whOut" class="stack" style="gap:12px"></div>'+
   '</div>',sh=>{
     sh.querySelector('#shClose').onclick=closeSheet;
     const upd=()=>{const k=sh.querySelector('#whBrand').value,B=WH_BRANDS[k];sh.querySelector('#whOtherBox').hidden=k!=='other';
       sh.querySelector('#whModels').innerHTML=(B.models||[]).map(m=>'<option value="'+esc(m)+'">').join('');
       sh.querySelector('#whBrandInfo').innerHTML=B.status?'<div class="card whwarn"><span class="label">Heads-up about '+esc(B.name)+'</span><p style="font-size:14px">'+esc(B.status)+'</p></div>':''};
-    sh.querySelector('#whBrand').onchange=upd;upd();
-    sh.querySelector('#whGo').onclick=()=>whBuild(sh);
+    const clr=()=>{sh.querySelector('#whRes').innerHTML='';sh.querySelector('#whOut').innerHTML='';sh.querySelector('#whMore').hidden=true};
+    sh.querySelector('#whBrand').onchange=()=>{upd();clr()};upd();
+    ['whArea','whDate','whFrom'].forEach(id=>sh.querySelector('#'+id).addEventListener('change',clr));
+    sh.querySelector('#whCheck').onclick=()=>whBuild(sh,false);
+    sh.querySelector('#whGo').onclick=()=>whBuild(sh,true);
   });
 }
-function whBuild(sh){
+function whBuild(sh,mail){
   const g=id=>(sh.querySelector('#'+id).value||'').trim();
   const d={whBrand:g('whBrand'),whBrandName:g('whBrandName'),whEmail:g('whEmail'),whModel:g('whModel'),whArea:g('whArea'),whDesc:g('whDesc'),whSince:g('whSince'),whDate:g('whDate'),whFrom:g('whFrom'),whOrder:g('whOrder'),whFrame:g('whFrame'),whName:g('whName'),checks:[...sh.querySelectorAll('.whchk input:checked')].map(x=>+x.dataset.c)};
   store('fc_wh_v1',JSON.stringify(d));
@@ -1364,10 +1370,13 @@ function whBuild(sh){
   const subject='Warranty claim: '+model+' '+area.toLowerCase()+' problem'+(d.whOrder?' (Order '+d.whOrder+')':'');
   const where=B.kind==='gone'?'You bought it from another shop: send this email to <b>that shop</b>.':(viaShop?(B.kind==='dealer'?'Send this to, or bring it to, <b>the '+esc(B.name)+' dealer where you bought the bike</b>. '+esc(B.claim):'You bought it from a shop or platform, so send this to <b>that seller</b>. In the Netherlands the seller is responsible for a faulty product.'):esc(B.claim||'Send it to the brand’s support address from its website.'));
   const repair=B.repair?esc(B.repair)+' '+WH_KF:(B.kind==='dealer'?'Warranty repairs are done by the dealer. If your dealer is gone, the brand can point you to the nearest one.':(B.kind==='partner'||B.kind==='direct'?esc(B.claim):'Any good local bike shop can repair it at your own cost.')+(B.kind==='gone'?' '+WH_KF:''));
-  const out=sh.querySelector('#whOut');
-  out.innerHTML=
+  const res=sh.querySelector('#whRes'),out=sh.querySelector('#whOut');
+  res.innerHTML=
    '<div class="card"><span class="label">Warranty check</span><p style="font-size:14.5px">'+status+'</p>'+(B.note?'<p class="hint" style="margin-top:6px">'+esc(B.note)+'</p>':'')+(B.src?'<p class="fine" style="margin-top:6px">Source: <a href="'+B.src+'" target="_blank" rel="noopener">'+esc(B.kind==='gone'?'news report':brand+' warranty terms')+'</a>, checked '+WH_CHECKED+'.</p>':'')+'</div>'+
-   '<div class="card"><span class="label">Who to send it to</span><p style="font-size:14.5px">'+where+'</p>'+(to?'<p style="margin-top:6px">Email: <b>'+esc(to)+'</b></p>':'')+(B.link?'<p style="margin-top:6px"><a href="'+B.link+'" target="_blank" rel="noopener">'+esc(B.linkLabel||('Open '+B.name+' support'))+'</a></p>':'')+'</div>'+
+   '<div class="card"><span class="label">Who to send it to</span><p style="font-size:14.5px">'+where+'</p>'+(to?'<p style="margin-top:6px">Email: <b>'+esc(to)+'</b></p>':'')+(B.link?'<p style="margin-top:6px"><a href="'+B.link+'" target="_blank" rel="noopener">'+esc(B.linkLabel||('Open '+B.name+' support'))+'</a></p>':'')+'</div>';
+  sh.querySelector('#whMore').hidden=false;
+  if(!mail){out.innerHTML='';setTimeout(()=>{try{res.firstChild.scrollIntoView({behavior:REDUCE()?'auto':'smooth',block:'start'})}catch(e){}},60);return}
+  out.innerHTML=
    '<div><label for="whMail">Your email (edit anything)</label><textarea class="field" id="whMail" style="min-height:260px">'+esc(body)+'</textarea></div>'+
    (to?'':'<p class="hint">'+(viaShop?'Add the shop\u2019s email address in your mail app. You can also print it or show it at the counter.':'This brand has no public email. Copy the text into its contact form, or add an address in your mail app.')+'</p>')+'<div class="btns"><a class="btn primary" id="whSend" href="#">Open in my mail app</a><button class="btn" id="whCopy" type="button">Copy email</button></div><p class="msg" id="whMsg" role="status"></p>'+
    '<div class="card"><span class="label">Before you send</span><ul class="dots"><li>Film a short video of the problem.</li><li>Photograph the part, its label and the frame number.</li><li>Attach your order confirmation or receipt'+(B.name==='Cortina'?', and bring the charger for a battery claim':'')+'.</li></ul></div>'+
