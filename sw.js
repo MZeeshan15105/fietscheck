@@ -1,8 +1,8 @@
 /* FietsCheck offline support. Change VERSION whenever you upload new files. */
-const VERSION = 'fietscheck-v1.10.0';
+const VERSION = 'fietscheck-v1.11.0';
 const FILES = ['./', 'index.html', 'privacy.html', 'terms.html', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/favicon-32.png', 'icons/apple-touch-icon.png',
-  'fonts/inter-400.woff', 'fonts/inter-500.woff', 'fonts/inter-600.woff', 'fonts/inter-700.woff', 'fonts/inter-800.woff'];
+  'fonts/archivo-var-latin.woff2'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });
