@@ -696,7 +696,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
     <div class="card"><div class="eyebrow">About</div><h3 style="margin-top:6px">Built for Groningen cyclists</h3><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
     <div class="card"><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
   </div>
-  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.16.1 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
+  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.17 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
 </footer>
 <script>document.addEventListener('click',function(e){var b=e.target.closest('#goPrices');if(!b)return;var t=document.querySelector('.tab[data-tab="prices"]');if(t){t.click();window.scrollTo({top:0,behavior:'smooth'})}});</script>
 
@@ -1036,14 +1036,17 @@ function bellStrike(ctx,t){
   const src=ctx.createBufferSource(),hp=ctx.createBiquadFilter(),ng=ctx.createGain();src.buffer=n;hp.type='highpass';hp.frequency.value=3000;ng.gain.value=.25;src.connect(hp);hp.connect(ng);ng.connect(out);src.start(t);
 }
 function fcBell(){
-  if(!bellOn()||REDUCE())return;
-  try{BELL.ctx=BELL.ctx||new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}
+  if(!bellOn()||REDUCE())return false;
+  try{BELL.ctx=BELL.ctx||new (window.AudioContext||window.webkitAudioContext)()}catch(e){return false}
   const ctx=BELL.ctx;
   const ring=()=>{const t=ctx.currentTime+.02;bellStrike(ctx,t);bellStrike(ctx,t+.24)};
-  if(ctx.state==='running'){ring();return}
+  if(ctx.state==='running'){ring();return true}
   /* Blocked until a tap: ring only if it can still land with the animation (within 0.4 s), never later. */
   const t0=performance.now();ctx.resume().then(()=>{if(ctx.state==='running'&&performance.now()-t0<400&&!$('intro').hidden)ring()}).catch(()=>{});
+  return false;
 }
+/* Ring from inside a tap: iPhone always allows sound here. */
+function bellTap(){if(!bellOn())return;try{BELL.ctx=BELL.ctx||new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}const c=BELL.ctx;try{c.resume()}catch(e){}const t=c.currentTime+.01;bellStrike(c,t);bellStrike(c,t+.24)}
 /* Any tap unlocks sound for the rest of the session, so the next opening rings in sync. Nothing is ever played late. */
 document.addEventListener('pointerdown',()=>{try{BELL.ctx=BELL.ctx||new (window.AudioContext||window.webkitAudioContext)();BELL.ctx.resume().catch(()=>{})}catch(e){}},true);
 function playIntro(full,quick){
@@ -1067,7 +1070,9 @@ function playIntro(full,quick){
     f.onfinish=()=>{ov.hidden=true;try{f.cancel()}catch(e){}ov.querySelectorAll('svg,.iwm,#iTag,.iskip').forEach(e=>e.getAnimations().forEach(x=>{try{x.cancel()}catch(_){}}));const fx=$('iFx');if(fx)fx.remove();const bw=$('iBell');if(bw)bw.remove()};
     ov.removeEventListener('pointerdown',early);document.removeEventListener('keydown',early);
   }
-  const t0=performance.now();const early=()=>{if(quick||performance.now()-t0>1800)close()};
+  const t0=performance.now();let rung=false;
+  const shake=()=>{const bar=$('iBar');if(bar)bar.animate([{rotate:'0deg'},{rotate:'-10deg'},{rotate:'8deg'},{rotate:'-5deg'},{rotate:'0deg'}],{duration:480,composite:'add'});const bw=$('iBell');if(bw)bw.querySelectorAll('path').forEach((a,k)=>a.animate([{opacity:0,transform:'scale(.7)'},{opacity:1,transform:'scale(1)',offset:.35},{opacity:0,transform:'scale(1.25)'}],{duration:520,delay:k*70,easing:'ease-out'}))};
+  const early=()=>{if(!rung&&!reduce&&bellOn()){rung=true;bellTap();shake();const sk=ov.querySelector('.iskip');if(sk)sk.textContent='Tap again to skip';return}if(quick||rung||performance.now()-t0>1800)close()};
   ov.addEventListener('pointerdown',early);document.addEventListener('keydown',early);
   if(!full||reduce){ov.querySelector('.iskip').style.opacity=0;ov.querySelectorAll('#iWm span').forEach(s=>{s.style.transform='none'});timer=setTimeout(close,reduce?2200:700);return}
   const A=(el,kf,o)=>{const a=el.animate(kf,Object.assign({fill:'both'},o));anims.push(a);return a};
@@ -1107,8 +1112,8 @@ function playIntro(full,quick){
     [1450,1690].forEach(t0=>A(a,[{opacity:0,transform:'scale(.7)'},{opacity:1,transform:'scale(1)',offset:.35},{opacity:0,transform:'scale(1.25)'}],{duration:520,delay:t0+k*70,easing:'ease-out',fill:'none'}))});
   bw.style.transformOrigin='80px 10px';
   A($('iBar'),[{rotate:'0deg'},{rotate:'-9deg'},{rotate:'7deg'},{rotate:'-5deg'},{rotate:'3deg'},{rotate:'0deg'}],{duration:520,delay:1450,composite:'add'});
-  setTimeout(()=>{if(!done)fcBell()},1450);
-  A(ov.querySelector('.iskip'),[{opacity:0},{opacity:1}],{duration:400,delay:1500});
+  setTimeout(()=>{if(!done&&!rung&&fcBell()){rung=true;const sk=ov.querySelector('.iskip');if(sk)sk.textContent='Tap to skip'}},1450);
+  {const sk=ov.querySelector('.iskip');if(sk)sk.textContent=bellOn()?'Tap to ring the bell':'Tap to skip';A(sk,[{opacity:0},{opacity:1}],{duration:400,delay:500})}
   timer=setTimeout(close,2900);
 }
 
@@ -2197,7 +2202,7 @@ $('infoBtn').addEventListener('click',()=>{
   '<div><h3 style="font-size:16px">How it works</h3><ul class="dots" style="margin-top:6px">'+(ai?'<li>The AI only classifies. It picks the most likely fault from a fixed list of 26.</li>':'<li>A guided check matches the part you tap and the words you use to a fixed list of 26 common faults.</li>')+'<li>Prices, safety ratings, DIY steps and Dutch notes come from our own tables. Labour prices come from NS Fiets &amp; Service and Radar, checked 2 Oct 2026.</li><li>It can be wrong. It cannot see hidden damage. If brakes, steering or the frame feel wrong, do not ride and ask a mechanic.</li></ul></div>'+
   '<div><h3 style="font-size:16px">Your data</h3><p class="hint" style="margin-top:4px">'+(S.local?'No account, no tracking. Your garage is saved only on this device.':'When AI is on, the text and photo you submit go to Claude through your own account, only when you tap Check. The Garage stores bikes and checks privately under your account.')+'</p></div>'+
   '<div class="btns" style="gap:8px;flex-wrap:wrap"><a class="btn small" href="privacy.html">Privacy policy</a><a class="btn small" href="terms.html">Terms and disclaimer</a>'+(window.FC_FEEDBACK?'<a class="btn small" href="mailto:'+window.FC_FEEDBACK+'?subject=FietsCheck%20feedback">Send feedback</a>':'')+'</div>'+
-  '<p class="fine">Version 1.16.1 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
+  '<p class="fine">Version 1.17 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
   '<button class="btn" id="replay" type="button">Replay intro</button></div>';
   openSheet(html,sh=>{sh.querySelector('#shClose').onclick=closeSheet;sh.querySelector('#replay').onclick=()=>{closeSheet();setTimeout(()=>playIntro(true),300)}});
 });
@@ -2488,5 +2493,6 @@ h3{font-stretch:108%;font-weight:700;letter-spacing:-.01em}
 .barow .babadge{flex-basis:44px;width:44px;height:44px;background:var(--surface)}.barow .babadge svg{width:24px;height:24px}
 .babrand{display:block;font-family:var(--f-body);font-size:13px;font-weight:600;color:var(--mute);letter-spacing:0;margin-bottom:1px}
 .barow b{font-weight:600}
+.intro .iskip{font-size:15px;font-weight:600;color:#F2F5F8;padding:10px 18px;border-radius:99px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12)}
 </style>
 </body></html>
