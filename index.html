@@ -1606,10 +1606,12 @@ const BA_CHAN={
  online:'New, online from the brand. Delivered to your door; no Groningen dealer.',
  sub:'Monthly subscription from Swapfiets. Pick it up in store.',
  used:'Second-hand. See the second-hand guide below.'};
-function baBadge(brand){
-  let h=0;for(const c of brand)h=(h*31+c.charCodeAt(0))%360;
-  const ini=brand.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  return '<span class="babadge" style="--h:'+h+'" aria-hidden="true"><b>'+esc(ini)+'</b></span>';
+/* Brand plate: shows img/logos/<slug>.svg or .png when the owner adds a licensed file; otherwise a name plate. */
+const BA_HUE={city:145,ebike:185,sub:22,used:215,cargo:275,fat:15,fold:205,mtb:230};
+function baSlug(brand){return brand.toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function baBadge(brand,kind){
+  const h=BA_HUE[kind]!=null?BA_HUE[kind]:215,sl=baSlug(brand),short=brand.length>11?brand.split(/\s+/)[0]:brand;
+  return '<span class="babadge" style="--h:'+h+'" aria-hidden="true"><img alt="" src="img/logos/'+sl+'.svg" onload="this.parentNode.classList.add(\'haslogo\')" onerror="if(!this.dataset.p){this.dataset.p=1;this.src=\'img/logos/'+sl+'.png\'}else{this.remove()}"><b style="--n:'+short.length+'">'+esc(short)+'</b></span>';
 }
 function baPrice(b,stu){return b.month?baMoney(stu&&b.monthStd?b.month:(b.monthStd||b.month))+'/month':(b.buyTo?baMoney(b.buy)+'–'+baMoney(b.buyTo):baMoney(b.buy))}
 function baRank(budget,use,e){
@@ -1667,7 +1669,7 @@ function baOpen(){
 }
 function baCard(b,i,stu){
   return '<div class="card bacard">'+
-   '<div class="bahead">'+baBadge(b.brand)+'<div style="min-width:0;flex:1"><span class="label">'+(i===0?'Best for you':'Option '+(i+1))+(b.best?' · Test winner':'')+'</span><h3 style="margin:2px 0 0"><span class="babrand">'+esc(b.brand)+'</span> '+esc(b.name)+'</h3><p class="baprice">'+baPrice(b,stu)+'</p></div>'+(b.score?'<div class="bascore"><b>'+b.score.toFixed(1)+'</b><small>ANWB</small></div>':'')+'</div>'+
+   '<div class="bahead">'+baBadge(b.brand,b.kind)+'<div style="min-width:0;flex:1"><span class="label">'+(i===0?'Best for you':'Option '+(i+1))+(b.best?' · Test winner':'')+'</span><h3 style="margin:2px 0 0"><span class="babrand">'+esc(b.brand)+'</span> '+esc(b.name)+'</h3><p class="baprice">'+baPrice(b,stu)+'</p></div>'+(b.score?'<div class="bascore"><b>'+b.score.toFixed(1)+'</b><small>ANWB</small></div>':'')+'</div>'+
    '<p class="hint" style="margin-top:8px">'+esc(b.rate)+'</p>'+
    '<dl class="baspecs">'+b.specs.map(([k,v])=>'<dt>'+esc(k)+'</dt><dd>'+esc(v)+'</dd>').join('')+'</dl>'+
    '<div class="bapc"><div><b class="pro">Good</b><ul>'+b.pros.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div><div><b class="con">Less good</b><ul>'+b.cons.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul></div></div>'+
@@ -1683,7 +1685,7 @@ function baShow(sh,ranked,use,e,stu,budget){
   let h='<p class="hint" style="margin:0"><b>'+ranked.length+'</b> of '+BA_BIKES.length+' options fit '+baMoney(budget)+'. Your top '+top.length+':</p>';
   if(!top.length){const mn=BA_BIKES.filter(b=>b.fit[use]>0&&!b.month&&(e==='yes'?b.e:e==='no'?!b.e:1)).reduce((m,b)=>Math.min(m,b.buy),1e9);h='<div class="card"><p>Nothing fits '+baMoney(budget)+' for '+esc(BA_USES[use].toLowerCase())+'.'+(mn<1e9?' The cheapest option starts at <b>'+baMoney(mn)+'</b>.':'')+' Try a higher budget or Not sure for electric.</p></div>'}
   top.forEach((x,i)=>h+=baCard(x.b,i,stu));
-  if(more.length)h+='<details class="card bamore"><summary>'+more.length+' more that fit</summary>'+more.map(x=>{const b=x.b;return '<button class="barow" type="button" data-i="'+BA_BIKES.indexOf(b)+'">'+baBadge(b.brand)+'<span style="flex:1;min-width:0"><b>'+esc(b.brand)+' '+esc(b.name)+'</b><small>'+esc(b.rate)+'</small></span><span class="baprice" style="margin:0;font-size:15px">'+baPrice(b,stu)+'</span></button>'}).join('')+'</details>';
+  if(more.length)h+='<details class="card bamore"><summary>'+more.length+' more that fit</summary>'+more.map(x=>{const b=x.b;return '<button class="barow" type="button" data-i="'+BA_BIKES.indexOf(b)+'">'+baBadge(b.brand,b.kind)+'<span style="flex:1;min-width:0"><b>'+esc(b.brand)+' '+esc(b.name)+'</b><small>'+esc(b.rate)+'</small></span><span class="baprice" style="margin:0;font-size:15px">'+baPrice(b,stu)+'</span></button>'}).join('')+'</details>';
   if(use==='courier')h+='<div class="card"><span class="label">For courier work</span><p style="font-size:14px">An e-bike earns back faster: Thuisbezorgd pays €0.19 per km for an e-bike (up to €160 a month), against €0.05 per km (up to €20) for a normal bike. Thuisbezorgd only covers third-party liability, so insure the bike against theft yourself.</p><p class="fine" style="margin-top:6px"><a href="https://www.thuisbezorgd.nl/en/courier/the-inside-track/delivering-with-us/choosing-ride-shift-starting-location" target="_blank" rel="noopener">Thuisbezorgd courier vehicles</a></p></div>';
   h+='<details class="card bamore" open><summary>Where to buy second-hand</summary><div class="bawhere">'+
    [['Marktplaats','Biggest Dutch second-hand site. Meet in person, test-ride, never pay in advance.','https://www.marktplaats.nl/l/fietsen-en-brommers/fietsen/'],
@@ -1692,9 +1694,9 @@ function baShow(sh,ranked,use,e,stu,budget){
     ['Bike Totaal used bikes','Checked by a mechanic, 14 days to swap.','https://www.biketotaal.nl/tweedehands-fiets-kopen'],
     ['Decathlon used bikes','Sellers like BikeFair: checked bikes with 3 to 6 months warranty. Seen from about €207.','https://www.decathlon.nl/vc/gebruikte-fietsen'],
     ['Upway (refurbished e-bikes)','1-year warranty and 14 days to return (return costs €70).','https://dutchreview.com/expat/upway-refurbished-electric-bikes-netherlands/']
-   ].map(([n,d,u])=>'<a class="barow" href="'+u+'" target="_blank" rel="noopener">'+baBadge(n)+'<span style="flex:1;min-width:0"><b>'+esc(n)+'</b><small>'+esc(d)+'</small></span></a>').join('')+'</div></details>';
+   ].map(([n,d,u])=>'<a class="barow" href="'+u+'" target="_blank" rel="noopener">'+baBadge(n,'used')+'<span style="flex:1;min-width:0"><b>'+esc(n)+'</b><small>'+esc(d)+'</small></span></a>').join('')+'</div></details>';
   if(e!=='no')h+='<div class="card"><span class="label">Buying a used e-bike?</span><ul class="dots"><li>Ask for a battery test: a new battery can cost up to €750.</li><li>Check the km on the display: around 5,000 km a chain and service are often due.</li></ul><p class="fine" style="margin-top:6px"><a href="https://www.consumentenbond.nl/elektrische-fiets/tweedehands-elektrische-fiets" target="_blank" rel="noopener">Consumentenbond tips</a></p></div>';
-  h+='<div class="card"><span class="label">Before you pay</span><ul class="dots"><li>Check the frame number at <a href="https://fdr.rdw.nl" target="_blank" rel="noopener">fdr.rdw.nl</a> to see if it is reported stolen.</li><li>Never buy a bike offered on the street: it is almost always stolen.</li><li>Buy a good lock and test-ride: brakes, gears, lights.</li></ul><p class="fine" style="margin-top:6px">Prices checked '+BA_CHECKED+' and can change. FietsCheck earns nothing from these links. Brand badges are our own, not official logos.</p></div>';
+  h+='<div class="card"><span class="label">Before you pay</span><ul class="dots"><li>Check the frame number at <a href="https://fdr.rdw.nl" target="_blank" rel="noopener">fdr.rdw.nl</a> to see if it is reported stolen.</li><li>Never buy a bike offered on the street: it is almost always stolen.</li><li>Buy a good lock and test-ride: brakes, gears, lights.</li></ul><p class="fine" style="margin-top:6px">Prices checked '+BA_CHECKED+' and can change. FietsCheck earns nothing from these links. Official brand logos are shown only with each brand\u2019s permission.</p></div>';
   out.innerHTML=h;
   out.querySelectorAll('.bashops').forEach(x=>x.onclick=()=>{closeSheet();setTimeout(()=>{const t=document.querySelector('[data-tab="shops"]');if(t)t.click()},400)});
   out.querySelectorAll('button.barow').forEach(x=>x.onclick=()=>{const b=BA_BIKES[+x.dataset.i];const d=document.createElement('div');d.innerHTML=baCard(b,9,stu);const c=d.firstChild;c.querySelector('.label').textContent='More option';x.replaceWith(c);c.querySelectorAll('.bashops').forEach(y=>y.onclick=()=>{closeSheet();setTimeout(()=>{const t=document.querySelector('[data-tab="shops"]');if(t)t.click()},400)})});
@@ -2411,5 +2413,16 @@ h3{font-stretch:108%;font-weight:700;letter-spacing:-.01em}
 #bikePhoto{filter:drop-shadow(0 0 .6px rgba(255,255,255,.22)) drop-shadow(0 10px 18px rgba(0,0,0,.45))}
 #bike .ground{opacity:.35}
 #bike .decal{filter:drop-shadow(0 .4px .6px rgba(0,0,0,.5))}
+
+/* Brand plates */
+.babadge{flex:0 0 64px;width:64px;height:48px;border-radius:12px;display:grid;place-items:center;position:relative;overflow:hidden;padding:4px;
+ background:linear-gradient(160deg,hsl(var(--h) 45% 96%),hsl(var(--h) 40% 89%));border:1px solid hsl(var(--h) 30% 80%);color:hsl(var(--h) 55% 24%)}
+.babadge b{font-family:var(--f-head);font-weight:800;font-stretch:calc(125% - var(--n)*3%);font-size:13px;line-height:1.05;letter-spacing:-.02em;text-align:center;word-break:break-word}
+.babadge img{position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);object-fit:contain;opacity:0}
+.babadge.haslogo{background:#fff;border-color:var(--line)}
+.babadge.haslogo img{opacity:1}.babadge.haslogo b{visibility:hidden}
+:root[data-theme="dark"] .babadge:not(.haslogo){background:linear-gradient(160deg,hsl(var(--h) 30% 20%),hsl(var(--h) 35% 14%));border-color:hsl(var(--h) 25% 30%);color:hsl(var(--h) 60% 82%)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .babadge:not(.haslogo){background:linear-gradient(160deg,hsl(var(--h) 30% 20%),hsl(var(--h) 35% 14%));border-color:hsl(var(--h) 25% 30%);color:hsl(var(--h) 60% 82%)}}
+.barow .babadge{flex-basis:56px;width:56px;height:42px}.barow .babadge b{font-size:11.5px}
 </style>
 </body></html>
