@@ -1,6 +1,7 @@
 <!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.ticket .langt{font:inherit;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--on-asphalt);background:transparent;border:1.5px solid #3A4654;border-radius:99px;padding:0 12px;min-height:44px;margin:-12px -6px -12px 0;cursor:pointer}.ticket.nlonly .en,.ticket.nlonly .perf{display:none}.ticket .scode{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #2A343F;font-size:12px;color:var(--mute-asphalt)}.ticket .scode b{white-space:nowrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.04em;color:var(--on-asphalt)}.ticket .scode .btn{margin-left:auto;min-height:44px;min-width:44px;padding:0 14px;font-size:13px}
 .whcard{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}select.field{min-height:48px;appearance:auto}input.field{min-height:48px}.whchk{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font:400 14.5px var(--f-body);color:var(--ink);padding:10px 0;min-height:44px;margin:0}.whchk input{width:22px;height:22px;flex:0 0 22px;margin-top:1px;accent-color:var(--signal)}
 .whwarn{background:#FFF4E5;border-color:#F3C98B}
+.bahead{display:flex;gap:12px;align-items:center}.baicon{width:72px;height:48px;flex:0 0 72px;background:var(--surface-2,#F3F4F6);border-radius:12px;padding:4px}.baprice{font-weight:700;font-size:17px;color:var(--signal-ink);margin-top:2px}#baUse button{flex:1 1 45%}
 </style><meta name="description" content="FietsCheck: tap the part of your bike that feels off and see the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic."><meta name="theme-color" content="#11161C"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FietsCheck"><meta property="og:title" content="FietsCheck: know the likely fault before you pay"><meta property="og:description" content="Tap the part of your bike that feels wrong. See the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic."><meta property="og:image" content="https://mzeeshan15105.github.io/fietscheck/icons/og.png">
 <meta property="og:image:width" content="1024">
 <meta property="og:image:height" content="500">
@@ -626,6 +627,7 @@ details.fold[open]>summary{margin-bottom:8px}
       <p class="hint" style="text-align:center">24 faults · tools and time · Dutch price check · mechanic note</p>
       <div id="season"></div>
       <details class="diy" id="quick"><summary>60-second safety check before you ride</summary><ol id="quickList"></ol></details>
+      <div class="card whcard"><div style="min-width:0;flex:1 1 200px"><h3 style="margin:0">Need a bike?</h3><p class="hint">Tell us your budget and use. We pick the best bikes, from €50 second-hand to e-bikes and cargo bikes.</p></div><button class="btn primary" id="baOpenBtn" type="button">Find my bike</button></div>
       <div class="card whcard"><div style="min-width:0;flex:1 1 200px"><h3 style="margin:0">Bike under warranty?</h3><p class="hint">10 brands checked. We tell you if it is likely covered, where to go, and write the email.</p></div><button class="btn dark" id="whOpenBtn" type="button">Warranty helper</button></div>
       <p><button class="linkbtn" id="demo" type="button">Try an example</button></p>
     </div>
@@ -1390,6 +1392,158 @@ function whBuild(sh,mail){
   setTimeout(()=>{try{out.firstChild.scrollIntoView({behavior:REDUCE()?'auto':'smooth',block:'start'})}catch(e){}},60);
 }
 $('whOpenBtn').addEventListener('click',whOpen);
+/* ---------- Bike buying advisor ---------- */
+/* Prices from the linked page, checked 21 November 2026. fit: 0-3 per use. buy = one-off cost, month = monthly cost. */
+const BA_CHECKED='21 November 2026';
+const BA_USES={student:'Student, short city rides',commute:'Daily commute (5+ km)',courier:'Courier job',cargo:'Kids or heavy shopping'};
+const BA_BIKES=[
+ {id:'used',name:'Second-hand bike from a private seller',kind:'city',e:0,buy:50,buyTo:100,fit:{student:3,commute:1,courier:1,cargo:0},
+  rating:'No test: depends on the bike. A guide for internationals says about €100 gets a decent one, and under €50 is likely stolen or falling apart.',
+  feats:['Cheapest way to own a bike','Low theft loss if it goes missing','Expect old brakes and tyres: budget for a check-up'],
+  where:'Marktplaats or Facebook Marketplace. Meet in person, test-ride it and never pay in advance.',
+  watch:'Check the frame number at fdr.rdw.nl before you pay. Never buy a bike offered on the street.',
+  link:'https://www.leideninternationalcentre.nl/get-advice/blogs/a-guide-to-buying-a-bicycle-in-the-netherlands',linkLabel:'Buying guide (Leiden International Centre)'},
+ {id:'usedshop',name:'Second-hand bike from a bike shop',kind:'city',e:0,buy:200,fit:{student:3,commute:2,courier:1,cargo:0},
+  rating:'No test. Shop bikes are checked by a mechanic first; Bike Totaal gives 14 days to swap a used bike.',
+  feats:['Checked and adjusted by a mechanic','Shop registers the frame number to you','Usually from about €200'],
+  where:'Local bike shops in Groningen (see Shops tab) or Bike Totaal’s used range.',
+  link:'https://www.biketotaal.nl/tweedehands-fiets-kopen',linkLabel:'Bike Totaal used bikes',shops:1},
+ {id:'swapo',name:'Swapfiets Original (subscription)',kind:'sub',e:0,month:13.7,monthStd:15.7,fit:{student:3,commute:2,courier:1,cargo:0},
+  rating:'No independent test. Free unlimited repairs are included and you can cancel monthly.',
+  feats:['From €13.70 a month for students (€15.70 others)','Repairs always free','No big payment up front'],
+  where:'Swapfiets website or store; they swap or fix the bike for you.',
+  watch:'Over a year a used bike is cheaper; you never own a Swapfiets.',
+  link:'https://swapfiets.nl/en-NL/students',linkLabel:'Swapfiets plans'},
+ {id:'swapd',name:'Swapfiets Deluxe 7 (subscription)',kind:'sub',e:0,month:18.9,monthStd:23.9,fit:{student:2,commute:3,courier:1,cargo:0},
+  rating:'No independent test. 7 gears, repairs included.',
+  feats:['From €18.90 a month for students (€23.90 others)','7 gears for longer rides','Repairs always free'],
+  where:'Swapfiets website or store.',link:'https://swapfiets.nl/en-NL/students',linkLabel:'Swapfiets plans'},
+ {id:'elops520',name:'Decathlon Elops 520 city bike',kind:'city',e:0,buy:349.99,fit:{student:3,commute:2,courier:1,cargo:1},
+  rating:'1,485 customer reviews on Decathlon.',
+  feats:['New bike with warranty for €349.99','Low frame, easy to get on','Cheap parts and service at Decathlon'],
+  where:'Decathlon online or in store.',link:'https://www.decathlon.nl/brands/elops',linkLabel:'Elops range at Decathlon'},
+ {id:'common',name:'Cortina Common',kind:'city',e:0,buy:899.99,fit:{student:2,commute:3,courier:1,cargo:2},
+  rating:'No independent test found. Sold at €899.99 (list price €1,049.99).',
+  feats:['Strong Dutch transport bike','Made for carrying shopping and bags','Dealer service across the Netherlands'],
+  where:'Cortina dealers or 12GO Biking.',link:'https://www.12gobiking.nl/cortina-common',linkLabel:'Cortina Common at 12GO Biking',shops:1},
+ {id:'swapp1',name:'Swapfiets Power 1 (e-bike subscription)',kind:'sub',e:1,month:64.9,fit:{student:1,commute:3,courier:3,cargo:0},
+  rating:'No independent test. Repairs included; e-bike without a big payment up front.',
+  feats:['From €64.90 a month','Repairs always free','Try an e-bike before buying one'],
+  where:'Swapfiets website or store.',link:'https://swapfiets.nl/en-NL/students',linkLabel:'Swapfiets plans'},
+ {id:'swapp7',name:'Swapfiets Power 7 (e-bike subscription)',kind:'sub',e:1,month:79.9,fit:{student:1,commute:3,courier:3,cargo:0},
+  rating:'No independent test. 7 gears, more power and stability than the Power 1.',
+  feats:['From €79.90 a month','7 gears, for longer distances','Repairs always free'],
+  where:'Swapfiets website or store.',link:'https://swapfiets.nl/en-NL/students',linkLabel:'Swapfiets plans'},
+ {id:'c11',name:'Fiido C11 e-bike',kind:'ebike',e:1,buy:799,fit:{student:2,commute:3,courier:2,cargo:1},
+  rating:'2,214 reviews on Fiido’s shop, about 80% five-star.',
+  feats:['€799 (normally €1,099)','499 Wh battery, up to 90 km; tested 62 to 91 km','Hydraulic disc brakes, 7 gears, 24.5 kg'],
+  where:'Online from Fiido; delivered to your door.',
+  watch:'No Dutch dealer network: repairs need Fiido’s approval first (see Warranty helper). The Consumentenbond warns e-bikes under €1,500 usually have drawbacks.',
+  link:'https://eu.fiido.com/products/fiido-c11-electric-commuter-bike',linkLabel:'Fiido C11 page'},
+ {id:'paris',name:'Gazelle Paris C7',kind:'ebike',e:1,buy:2399,fit:{student:1,commute:3,courier:2,cargo:1},
+  rating:'No ANWB test of this model. Price is the list price on Gazelle’s Belgian site.',
+  feats:['Bosch Active Line motor','400 or 500 Wh battery, 7 gears','Gazelle dealer service and warranty'],
+  where:'Any Gazelle dealer. Groningen shops are in the Shops tab.',link:'https://www.gazellebikes.com/nl-be/modellen/paris',linkLabel:'Gazelle Paris page',shops:1},
+ {id:'newtour',name:'Giant NewTour E+1',kind:'ebike',e:1,buy:3199,fit:{student:0,commute:3,courier:3,cargo:1},
+  rating:'ANWB e-bike test 2026: 8.2 out of 10.',
+  feats:['Scored 8.2 in the ANWB test','Built for longer daily rides','Giant dealer service'],
+  where:'Giant dealers (see Shops tab).',link:'https://www.anwb.nl/fiets/test/e-biketest-2026',linkLabel:'ANWB e-bike test 2026',shops:1},
+ {id:'cube',name:'Cube Touring Hybrid Comfort SLX',kind:'ebike',e:1,buy:3299,fit:{student:0,commute:3,courier:3,cargo:1},
+  rating:'ANWB e-bike test 2026 winner: 8.6 out of 10.',
+  feats:['Best score in the ANWB test','Comfortable for long distances','Cube dealer service'],
+  where:'Cube dealers (see Shops tab).',link:'https://www.anwb.nl/fiets/test/e-biketest-2026',linkLabel:'ANWB e-bike test 2026',shops:1},
+ {id:'vanmoof',name:'VanMoof S6',kind:'ebike',e:1,buy:3298,fit:{student:1,commute:3,courier:1,cargo:0},
+  rating:'No ANWB score. 3-year warranty on the S6.',
+  feats:['487 Wh battery, 60 to 150 km','Built-in theft tracking (Apple Find My)','Kick lock and boost button'],
+  where:'VanMoof online; repairs at VanMoof Partners.',watch:'VanMoof went bankrupt in 2023 and restarted under a new owner.',
+  link:'https://www.electrive.com/2025/06/13/e-bike-specialist-vanmoof-makes-a-comeback-with-the-s6-series',linkLabel:'VanMoof S6 launch report'},
+ {id:'cowboy',name:'Cowboy Classic',kind:'ebike',e:1,buy:3118,fit:{student:1,commute:3,courier:1,cargo:0},
+  rating:'No ANWB score. Cruiser (upright Dutch position) costs €3,418.',
+  feats:['Light, sporty city e-bike','App with theft alerts','Mobile mechanics come to you'],
+  where:'Cowboy online.',link:'https://cowboy.com/collections/bikes.md',linkLabel:'Cowboy bikes'},
+ {id:'grenoble',name:'Gazelle Grenoble C8',kind:'ebike',e:1,buy:3549,fit:{student:0,commute:3,courier:2,cargo:1},
+  rating:'ANWB e-bike test 2026: 8.3 out of 10.',
+  feats:['Second-best score in the ANWB test','Classic Dutch comfort, 8 gears','Gazelle dealer service'],
+  where:'Any Gazelle dealer (see Shops tab).',link:'https://www.anwb.nl/fiets/test/e-biketest-2026',linkLabel:'ANWB e-bike test 2026',shops:1},
+ {id:'ua',name:'Urban Arrow FamilyNext Essential',kind:'cargo',e:1,buy:5299,fit:{student:0,commute:1,courier:1,cargo:3},
+  rating:'No ANWB score. One of the best-known Dutch cargo bikes.',
+  feats:['Electric cargo bike for kids or big loads','Bosch Performance Line motor','Enviolo hub gears, disc brakes'],
+  where:'Urban Arrow dealers (see Shops tab).',link:'https://www.lease-a-bike.nl/en/bikes/urban-arrow-familynext-essential',linkLabel:'Urban Arrow FamilyNext Essential',shops:1}
+];
+function baIcon(kind){
+  const c='var(--signal)',k='var(--ink)';
+  const wheels=(r,sw)=>'<circle cx="16" cy="34" r="'+r+'" fill="none" stroke="'+k+'" stroke-width="'+sw+'"/><circle cx="56" cy="34" r="'+r+'" fill="none" stroke="'+k+'" stroke-width="'+sw+'"/>';
+  let x='';
+  if(kind==='cargo')x='<circle cx="12" cy="36" r="8" fill="none" stroke="'+k+'" stroke-width="3"/><circle cx="58" cy="34" r="10" fill="none" stroke="'+k+'" stroke-width="3"/><rect x="4" y="14" width="22" height="14" rx="3" fill="'+c+'"/><path d="M12 36 L30 36 L44 18 L58 34 M30 36 L40 14 M38 12h8" fill="none" stroke="'+k+'" stroke-width="3" stroke-linecap="round"/>';
+  else x=wheels(10,kind==='fat'?6:3)+'<path d="M16 34 L28 16 L46 16 L56 34 M28 16 L36 34 L46 16 M24 10h8 M44 10l2 6" fill="none" stroke="'+k+'" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>'+(kind==='ebike'?'<rect x="31" y="20" width="12" height="6" rx="2" fill="'+c+'"/>':'')+(kind==='sub'?'<path d="M58 6a7 7 0 1 1-7 7" fill="none" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/><path d="M48 9l3 4 4-3" fill="none" stroke="'+c+'" stroke-width="3" stroke-linecap="round"/>':'');
+  return '<svg class="baicon" viewBox="0 0 72 48" aria-hidden="true">'+x+'</svg>';
+}
+function baPick(budget,use,e,student){
+  return BA_BIKES.filter(b=>{
+    if(e==='yes'&&!b.e)return false;
+    if(e==='no'&&b.e)return false;
+    if(b.month)return true;
+    return b.buy<=budget;
+  }).map(b=>{
+    let s=b.fit[use]*30;
+    if(b.month){s+=budget<(b.e?800:150)?18:(budget>=(b.e?1500:400)?-10:4);if(use==='courier'&&b.e)s+=8;}
+    else s+=Math.min(20,20*b.buy/Math.max(budget,1));
+    if(e==='unsure'&&b.e&&(use==='courier'||use==='commute'))s+=6;
+    if(b.watch)s-=3;
+    return {b,s};
+  }).filter(x=>x.b.fit[use]>0).sort((a,b)=>b.s-a.s).filter((x,i,a)=>!x.b.month||a.findIndex(y=>y.b.month)===i).slice(0,3);
+}
+function baMoney(n){return '€'+(Math.round(n*100)%100?n.toFixed(2):Math.round(n).toLocaleString('en-GB'))}
+function baOpen(){
+  let w={};try{w=JSON.parse(store('fc_ba_v1')||'{}')}catch(e){}
+  const seg=(id,opts,cur)=>'<div class="seg" id="'+id+'" role="group">'+Object.keys(opts).map(k=>'<button type="button" data-v="'+k+'" aria-pressed="'+(k===cur)+'">'+esc(opts[k])+'</button>').join('')+'</div>';
+  const budgets=[50,150,400,1000,2500,4000,6000];
+  openSheet('<div class="shead"><h2 id="sheetTitle">Find your bike</h2><button class="iconbtn" id="shClose" type="button" aria-label="Close">'+IC.close+'</button></div>'+
+  '<p class="hint" style="margin-top:4px">Three questions. We suggest the best bikes for your money, with real prices and where to buy in Groningen.</p>'+
+  '<div class="stack" style="gap:14px;margin-top:12px">'+
+   '<div><span class="label">1. What will you use it for?</span>'+seg('baUse',BA_USES,w.use||'student')+'</div>'+
+   '<div><span class="label">2. Electric?</span>'+seg('baE',{no:'Normal bike',yes:'E-bike',unsure:'Not sure'},w.e||'unsure')+'</div>'+
+   '<div><label for="baBudget">3. Your budget to buy: <b id="baBudgetV"></b></label><input type="range" id="baBudget" min="0" max="'+(budgets.length-1)+'" step="1" value="'+(w.bi!=null?w.bi:2)+'" style="width:100%;accent-color:var(--signal)"><div class="fine" style="display:flex;justify-content:space-between"><span>€50</span><span>€6,000+</span></div></div>'+
+   '<label class="whchk"><input type="checkbox" id="baStu"'+(w.stu!==false?' checked':'')+'> <span>I am a student (student prices where they exist)</span></label>'+
+   '<button class="btn primary" id="baGo" type="button">Show my bikes</button>'+
+   '<div id="baOut" class="stack" style="gap:12px"></div>'+
+  '</div>',sh=>{
+    sh.querySelector('#shClose').onclick=closeSheet;
+    sh.querySelectorAll('.seg').forEach(g=>g.addEventListener('click',ev=>{const t=ev.target.closest('button');if(!t)return;g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===t));sh.querySelector('#baOut').innerHTML=''}));
+    const r=sh.querySelector('#baBudget'),v=sh.querySelector('#baBudgetV');
+    const sv=()=>{const n=budgets[+r.value];v.textContent='up to '+baMoney(n)+(n===6000?'+':'')};
+    r.addEventListener('input',()=>{sv();sh.querySelector('#baOut').innerHTML=''});sv();
+    sh.querySelector('#baGo').onclick=()=>{
+      const use=sh.querySelector('#baUse [aria-pressed="true"]').dataset.v,e=sh.querySelector('#baE [aria-pressed="true"]').dataset.v,bi=+r.value,budget=budgets[bi]===6000?99999:budgets[bi],stu=sh.querySelector('#baStu').checked;
+      store('fc_ba_v1',JSON.stringify({use,e,bi,stu}));
+      baShow(sh,baPick(budget,use,e,stu),use,e,stu,budgets[bi]);
+    };
+  });
+}
+function baShow(sh,picks,use,e,stu,budget){
+  const out=sh.querySelector('#baOut');
+  let h='';
+  if(!picks.length)h='<div class="card"><p>No bike fits this budget for that use. Try a higher budget, or a subscription: you pay monthly instead.</p></div>';
+  picks.forEach(({b},i)=>{
+    const price=b.month?baMoney(stu&&b.monthStd?b.month:(b.monthStd||b.month))+' a month':(b.buyTo?baMoney(b.buy)+'–'+baMoney(b.buyTo):(b.id==='usedshop'?'from about ':'')+baMoney(b.buy));
+    h+='<div class="card bacard">'+
+     '<div class="bahead">'+baIcon(b.kind)+'<div style="min-width:0"><span class="label">'+(i===0?'Best match':'Option '+(i+1))+'</span><h3 style="margin:2px 0 0">'+esc(b.name)+'</h3><p class="baprice">'+price+'</p></div></div>'+
+     '<p class="hint" style="margin-top:8px"><b>Rating:</b> '+esc(b.rating)+'</p>'+
+     '<ul class="dots" style="margin-top:8px">'+b.feats.map(f=>'<li>'+esc(f)+'</li>').join('')+'</ul>'+
+     '<p style="margin-top:8px;font-size:14.5px"><b>Where to buy:</b> '+esc(b.where)+'</p>'+
+     (b.watch?'<p class="hint" style="margin-top:6px"><b>Watch out:</b> '+esc(b.watch)+'</p>':'')+
+     '<p style="margin-top:8px;display:flex;gap:16px;flex-wrap:wrap"><a href="'+b.link+'" target="_blank" rel="noopener">'+esc(b.linkLabel)+' (photos and details)</a>'+(b.shops?'<button class="linkbtn bashops" type="button">Shops in Groningen</button>':'')+'</p>'+
+    '</div>';
+  });
+  if(use==='courier')h+='<div class="card"><span class="label">For courier work</span><p style="font-size:14.5px">An e-bike pays for itself faster: Thuisbezorgd pays an e-bike allowance of €0.19 per km (up to €160 a month), against €0.05 per km (up to €20) for a normal bike. Thuisbezorgd only covers third-party liability, so insure the bike against theft yourself.</p><p class="fine" style="margin-top:6px"><a href="https://www.thuisbezorgd.nl/en/courier/the-inside-track/delivering-with-us/choosing-ride-shift-starting-location" target="_blank" rel="noopener">Thuisbezorgd courier vehicle page</a></p></div>';
+  if(e!=='no')h+='<div class="card"><span class="label">Thinking about a fatbike?</span><p style="font-size:14.5px">They are legal only up to 250 W and 25 km/h with pedal assist. Ones that go faster, or move without pedalling, are illegal and uninsured. The government plans a helmet rule for riders under 18 from 1 September 2027.</p><p class="fine" style="margin-top:6px"><a href="https://www.anwb.nl/fiets/soorten-fietsen/fatbike/fatbike-regels" target="_blank" rel="noopener">ANWB fatbike rules</a> · <a href="https://www.rijksoverheid.nl/actueel/nieuws/2026/11/13/helmplicht-voor-jongeren-op-fatbikes-en-andere-e-bikes-gaat-naar-tweede-kamer" target="_blank" rel="noopener">Government helmet plan</a></p></div>';
+  h+='<div class="card"><span class="label">Before you pay</span><ul class="dots"><li>Check the frame number at <a href="https://fdr.rdw.nl" target="_blank" rel="noopener">fdr.rdw.nl</a> to see if it was reported stolen.</li><li>Spend real money on a good lock. Theft is common in Groningen.</li><li>Test-ride it: brakes, gears, lights.</li></ul><p class="fine" style="margin-top:6px">Prices checked '+BA_CHECKED+' and can change. We earn nothing from these links.</p></div>';
+  out.innerHTML=h;
+  out.querySelectorAll('.bashops').forEach(x=>x.onclick=()=>{closeSheet();setTimeout(()=>{const t=document.querySelector('[data-tab="shops"]');if(t)t.click()},400)});
+  setTimeout(()=>{try{out.firstChild.scrollIntoView({behavior:REDUCE()?'auto':'smooth',block:'start'})}catch(x){}},60);
+}
+$('baOpenBtn').addEventListener('click',baOpen);
+
 
 /* ---------- Offline (guided) diagnosis ---------- */
 function guided(text,chip){
