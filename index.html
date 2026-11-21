@@ -528,6 +528,7 @@ details.fold[open]>summary{margin-bottom:8px}
 .tools{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tool{display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:18px;padding:14px;min-height:104px;cursor:pointer;font:inherit;box-shadow:var(--shadow)}.tool:active{transform:scale(.98)}.tool b{font-size:15px;font-weight:700}.tool small{font-size:12.5px;color:var(--mute);line-height:1.3}.tic{width:36px;height:36px;border-radius:11px;background:var(--surface2);color:var(--signal-ink);display:grid;place-items:center;margin-bottom:4px}.tic svg{width:20px;height:20px}.wf-more>summary{cursor:pointer;font-weight:700;font-size:15px;padding:16px 18px;border:1px solid var(--line);border-radius:18px;background:var(--surface);color:var(--ink);list-style:none;min-height:44px}.wf-more[open]>summary{margin-bottom:12px}.wf-more>summary::-webkit-details-marker{display:none}.wf-more>summary::after{content:" +";color:var(--signal-ink)}.wf-more[open]>summary::after{content:" −"}
 @media (max-width:430px){#aiPill{display:none}.hright{gap:6px}}
 .babadge{flex:0 0 48px;width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:hsl(var(--h) 55% 92%);color:hsl(var(--h) 60% 28%);font-weight:800;font-size:16px;letter-spacing:-.02em;border:1px solid hsl(var(--h) 40% 80%)}:root[data-theme="dark"] .babadge{background:hsl(var(--h) 35% 20%);color:hsl(var(--h) 70% 80%);border-color:hsl(var(--h) 30% 32%)}@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .babadge{background:hsl(var(--h) 35% 20%);color:hsl(var(--h) 70% 80%);border-color:hsl(var(--h) 30% 32%)}}.babrand{color:var(--mute);font-weight:600}.bascore{flex:0 0 auto;text-align:center;background:var(--safe-bg);color:var(--safe);border-radius:14px;padding:6px 10px}.bascore b{display:block;font-size:20px;line-height:1}.bascore small{font-size:10.5px;font-weight:700;letter-spacing:.06em}.baspecs{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;margin:10px 0 0;font-size:13.5px}.baspecs dt{color:var(--mute)}.baspecs dd{margin:0;font-weight:600}.bapc{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;font-size:13.5px}.bapc ul{margin:4px 0 0 16px;padding:0}.bapc .pro{color:var(--safe)}.bapc .con{color:var(--stop)}.bawatch{margin-top:8px;background:var(--caution-bg);color:var(--ink);border-radius:12px;padding:8px 10px}.bamore>summary{cursor:pointer;font-weight:700;min-height:28px}.bawhere{display:flex;flex-direction:column;gap:8px;margin-top:10px}.barow{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--surface2);border:0;border-radius:14px;padding:10px;color:var(--ink);text-decoration:none;font:inherit;cursor:pointer;margin-top:8px}.barow small{display:block;color:var(--mute);font-size:12.5px;line-height:1.3;margin-top:2px}.barow .babadge{flex-basis:40px;width:40px;height:40px;font-size:14px}.bathink{display:flex;gap:14px;align-items:flex-start}.baspin{width:44px;height:44px;flex:0 0 44px;color:var(--signal)}.baspin svg{width:100%;height:100%;animation:baspin 1.4s linear infinite}@keyframes baspin{to{transform:rotate(360deg)}}.basteps{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--mute)}.basteps li{opacity:.35;transition:opacity .25s}.basteps li.on{opacity:1;color:var(--ink)}.basteps li.on::before{content:"✓ ";color:var(--safe);font-weight:700}@media (prefers-reduced-motion:reduce){.baspin svg{animation:none}}#baUse button{flex:1 1 45%}
+.babud{display:flex;align-items:center;gap:8px;margin-top:6px}.babud span{font-weight:700;font-size:18px}.babud input{font-size:18px;font-weight:700}.bachips{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}.bachips button{border:1.5px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;min-height:40px;cursor:pointer}
 </style>
 
 <!-- Brand mark: a bicycle whose frame is the check. -->
@@ -629,7 +630,7 @@ details.fold[open]>summary{margin-bottom:8px}
         <div class="heroFoot"><span class="where" id="partName">Pick a part</span><span style="display:flex;gap:6px;align-items:center"><button class="linkbtn" id="pickList" type="button">Choose from a list</button><span aria-hidden="true" style="color:#566474">·</span><button class="linkbtn" id="notSure" type="button">Not sure where</button></span></div>
       </div>
       <div id="season"></div>
-      <div class="tools" role="group" aria-label="More tools"><button class="tool" id="baOpenBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l4-7h5l3 7M10 9l3 7M9 6h3"/></svg></span><b>Find a bike</b><small>32 bikes, from €50 to cargo</small></button><button class="tool" id="whOpenBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span><b>Warranty help</b><small>Is the repair free?</small></button><button class="tool" id="quickBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></svg></span><b>Pre-ride check</b><small>7 things, 60 seconds</small></button><button class="tool" id="demo" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7z"/></svg></span><b>Try an example</b><small>See a sample result</small></button></div>
+      <div class="tools" role="group" aria-label="More tools"><button class="tool" id="baOpenBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l4-7h5l3 7M10 9l3 7M9 6h3"/></svg></span><b>Find a bike</b><small>100 bikes, €50 to cargo</small></button><button class="tool" id="whOpenBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span><b>Warranty help</b><small>Is the repair free?</small></button><button class="tool" id="quickBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></svg></span><b>Pre-ride check</b><small>7 things, 60 seconds</small></button><button class="tool" id="demo" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7z"/></svg></span><b>Try an example</b><small>See a sample result</small></button></div>
       <details class="diy" id="quick" hidden><summary>60-second safety check before you ride</summary><ol id="quickList"></ol></details>
     </div>
 
@@ -1390,11 +1391,11 @@ $('quickBtn').addEventListener('click',()=>{const q=$('quick');q.hidden=!q.hidde
 /* ---------- Bike buying advisor ---------- */
 /* Prices from the linked page, checked 21 November 2026. fit 0-3 per use. buy = one-off, month = monthly. */
 const BA_CHECKED='21 November 2026';
-const BA_USES={daily:'Daily use, everything',student:'Student, short rides',courier:'Courier job',cargo:'Kids or heavy shopping',touring:'Long rides, weekends'};
+const BA_USES={daily:'Daily use, everything',student:'Student, short rides',courier:'Courier job',cargo:'Kids or heavy shopping',touring:'Long rides, weekends',sport:'Sport, forest, gravel',train:'With the train, small home',kid:'For a child (8\u201311)'};
 const ANWB='https://www.anwb.nl/fiets/test/e-biketest-2026',G12='https://www.12gobiking.nl/fietsen/stadsfietsen/goedkoop',SWAP='https://swapfiets.nl/en-NL/students';
 const ACC='Batavus’s former owner Accell went bankrupt in 2026; the brand now belongs to Dutech. Buy from a shop that gives its own warranty.';
 const T=(brand,name,kind,e,price,fit,o)=>Object.assign({brand,name,kind,e,fit},typeof price==='number'?{buy:price}:price,o);
-const F=(s,d,c,k,t)=>({student:s,daily:d,courier:c,cargo:k,touring:t});
+const F=(s,d,c,k,t,sp=0,tr=0,kid=0)=>({student:s,daily:d,courier:c,cargo:k,touring:t,sport:sp,train:tr,kid:kid});
 const BA_BIKES=[
  T('Used','bike from a private seller (Marktplaats, Facebook)','used',0,{buy:50,buyTo:100},F(3,2,1,0,0),{chan:'used',
   rate:'No test: every bike is different. Guides say about €100 gets a decent one; under €50 is often stolen or broken.',
@@ -1424,7 +1425,7 @@ const BA_BIKES=[
   specs:[['Price','€659.99'],['Gears','3'],['Brand','Gazelle, 10-year frame warranty']],pros:['Classic Dutch quality','Big dealer network'],cons:['Only 3 gears'],link:G12,ll:'Cheap city bikes at 12GO'}),
  T('Cortina','U4 Transport 3v','city',0,679.99,F(2,3,2,2,0),{chan:'dealer',rate:'No independent test. Sold at 12GO Biking.',
   specs:[['Price','€679.99'],['Gears','3'],['Type','Transport bike with front carrier']],pros:['Carries crates and bags','Very sturdy'],cons:['Heavy'],link:G12,ll:'Cheap city bikes at 12GO'}),
- T('Giant','Triple X 1','city',0,699.99,F(2,3,1,0,3),{chan:'dealer',rate:'No independent test. Sold at 12GO Biking.',
+ T('Giant','Triple X 1','city',0,699.99,F(2,3,1,0,3,2),{chan:'dealer',rate:'No independent test. Sold at 12GO Biking.',
   specs:[['Price','€699.99'],['Type','Hybrid: city plus longer rides']],pros:['Lighter and faster','Good for longer distances'],cons:['Less upright than a Dutch bike'],link:G12,ll:'Cheap city bikes at 12GO'}),
  T('Cortina','Common','city',0,899.99,F(2,3,1,2,1),{chan:'dealer',rate:'No independent test. €899.99 at 12GO (list price €1,049.99).',
   specs:[['Price','€899.99'],['Type','Strong transport city bike'],['Warranty','Frame 5 years']],pros:['Built for shopping and bags','Dealer service across NL'],cons:['Heavier than a hybrid'],link:'https://www.12gobiking.nl/cortina-common',ll:'Cortina Common at 12GO'}),
@@ -1467,6 +1468,107 @@ const BA_BIKES=[
  T('Urban Arrow','FamilyNext Essential','cargo',1,5299,F(0,1,1,3,0),{chan:'dealer',rate:'No ANWB score. One of the best-known Dutch cargo bikes.',
   specs:[['Price','€5,299'],['Motor','Bosch Performance Line'],['Gears','Enviolo stepless hub'],['Brakes','Disc']],pros:['Carries kids or big loads','Stepless gears'],cons:['Big to park','Expensive'],link:'https://www.lease-a-bike.nl/en/bikes/urban-arrow-familynext-essential',ll:'FamilyNext Essential'})
 ];
+function baMoney(n){return '€'+(Math.round(n*100)%100?n.toFixed(2):Math.round(n).toLocaleString('en-GB'))}
+/* More bikes: prices from 12GO Biking and Decathlon listings, checked 21 November 2026. */
+const SPA='Sparta\u2019s owner Accell went bankrupt in 2026 and Sparta was not in the sale of its brands. Buy from a shop that gives its own warranty.';
+const MKT='Sold by an outside seller on Decathlon\u2019s marketplace. Check that seller\u2019s warranty and returns before buying.';
+const U12={city:'https://www.12gobiking.nl/fietsen/stadsfietsen/goedkoop',hybrid:'https://www.12gobiking.nl/fietsen/herenfiets/goedkoop',ebike:'https://www.12gobiking.nl/elektrische-fietsen/goedkoop',mtb:'https://www.12gobiking.nl/fietsen/mountainbikes/goedkoop',gravel:'https://www.12gobiking.nl/fietsen/gravelbikes/aanbiedingen',cargo:'https://www.12gobiking.nl/elektrische-fietsen/elektrische-bakfietsen',kids:'https://www.12gobiking.nl/fietsen/kinderfietsen/24-inch-wielen',fold:'https://www.decathlon.nl/vc/vouwfiets-e-bike'};
+const CAT={
+ city:{kind:'city',e:0,fit:F(3,3,1,1,1),type:'Dutch city bike',pros:['Upright, relaxed riding position','Made for everyday trips'],cons:['Heavier than a hybrid'],chan:'dealer'},
+ trans:{kind:'city',e:0,fit:F(2,3,2,2,0),type:'Transport city bike',pros:['Strong, carries bags and crates','Very sturdy'],cons:['Heavy'],chan:'dealer'},
+ hybrid:{kind:'city',e:0,fit:F(2,3,1,0,3,2),type:'Hybrid (city plus sport)',pros:['Lighter and faster than a city bike','Good for longer rides'],cons:['Less upright; check if mudguards and rack are included'],chan:'dealer'},
+ ecity:{kind:'ebike',e:1,fit:F(1,3,2,1,2),type:'Electric city bike',pros:['Big discount on the list price','Brand with Dutch dealers'],cons:['Check battery size against your daily distance'],chan:'dealer'},
+ etrek:{kind:'ebike',e:1,fit:F(0,3,3,1,3),type:'Electric trekking bike',pros:['Built for long distances','Often bigger batteries'],cons:['Sportier position, heavier'],chan:'dealer'},
+ etrans:{kind:'ebike',e:1,fit:F(1,3,3,3,1),type:'Electric transport bike',pros:['Carries heavy loads with motor help','Front carrier for crates'],cons:['Heavy to lift and park'],chan:'dealer'},
+ mtb:{kind:'mtb',e:0,fit:F(1,1,0,0,2,3),type:'Mountain bike (hardtail)',pros:['Fun off-road and in the forest','Strong frame and wide tyres'],cons:['No lights, rack or mudguards for city use'],chan:'dealer'},
+ gravel:{kind:'mtb',e:0,fit:F(0,2,0,0,3,3),type:'Gravel bike',pros:['Fast on road and gravel paths','Light'],cons:['Bent-over position; no rack or lights as standard'],chan:'dealer'},
+ kids:{kind:'city',e:0,fit:F(0,0,0,0,0,0,0,3),type:'Kids bike, 24-inch wheels (about 8 to 11 years)',pros:['Sized for children','Good brands keep resale value'],cons:['Outgrown in a few years'],chan:'dealer'},
+ fold:{kind:'fold',e:0,fit:F(2,2,0,0,0,0,3),type:'Folding bike',pros:['Take it on the train for free when folded','Fits in a small room'],cons:['Small wheels feel less stable'],chan:'shop'},
+ efold:{kind:'fold',e:1,fit:F(1,2,1,0,1,0,3),type:'Electric folding bike',pros:['Motor plus fits on the train folded','Easy to store indoors'],cons:['Heavy to carry','Cheap brands, little dealer support'],chan:'shop',watch:MKT},
+ ecargo:{kind:'cargo',e:1,fit:F(0,1,1,3,0),type:'Electric cargo bike',pros:['Carries kids or big loads','Motor makes the weight easy'],cons:['Big to park','Expensive'],chan:'dealer'}
+};
+const L=(brand,name,c,price,list,o)=>{const d=CAT[c];const src=o&&o.src||U12[c==='city'||c==='trans'?'city':c==='hybrid'?'hybrid':c.startsWith('e')&&c!=='efold'&&c!=='ecargo'?'ebike':c==='ecargo'?'cargo':c==='efold'||c==='fold'?'fold':c];
+ const at=src.includes('decathlon')?'Decathlon (marketplace)':'12GO Biking';
+ return Object.assign({brand,name,kind:d.kind,e:d.e,fit:d.fit,buy:price,chan:d.chan,watch:d.watch,
+  rate:'No independent test. '+baMoney(price)+' at '+at+(list?' (list price '+baMoney(list)+').':'.'),
+  specs:[['Price',baMoney(price)+(list?' (was '+baMoney(list)+')':'')],['Type',d.type],['Sold at',at]].concat(o&&o.specs||[]),
+  pros:(o&&o.pros||[]).concat(d.pros).slice(0,3),cons:(o&&o.cons||[]).concat(d.cons).slice(0,2),link:src,ll:at+' listing'},o&&o.extra||{});};
+BA_BIKES.push(
+ L('Gazelle','Esprit C','city',539.99,599.99),
+ L('Batavus','PACKD 3','trans',599.99,0,{extra:{watch:ACC}}),
+ L('Cortina','Tide ND3','city',649.99,749.99),
+ L('Batavus','Fonk 3','city',659.99,0,{extra:{watch:ACC}}),
+ L('Giant','Attend CS 3','hybrid',599.99,699.99),
+ L('Trek','FX 1 Gen 4','hybrid',599.99),
+ L('Trek','FX 2 Gen 4','hybrid',699.99),
+ L('Merida','Speeder 100','hybrid',649.99,749.99),
+ L('Merida','Speeder 60','hybrid',699.99),
+ L('Merida','Speeder 200','hybrid',729.99,849.99),
+ L('Cube','Touring One','hybrid',699.99),
+ L('Stevens','E-Molveno','etrek',1499.99,2549.99),
+ L('Greens','Dorset 12v 750 Wh','etrek',1599.99,3599.99,{specs:[['Battery','750 Wh']]}),
+ L('Conway','Cairon T 2.0','etrek',1649.99,3049.99),
+ L('Batavus','Altura E-go Smart','ecity',1699.99,2424,{extra:{watch:ACC}}),
+ L('Tenways','CGO800S','ecity',1799.99,1899.99,{extra:{chan:'online'}}),
+ L('Greens','Bromley 5v','ecity',1799.90,3799.99),
+ L('Stevens','E-Triton PT5','etrek',1799.99,3869.99),
+ L('Cortina','E-Lett','ecity',1899.99,2599.99),
+ L('Stevens','E-Hazard 500 Wh','etrek',1999.99,3869.99,{specs:[['Battery','500 Wh']]}),
+ L('Stevens','E-Triton 6.5.1','etrek',1999.99,4069.99),
+ L('Stevens','E-4X Tour','etrek',1999.99,3199.99),
+ L('Greens','Bromley 8v 625 Wh','ecity',1999.99,3999.99,{specs:[['Battery','625 Wh']]}),
+ L('Cortina','E-U4 Transport','etrans',1999.99,2099.99),
+ L('Reany','N1 Daily','ecity',1999.99,2299.99),
+ L('Huyser','Q-Bike','ecity',1999.99),
+ L('Superior','eWAY 5.9','etrek',1999.99,2699.99),
+ L('Trek','District+ 2','ecity',1999.99,2799.99),
+ L('Pegasus','Siena E7F','ecity',1999.99,2399.99),
+ L('Sparta','A-Lane Fit','ecity',1999.99,2324,{extra:{watch:SPA}}),
+ L('Reany','W1 Daily','ecity',2099.99,2299.99),
+ L('Sparta','A-Lane Energy','ecity',2149.99,2624,{extra:{watch:SPA}}),
+ L('Batavus','Altura E-go Plus Smart','ecity',2249.99,2624,{extra:{watch:ACC}}),
+ L('Gazelle','Curb C1','ecity',2279.99,2399.99),
+ L('Cortina','E-U4 Transport Bosch Smart','etrans',2399.99,2699.99,{specs:[['Motor','Bosch Smart System']]}),
+ L('Trek','District+ 3','ecity',2499.99,3399.99),
+ L('Bulls','Cross Lite EVO SX Belt','etrek',2499.99,3599.99,{specs:[['Drive','Belt']]}),
+ L('Giant','Entour E+ 0','etrek',2499.99),
+ L('Cortina','E-Nite','ecity',2499.99,2649.99),
+ L('Gazelle','Bloom C7 HMS','ecity',2549.99,2799.99),
+ L('Batavus','Finez E-go Power Smart','etrek',2799.99,3924,{extra:{watch:ACC}}),
+ L('Gazelle','Chamonix C5 HMS','etrek',2799.99,2999.99),
+ L('Trek','District+ 3 Belt','ecity',2799.99,3599.99,{specs:[['Drive','Belt']]}),
+ L('Cortina','E-Common Integrated','ecity',2799.99,3099.99),
+ L('Focus','Whistler 3.7','mtb',499.99,849.99),
+ L('Merida','Big Nine 200 (outlet)','mtb',599.99,899.99),
+ L('Cube','Aim Pro','mtb',599.99),
+ L('Cannondale','Trail 2','mtb',649.99),
+ L('Scott','Contrail 30','mtb',699.99),
+ L('Scott','Contrail 20','mtb',799.99),
+ L('Cannondale','Trail 1','mtb',849.99),
+ L('Scott','Speedster Gravel 30','gravel',1199.99,1499.99),
+ L('Cube','Acid 240','kids',399.99),
+ L('Giant','Talon 24','kids',449.99),
+ L('Alpina','Yabber 3V 24','kids',449.99,489.99),
+ L('Cortina','U4 Mini 24','kids',499.99,589.99),
+ L('Cannondale','Kids Trail Plus 24','kids',499.99),
+ L('PUKY','LS-Pro 24','kids',529.99,569.99),
+ L('Woom','Explore 5 (24 inch)','kids',689.99),
+ L('Onesport','OT02 Pro e-folding bike','efold',579,0,{specs:[['Sensor','Torque sensor']]}),
+ L('Denver','Le Pliage e-folding bike','efold',699,0,{specs:[['Gears','6']]}),
+ L('Samebike','CY20 Pro e-folding bike','efold',723,0,{specs:[['Tyres','20 \u00d7 3.0 inch']]}),
+ L('Fafrees','F20 Pro e-folding bike','efold',978,0,{specs:[['Battery','36V 20Ah, up to 100 km']]}),
+ L('ENGWE','Engine X folding fat-tyre','efold',1299,0,{specs:[['Tyres','20 \u00d7 4.0 inch']]}),
+ L('ENGWE','L20 3.0 Boost folding','efold',1399,0,{specs:[['Battery','648 Wh']]}),
+ L('Cube','Cargo Hybrid Comfort Pro Family 800','ecargo',4899.99,0,{specs:[['Battery','800 Wh']]}),
+ L('Cube','Cargo Hybrid Comfort SLX 800','ecargo',4999.99,0,{specs:[['Battery','800 Wh']]}),
+ Object.assign({brand:'Speed pedelec',name:'(Stromer, Gazelle, Riese & M\u00fcller)',kind:'ebike',e:1,fit:F(0,3,0,0,3),buy:4500,chan:'dealer',
+  rate:'Assist up to 45 km/h instead of 25. Prices start around \u20ac4,500 at 12GO Biking.',
+  watch:'Legally a moped: yellow number plate, insurance and an approved E45 helmet are required, and it is not allowed on every bike path.',
+  specs:[['Price','from about \u20ac4,500'],['Assist','up to 45 km/h'],['Needs','Plate, insurance, E45 helmet']],
+  pros:['Fastest commute: 20+ km is easy','Strong brakes by law'],cons:['Plate, insurance and helmet costs','Not allowed on every bike path'],
+  link:'https://www.12gobiking.nl/elektrische-fietsen/speed-pedelecs',ll:'Speed pedelecs at 12GO'})
+);
+BA_BIKES.forEach(b=>{if(b.brand==='Gazelle'&&b.name==='Paris C7'){b.buy=2149.99;b.rate='No ANWB score. \u20ac2,149.99 at 12GO Biking for the 2027 HMB Smart version (list price \u20ac2,399.99).';b.specs[0]=['Price','\u20ac2,149.99 (was \u20ac2,399.99)'];b.link=U12.ebike;b.ll='12GO Biking listing'}});
 const BA_CHAN={
  dealer:'New, from a dealer: any bike shop that sells this brand. Groningen shops are in the Shops tab; 12GO Biking also delivers.',
  shop:'New, from a shop or webshop with its own warranty (Decathlon Groningen, Sontplein 5, or 12GO Biking).',
@@ -1478,7 +1580,6 @@ function baBadge(brand){
   const ini=brand.split(/\s+/).map(w=>w[0]).join('').slice(0,2).toUpperCase();
   return '<span class="babadge" style="--h:'+h+'" aria-hidden="true"><b>'+esc(ini)+'</b></span>';
 }
-function baMoney(n){return '€'+(Math.round(n*100)%100?n.toFixed(2):Math.round(n).toLocaleString('en-GB'))}
 function baPrice(b,stu){return b.month?baMoney(stu&&b.monthStd?b.month:(b.monthStd||b.month))+'/month':(b.buyTo?baMoney(b.buy)+'–'+baMoney(b.buyTo):baMoney(b.buy))}
 function baRank(budget,use,e){
   return BA_BIKES.filter(b=>{
@@ -1501,13 +1602,13 @@ function baOpen(){
   let w={};try{w=JSON.parse(store('fc_ba_v1')||'{}')}catch(e){}
   if(!BA_USES[w.use])w.use='daily';
   const seg=(id,opts,cur)=>'<div class="seg" id="'+id+'" role="group">'+Object.keys(opts).map(k=>'<button type="button" data-v="'+k+'" aria-pressed="'+(k===cur)+'">'+esc(opts[k])+'</button>').join('')+'</div>';
-  const budgets=[50,100,200,400,700,1000,1500,2500,3500,6000];
   openSheet('<div class="shead"><h2 id="sheetTitle">Find your bike</h2><button class="iconbtn" id="shClose" type="button" aria-label="Close">'+IC.close+'</button></div>'+
   '<p class="hint" style="margin-top:4px">'+BA_BIKES.length+' bikes and options checked, from €50 second-hand to cargo bikes. Real prices, real test scores.</p>'+
   '<div class="stack" style="gap:14px;margin-top:12px">'+
    '<div><span class="label">1. What is it for?</span>'+seg('baUse',BA_USES,w.use)+'</div>'+
    '<div><span class="label">2. Electric?</span>'+seg('baE',{no:'Normal bike',yes:'E-bike',unsure:'Not sure'},w.e||'unsure')+'</div>'+
-   '<div><label for="baBudget">3. Budget to buy: <b id="baBudgetV"></b></label><input type="range" id="baBudget" min="0" max="'+(budgets.length-1)+'" step="1" value="'+(w.bi!=null&&w.bi<budgets.length?w.bi:3)+'" style="width:100%;accent-color:var(--signal)"><div class="fine" style="display:flex;justify-content:space-between"><span>€50</span><span>€6,000+</span></div></div>'+
+   '<div><label for="baBudget">3. Your budget to buy</label><div class="babud"><span aria-hidden="true">\u20ac</span><input class="field" id="baBudget" type="number" inputmode="numeric" min="0" step="10" placeholder="e.g. 600" value="'+(w.budget!=null?w.budget:400)+'"></div>'+
+   '<div class="bachips">'+[100,300,700,1500,3000,5000].map(n=>'<button type="button" data-b="'+n+'">'+baMoney(n)+'</button>').join('')+'</div></div>'+
    '<label class="whchk"><input type="checkbox" id="baStu"'+(w.stu!==false?' checked':'')+'> <span>I am a student (show student prices)</span></label>'+
    '<button class="btn primary" id="baGo" type="button">Find my best bikes</button>'+
    '<div id="baOut" class="stack" style="gap:12px" aria-live="polite"></div>'+
@@ -1515,14 +1616,16 @@ function baOpen(){
     sh.querySelector('#shClose').onclick=closeSheet;
     const out=sh.querySelector('#baOut');
     sh.querySelectorAll('.seg').forEach(g=>g.addEventListener('click',ev=>{const t=ev.target.closest('button');if(!t)return;g.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',x===t));out.innerHTML=''}));
-    const r=sh.querySelector('#baBudget'),v=sh.querySelector('#baBudgetV');
-    const sv=()=>{const n=budgets[+r.value];v.textContent='up to '+baMoney(n)+(n===6000?'+':'')};
-    r.addEventListener('input',()=>{sv();out.innerHTML=''});sv();
+    const r=sh.querySelector('#baBudget');
+    r.addEventListener('input',()=>{out.innerHTML=''});
+    sh.querySelectorAll('.bachips button').forEach(c=>c.onclick=()=>{r.value=c.dataset.b;out.innerHTML=''});
     sh.querySelector('#baGo').onclick=()=>{
-      const use=sh.querySelector('#baUse [aria-pressed="true"]').dataset.v,e=sh.querySelector('#baE [aria-pressed="true"]').dataset.v,bi=+r.value,budget=budgets[bi]===6000?99999:budgets[bi],stu=sh.querySelector('#baStu').checked;
-      store('fc_ba_v1',JSON.stringify({use,e,bi,stu}));
+      const use=sh.querySelector('#baUse [aria-pressed="true"]').dataset.v,e=sh.querySelector('#baE [aria-pressed="true"]').dataset.v,stu=sh.querySelector('#baStu').checked;
+      const budget=Math.round(parseFloat(String(r.value).replace(',','.')));
+      if(!(budget>0)){r.focus();r.setCustomValidity('Type your budget in euros');r.reportValidity();setTimeout(()=>r.setCustomValidity(''),2000);return}
+      store('fc_ba_v1',JSON.stringify({use,e,budget,stu}));
       const ranked=baRank(budget,use,e);
-      const steps=['Checking '+BA_BIKES.length+' bikes and options','Keeping what fits '+(budget>9999?'any budget':'up to '+baMoney(budget)),'Comparing ANWB scores and prices','Ranking for '+BA_USES[use].toLowerCase()];
+      const steps=['Checking '+BA_BIKES.length+' bikes and options','Keeping what fits up to '+baMoney(budget),'Comparing ANWB scores and prices','Ranking for '+BA_USES[use].toLowerCase()];
       out.innerHTML='<div class="card bathink"><div class="baspin" aria-hidden="true"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="18" fill="none" stroke="currentColor" stroke-width="3" stroke-dasharray="6 5"/><circle cx="24" cy="24" r="4" fill="currentColor"/></svg></div><div><b>Finding your best bikes…</b><ul class="basteps">'+steps.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul></div></div>';
       setTimeout(()=>{try{out.firstChild.scrollIntoView({behavior:REDUCE()?'auto':'smooth',block:'start'})}catch(x){}},30);
       const li=out.querySelectorAll('.basteps li'),dt=REDUCE()?0:380;
@@ -1544,9 +1647,10 @@ function baCard(b,i,stu){
 }
 function baShow(sh,ranked,use,e,stu,budget){
   const out=sh.querySelector('#baOut');
-  const top=ranked.slice(0,3),more=ranked.slice(3,10);
-  let h='<p class="hint" style="margin:0"><b>'+ranked.length+'</b> of '+BA_BIKES.length+' options fit. Your top '+top.length+':</p>';
-  if(!top.length)h='<div class="card"><p>Nothing fits this budget for that use. Try a higher budget, or a subscription (you pay monthly).</p></div>';
+  const top=[],seen=new Set();for(const x of ranked){if(top.length<3&&!seen.has(x.b.brand)){top.push(x);seen.add(x.b.brand)}}
+  const more=ranked.filter(x=>!top.includes(x)).slice(0,12);
+  let h='<p class="hint" style="margin:0"><b>'+ranked.length+'</b> of '+BA_BIKES.length+' options fit '+baMoney(budget)+'. Your top '+top.length+':</p>';
+  if(!top.length){const mn=BA_BIKES.filter(b=>b.fit[use]>0&&!b.month&&(e==='yes'?b.e:e==='no'?!b.e:1)).reduce((m,b)=>Math.min(m,b.buy),1e9);h='<div class="card"><p>Nothing fits '+baMoney(budget)+' for '+esc(BA_USES[use].toLowerCase())+'.'+(mn<1e9?' The cheapest option starts at <b>'+baMoney(mn)+'</b>.':'')+' Try a higher budget or Not sure for electric.</p></div>'}
   top.forEach((x,i)=>h+=baCard(x.b,i,stu));
   if(more.length)h+='<details class="card bamore"><summary>'+more.length+' more that fit</summary>'+more.map(x=>{const b=x.b;return '<button class="barow" type="button" data-i="'+BA_BIKES.indexOf(b)+'">'+baBadge(b.brand)+'<span style="flex:1;min-width:0"><b>'+esc(b.brand)+' '+esc(b.name)+'</b><small>'+esc(b.rate)+'</small></span><span class="baprice" style="margin:0;font-size:15px">'+baPrice(b,stu)+'</span></button>'}).join('')+'</details>';
   if(use==='courier')h+='<div class="card"><span class="label">For courier work</span><p style="font-size:14.5px">An e-bike earns back faster: Thuisbezorgd pays €0.19 per km for an e-bike (up to €160 a month), against €0.05 per km (up to €20) for a normal bike. Thuisbezorgd only covers third-party liability, so insure the bike against theft yourself.</p><p class="fine" style="margin-top:6px"><a href="https://www.thuisbezorgd.nl/en/courier/the-inside-track/delivering-with-us/choosing-ride-shift-starting-location" target="_blank" rel="noopener">Thuisbezorgd courier vehicles</a></p></div>';
