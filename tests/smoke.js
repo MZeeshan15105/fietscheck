@@ -35,7 +35,7 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
 
   // Brake check: split symptoms and back-pedal brake exist
   await page.click('.dot[data-part="brakes"]', { force: true });
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(1000);
   const opts = await page.$$eval('#sheet .opt', a => a.map(x => x.textContent.trim()));
   ok(opts.some(t => /squeal, but stop fine/i.test(t)), 'brakes: squeal-only option exists');
   ok(opts.some(t => /back-pedal/i.test(t)), 'brakes: back-pedal brake option exists');
@@ -75,6 +75,9 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
   ok(nums.every(n => n <= 650 || /month/.test(prices.join(''))), 'advisor: picks stay within the typed budget');
   const brands = await page.$$eval('#baOut .bacard .babrand', a => a.map(x => x.textContent));
   ok(new Set(brands).size === brands.length, 'advisor: top picks are different brands');
+
+  // Motion: camera push resets after closing
+  ok((await page.getAttribute('#bike', 'viewBox')) === '0 0 480 303.4', 'motion: bike zoom resets after the sheet closes');
 
   // Theme toggle persists
   await page.goBack();

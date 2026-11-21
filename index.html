@@ -2211,4 +2211,113 @@ window.FC_FEEDBACK=window.FC_FEEDBACK||""; /* put your feedback email between th
   var dp=null;window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;var b=document.getElementById('installBtn');if(b)b.hidden=false});
   document.addEventListener('click',function(e){var b=e.target.closest('#installBtn');if(!b||!dp)return;e.preventDefault();dp.prompt();dp.userChoice.finally(function(){dp=null;b.hidden=true})});
 })();
-</script></body></html>
+</script><script>
+/* ---------- Motion: diagnostic scan, camera push, verdict stamp, tilt, tab pill ---------- */
+(function(){
+const R=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const NS='http://www.w3.org/2000/svg';
+const svg=document.getElementById('bike');if(!svg)return;
+const VB=[0,0,480,303.4];
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2, eo=t=>1-Math.pow(1-t,3);
+const dots=()=>[...svg.querySelectorAll('.dot')].filter(d=>d.getBoundingClientRect().width>0);
+const cxy=d=>{const c=d.querySelector('.core');return [+c.getAttribute('cx'),+c.getAttribute('cy')]};
+function burst(x,y,big){
+  const c=document.createElementNS(NS,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',4);c.setAttribute('class','fxring'+(big?' big':''));
+  svg.appendChild(c);setTimeout(()=>c.remove(),big?900:700);
+}
+/* 1. Diagnostic scan: the signature moment */
+let scanning=false;
+function scan(){
+  if(R()||scanning)return;scanning=true;
+  let fx=document.getElementById('scanFx');
+  if(!fx){fx=document.createElementNS(NS,'g');fx.id='scanFx';fx.setAttribute('pointer-events','none');fx.setAttribute('aria-hidden','true');
+    fx.innerHTML='<defs><linearGradient id="scanG" x1="0" x2="1"><stop offset="0" stop-color="#FF6B2C" stop-opacity="0"/><stop offset=".8" stop-color="#FF6B2C" stop-opacity=".28"/><stop offset="1" stop-color="#FFC9A8" stop-opacity=".85"/></linearGradient></defs>'+
+    '<rect id="scanBeam" x="-90" y="0" width="90" height="303.4" fill="url(#scanG)"/><line id="scanLine" x1="0" y1="0" x2="0" y2="303.4" stroke="#FFE6D6" stroke-width="1.4"/>'+
+    '<text id="scanTxt" x="14" y="294" font-family="Inter,system-ui,sans-serif" font-size="9.5" font-weight="700" fill="#FFE6D6"></text>';
+    const first=svg.querySelector('.dot');svg.insertBefore(fx,first);}
+  const beam=fx.querySelector('#scanBeam'),line=fx.querySelector('#scanLine'),txt=fx.querySelector('#scanTxt');
+  const ds=dots();ds.forEach(d=>d.classList.remove('lit'));svg.classList.add('scanning');fx.style.opacity=1;
+  const n=ds.length,t0=performance.now(),dur=1700;let lit=0;
+  (function step(now){
+    const k=Math.min(1,(now-t0)/dur),x=-10+500*ease(k);
+    beam.setAttribute('x',x-90);line.setAttribute('x1',x);line.setAttribute('x2',x);
+    ds.forEach(d=>{if(!d.classList.contains('lit')&&cxy(d)[0]<=x){d.classList.add('lit');lit++;const [a,b]=cxy(d);burst(a,b)}});
+    txt.textContent='Scanning parts… '+lit+'/'+n;
+    if(k<1)return requestAnimationFrame(step);
+    svg.classList.remove('scanning');ds.forEach(d=>d.classList.add('lit'));
+    txt.textContent=n+' parts ready. Tap where it hurts.';
+    beam.setAttribute('x',-200);line.setAttribute('x1',-5);line.setAttribute('x2',-5);
+    setTimeout(()=>{fx.style.opacity=0;scanning=false},1900);
+  })(t0);
+}
+function whenClear(fn){const ok=()=>{const i=document.getElementById('intro'),o=document.getElementById('onb');return (!i||i.hidden)&&(!o||o.hidden)};
+  (function w(){if(ok()&&!document.getElementById('home').hidden)setTimeout(fn,250);else setTimeout(w,250)})()}
+whenClear(scan);
+const seg=document.getElementById('typeSeg');if(seg)seg.addEventListener('click',e=>{if(e.target.closest('button'))setTimeout(scan,120)});
+/* 2. Camera push into the tapped part */
+let vb=VB.slice(),zoomed=false,anim=0;
+function toVB(to,ms){cancelAnimationFrame(anim);const from=vb.slice(),t0=performance.now();
+  (function f(now){const k=Math.min(1,(now-t0)/ms),e=eo(k);vb=from.map((v,i)=>v+(to[i]-v)*e);svg.setAttribute('viewBox',vb.join(' '));if(k<1)anim=requestAnimationFrame(f)})(t0)}
+let replay=false;
+svg.addEventListener('click',e=>{const d=e.target.closest('.dot');if(!d||R()||replay)return;e.stopPropagation();const [x,y]=cxy(d);burst(x,y,true);
+  svg.querySelectorAll('.dot').forEach(g=>g.classList.toggle('sel',g===d));setTimeout(()=>{replay=true;d.querySelector('.core').dispatchEvent(new MouseEvent('click',{bubbles:true}));replay=false},430);
+  const w=480/1.55,h=303.4/1.55,X=Math.max(0,Math.min(480-w,x-w/2)),Y=Math.max(0,Math.min(303.4-h,y-h*0.42));
+  toVB([X,Y,w,h],520);zoomed=true;sawOpen=false;svg.classList.add('pushed')},true);
+let sawOpen=false;setInterval(()=>{if(!zoomed)return;const sh=document.getElementById('sheet'),on=sh&&sh.classList.contains('on');if(on)sawOpen=true;else if(sawOpen||!document.getElementById('result').hidden){zoomed=false;sawOpen=false;svg.classList.remove('pushed');toVB(VB,480)}},150);
+/* 3. Tilt with the pointer (mouse and trackpad only) */
+const hero=svg.closest('.hero');
+if(hero&&window.matchMedia('(pointer:fine)').matches){
+  hero.addEventListener('pointermove',e=>{if(R())return;const r=hero.getBoundingClientRect(),px=(e.clientX-r.left)/r.width-.5,py=(e.clientY-r.top)/r.height-.5;
+    hero.style.setProperty('--mx',(px+.5)*100+'%');hero.style.setProperty('--my',(py+.5)*100+'%');
+    svg.style.transform='perspective(900px) rotateY('+(px*7).toFixed(2)+'deg) rotateX('+(-py*5).toFixed(2)+'deg)'});
+  hero.addEventListener('pointerleave',()=>{svg.style.transform='';hero.style.removeProperty('--mx')});
+}
+/* 4. Verdict stamp when a result appears */
+const res=document.getElementById('result');
+if(res)new MutationObserver(()=>{if(res.hidden||R())return;const b=res.querySelector('.band');if(!b||b.dataset.stamped)return;b.dataset.stamped=1;
+  b.classList.add('stamp');
+  if(b.classList.contains('safe')){const ic=b.querySelector('svg');if(ic){const r=ic.getBoundingClientRect(),br=b.getBoundingClientRect();
+    for(let i=0;i<14;i++){const s=document.createElement('i');s.className='spark';const a=i/14*Math.PI*2,dist=34+Math.random()*26;
+      s.style.left=(r.left-br.left+r.width/2)+'px';s.style.top=(r.top-br.top+r.height/2)+'px';s.style.setProperty('--tx',Math.cos(a)*dist+'px');s.style.setProperty('--ty',Math.sin(a)*dist+'px');
+      s.style.animationDelay=(220+Math.random()*80)+'ms';b.appendChild(s);setTimeout(()=>s.remove(),1300)}}}
+}).observe(res,{childList:true,subtree:false,attributes:true,attributeFilter:['hidden']});
+/* 5. Sliding pill behind the active tab */
+const tabs=document.getElementById('tabs');
+if(tabs){const pill=document.createElement('span');pill.className='tabpill';pill.setAttribute('aria-hidden','true');tabs.prepend(pill);
+  const place=()=>{const a=tabs.querySelector('.tab[aria-current="page"]');if(!a)return;pill.style.width=a.offsetWidth+'px';pill.style.transform='translateX('+a.offsetLeft+'px)'};
+  new MutationObserver(place).observe(tabs,{attributes:true,subtree:true,attributeFilter:['aria-current']});addEventListener('resize',place);setTimeout(place,50);}
+})();
+</script>
+<style>
+#bike{transition:transform .25s ease-out;transform-style:preserve-3d;will-change:transform}
+#scanFx{transition:opacity .5s}
+#scanBeam,#scanLine{mix-blend-mode:screen}
+#scanLine{filter:drop-shadow(0 0 4px #FF6B2C)}
+#bike.scanning .dot:not(.lit){opacity:0}
+#bike .dot.lit .core{animation:ignite .55s cubic-bezier(.3,1.7,.5,1)}
+@keyframes ignite{0%{transform:scale(0)}100%{transform:scale(1)}}
+.fxring{fill:none;stroke:#FF8A55;stroke-width:1.6;transform-box:fill-box;transform-origin:center;animation:fxring .7s cubic-bezier(.2,.7,.3,1) forwards;pointer-events:none}
+.fxring.big{stroke-width:2.2;animation-duration:.9s}
+@keyframes fxring{from{opacity:.95;transform:scale(1)}to{opacity:0;transform:scale(5.5)}}
+.fxring.big{animation-name:fxringB}@keyframes fxringB{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(9)}}
+#bike.pushed{overflow:hidden}#bike.pushed .dot:not(.sel){opacity:.35;transition:opacity .3s}
+.hero{position:relative}
+.hero::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(255,107,44,.16),transparent 60%)}
+.hero:hover::after{opacity:1}
+.band.stamp{position:relative;overflow:visible;animation:bandIn .5s cubic-bezier(.2,.8,.2,1) both}
+@keyframes bandIn{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+.band.stamp>svg,.band.stamp>.ic,.band.stamp>span:first-child{animation:stampIc .6s cubic-bezier(.3,1.8,.45,1) .18s both}
+@keyframes stampIc{0%{transform:scale(2.6) rotate(-18deg);opacity:0}60%{opacity:1}100%{transform:scale(1) rotate(0);opacity:1}}
+.band.stamp.stop{animation:bandIn .5s cubic-bezier(.2,.8,.2,1) both,shake .42s ease-in-out .62s}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-7px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(2px)}}
+.band.stamp.caution>div b{animation:blinkOnce 1.1s ease .5s 2}
+@keyframes blinkOnce{50%{opacity:.35}}
+.spark{position:absolute;width:6px;height:6px;border-radius:50%;background:var(--safe);pointer-events:none;animation:spark .9s cubic-bezier(.15,.8,.3,1) both}
+.spark:nth-child(3n){background:#FFC24A}.spark:nth-child(3n+1){width:4px;height:4px}
+@keyframes spark{from{transform:translate(-50%,-50%) scale(1);opacity:1}to{transform:translate(calc(-50% + var(--tx)),calc(-50% + var(--ty))) scale(.2);opacity:0}}
+.tabs-in{position:relative}
+.tabpill{position:absolute;left:0;top:6px;bottom:6px;border-radius:20px;background:color-mix(in srgb,var(--signal) 12%,transparent);transition:transform .42s cubic-bezier(.3,1.35,.5,1),width .3s;pointer-events:none;z-index:0}
+.tab{position:relative;z-index:1}
+@media (prefers-reduced-motion:reduce){#bike{transition:none}.tabpill{transition:none}.band.stamp,.band.stamp *{animation:none!important}}
+</style>
+</body></html>
