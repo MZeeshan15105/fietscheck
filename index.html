@@ -1,4 +1,16 @@
-<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style><meta name="description" content="FietsCheck: tap the part of your bike that feels off and see the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic."><meta name="theme-color" content="#11161C"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FietsCheck"><meta property="og:title" content="FietsCheck: know the likely fault before you pay"><meta property="og:description" content="A quick bike check for cyclists in the Netherlands."><meta property="og:image" content="icons/og.png"><meta property="og:type" content="website"></head><body>
+<!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.ticket .langt{font:inherit;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--on-asphalt);background:transparent;border:1.5px solid #3A4654;border-radius:99px;padding:0 12px;min-height:44px;margin:-12px -6px -12px 0;cursor:pointer}.ticket.nlonly .en,.ticket.nlonly .perf{display:none}.ticket .scode{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #2A343F;font-size:12px;color:var(--mute-asphalt)}.ticket .scode b{white-space:nowrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.04em;color:var(--on-asphalt)}.ticket .scode .btn{margin-left:auto;min-height:44px;min-width:44px;padding:0 14px;font-size:13px}
+</style><meta name="description" content="FietsCheck: tap the part of your bike that feels off and see the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic."><meta name="theme-color" content="#11161C"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FietsCheck"><meta property="og:title" content="FietsCheck: know the likely fault before you pay"><meta property="og:description" content="Tap the part of your bike that feels wrong. See the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic."><meta property="og:image" content="https://mzeeshan15105.github.io/fietscheck/icons/og.png">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="500">
+<meta property="og:image:alt" content="FietsCheck: know the likely fault before you pay">
+<meta property="og:url" content="https://mzeeshan15105.github.io/fietscheck/">
+<meta property="og:site_name" content="FietsCheck">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="FietsCheck: know the likely fault before you pay">
+<meta name="twitter:description" content="Tap the part of your bike that feels wrong. See the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic.">
+<meta name="twitter:image" content="https://mzeeshan15105.github.io/fietscheck/icons/og.png">
+<link rel="canonical" href="https://mzeeshan15105.github.io/fietscheck/"><meta property="og:type" content="website"></head><body>
 <title>FietsCheck: know the likely fault before you pay</title><style>@font-face{font-family:"Inter";font-style:normal;font-weight:400;font-display:swap;src:url(fonts/inter-400.woff) format("woff")}@font-face{font-family:"Inter";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/inter-500.woff) format("woff")}@font-face{font-family:"Inter";font-style:normal;font-weight:600;font-display:swap;src:url(fonts/inter-600.woff) format("woff")}@font-face{font-family:"Inter";font-style:normal;font-weight:700;font-display:swap;src:url(fonts/inter-700.woff) format("woff")}@font-face{font-family:"Inter";font-style:normal;font-weight:800;font-display:swap;src:url(fonts/inter-800.woff) format("woff")}</style>
 <link rel="icon" href="icons/favicon-32.png"><style>
 /* Concept: the Dutch bike lane at night. Asphalt surfaces, one signal-orange accent, lane-marking white.
@@ -573,6 +585,7 @@ details.fold[open]>summary{margin-bottom:8px}
     </div>
     <div class="hright">
       <span class="pill" id="aiPill">Guided</span>
+      <button class="iconbtn" id="helpBtn" type="button" aria-label="How FietsCheck works"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.6 9.3a2.5 2.5 0 0 1 4.8.9c0 1.7-2.4 2.3-2.4 3.6M12 16.8h.01"/></svg></button>
       <button class="iconbtn" id="infoBtn" type="button" aria-label="About FietsCheck"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg></button>
     </div>
   </div>
@@ -1357,8 +1370,8 @@ function renderResult(){
     h+='<div '+rv()+'><div class="card"><h3>Ask for a quote</h3><p>'+(f.noPrice?(r.id==='frame_crack'?'Frame repairs are rarely worth it on an everyday bike. Ask a shop whether the frame can be fixed, and compare that with the price of a second-hand bike.':'E-bike repairs are priced per fault and many shops do not take them. Call or message the shop first and ask for an estimate.'):'Without a clear fault there is no price to show. Take the bike to a shop and ask for an estimate before work starts.')+'</p></div></div>';
   }
 
-  h+='<div '+rv()+'><div class="ticket"><div class="eyebrow"><span>Note for the mechanic</span><span>NL · EN</span></div><div class="nl">'+esc(f.nl)+'</div><div class="perf"></div><div class="en">'+esc(f.en)+'</div>'+
-    '<div class="btns"><button class="btn primary" id="show" type="button">Show full screen</button><button class="btn" id="cpy" type="button">Copy</button><a class="btn" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(f.nl)+'">WhatsApp</a></div><p class="msg" id="cpyMsg" role="status" style="color:var(--mute-asphalt)"></p></div></div>';
+  h+='<div '+rv()+'><div class="ticket'+(store('fc_nlonly')==='1'?' nlonly':'')+'" id="ticket"><div class="eyebrow"><span>Note for the mechanic</span><button class="langt" id="langT" type="button" aria-pressed="'+(store('fc_nlonly')==='1')+'">'+(store('fc_nlonly')==='1'?'NL only':'NL + EN')+'</button></div><div class="nl">'+esc(f.nl)+'</div><div class="perf"></div><div class="en">'+esc(f.en)+'</div>'+
+    '<div class="btns"><button class="btn primary" id="show" type="button">Show full screen</button><button class="btn" id="cpy" type="button">Copy</button><a class="btn" target="_blank" rel="noopener" href="https://wa.me/?text='+encodeURIComponent(f.nl)+'">WhatsApp</a></div><p class="msg" id="cpyMsg" role="status" style="color:var(--mute-asphalt)"></p><div class="scode"><span>Study code</span><b id="scVal">'+'FC-'+String(f.part||'gen').toUpperCase()+'-'+String(r.id).toUpperCase().replace(/_/g,'')+'</b><button class="btn" id="scCopy" type="button" aria-label="Copy study check code">Copy</button></div></div></div>';
 
   h+='<div '+rv()+'><div class="btns"><button class="btn primary" id="findShop" type="button" style="flex:1">Find a shop</button><button class="btn" id="shareRes" type="button">Share</button></div></div>';
 
@@ -1394,6 +1407,8 @@ function renderResult(){
   const pn=$('priceNum');if(pn&&d&&!d.free){const fmt=v=>range(Math.round(v[0]*100)/100,Math.round(v[1]*100)/100);const a0=d.lo,b0=d.hi;const t0=performance.now();if(!REDUCE()){(function ff(t){const k=Math.min(1,(t-t0)/700),e=1-Math.pow(1-k,3);pn.textContent=range(Math.round(a0*e*10)/10,Math.round(b0*e*10)/10);if(k<1)requestAnimationFrame(ff);else pn.textContent=range(a0,b0)})(t0)}}
   const fu=$('fuGo');if(fu)fu.addEventListener('click',()=>{const v=$('fu').value.trim();if(!v)return;S.lastExtra=(S.lastExtra+' '+r.followUp+' Answer: '+v).trim();$('result').hidden=true;run(S.lastExtra)});
   const c2=$('cost2Go');if(c2)c2.addEventListener('click',()=>{const v=$('cost2').value;if(!v)return;S.cost=v;S.bikeId=null;store('fc_cost',v);renderResult()});
+  $('langT').addEventListener('click',()=>{const t=$('ticket');const on=!t.classList.contains('nlonly');t.classList.toggle('nlonly',on);store('fc_nlonly',on?'1':'0');$('langT').textContent=on?'NL only':'NL + EN';$('langT').setAttribute('aria-pressed',on)});
+  $('scCopy').addEventListener('click',async()=>{const v=$('scVal').textContent;try{await navigator.clipboard.writeText(v);$('scCopy').textContent='Copied'}catch(e){const rg=document.createRange();rg.selectNodeContents($('scVal'));const sl=getSelection();sl.removeAllRanges();sl.addRange(rg)}setTimeout(()=>{const b=$('scCopy');if(b)b.textContent='Copy'},1800)});
   $('cpy').addEventListener('click',async()=>{
     try{await navigator.clipboard.writeText(f.nl);$('cpyMsg').textContent='Copied.'}
     catch(e){const range=document.createRange();range.selectNodeContents(el.querySelector('.ticket .nl'));const sel=getSelection();sel.removeAllRanges();sel.addRange(range);$('cpyMsg').textContent='Text selected. Copy it with your phone menu.'}
@@ -1632,7 +1647,7 @@ $('infoBtn').addEventListener('click',()=>{
 
 /* ---------- Boot ---------- */
 S.cost=store('fc_cost')||'';S.age=store('fc_age')||'0.8';
-playIntro(true);
+(function(){let seen=false;try{seen=localStorage.getItem('fc_onb')==='1'}catch(e){}if(!seen)playIntro(true)})();
 (async function(){
   try{
     if(!window.claude||!window.claude.use){localBoot();return;}
@@ -1678,6 +1693,7 @@ playIntro(true);
   function close(){ob.hidden=true;try{localStorage.setItem('fc_onb','1')}catch(e){}}
   nx.addEventListener('click',function(){i<3?go(i+1):close()});
   document.getElementById('onbSkip').addEventListener('click',close);
+  var hb=document.getElementById('helpBtn');if(hb)hb.addEventListener('click',function(){go(0);ob.hidden=false;nx.focus()});
   var sx=null;ob.addEventListener('touchstart',function(e){sx=e.touches[0].clientX},{passive:true});
   ob.addEventListener('touchend',function(e){if(sx==null)return;var dx=e.changedTouches[0].clientX-sx;sx=null;if(dx<-50&&i<3)go(i+1);if(dx>50&&i>0)go(i-1)});
   new MutationObserver(function(){if(intro.hidden&&!shown&&!seen){shown=true;go(0);ob.hidden=false}}).observe(intro,{attributes:true,attributeFilter:['hidden']});
