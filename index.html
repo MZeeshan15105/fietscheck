@@ -1607,11 +1607,20 @@ const BA_CHAN={
  sub:'Monthly subscription from Swapfiets. Pick it up in store.',
  used:'Second-hand. See the second-hand guide below.'};
 /* Brand plate: shows img/logos/<slug>.svg or .png when the owner adds a licensed file; otherwise a name plate. */
-const BA_HUE={city:145,ebike:185,sub:22,used:215,cargo:275,fat:15,fold:205,mtb:230};
 function baSlug(brand){return brand.toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+const BA_ICON={
+ city:'<circle cx="6" cy="16" r="4"/><circle cx="18" cy="16" r="4"/><path d="M6 16l4-8h5M10 8l3 8 4-7.5M8.5 5.5h3M15 6.5h2.5"/>',
+ ebike:'<circle cx="6" cy="16.5" r="4"/><circle cx="18" cy="16.5" r="4"/><path d="M6 16.5l4-8h5l3 8M10 8.5l3 8M8.5 6h3"/><path d="M13 3.5l-1.6 2.6h2.4L12.2 8.7" stroke-width="1.6"/>',
+ cargo:'<circle cx="5" cy="17" r="3"/><circle cx="19" cy="17" r="3"/><path d="M8 17h7l4-8M15 17l2-8h3M17 6h3"/><rect x="2.5" y="8.5" width="8" height="5.5" rx="1"/>',
+ fold:'<circle cx="7" cy="17" r="3"/><circle cx="17" cy="17" r="3"/><path d="M7 17l5-6 5 6M12 11V5h3M9 8h3"/>',
+ mtb:'<circle cx="6" cy="16" r="4"/><circle cx="18" cy="16" r="4"/><path d="M6 16l4-7h6l2 7M10 9l3 7M9 6h3M16 9l-1-3h2"/><path d="M2 22l5-4 3 2 4-4 3 2 5-3" stroke-width="1.4"/>',
+ fat:'<circle cx="6" cy="16" r="4.2" stroke-width="3"/><circle cx="18" cy="16" r="4.2" stroke-width="3"/><path d="M6 16l4-7h5l3 7M10 9l3 7M8.5 6.5h3"/>',
+ sub:'<path d="M20 12a8 8 0 0 1-14.3 4.9M4 12A8 8 0 0 1 18.3 7.1"/><path d="M18.5 3v4.3h-4.3M5.5 21v-4.3h4.3"/><circle cx="12" cy="12" r="2.2"/>',
+ used:'<path d="M3 12.5V4.5A1.5 1.5 0 0 1 4.5 3h8l8.5 8.5-9.5 9.5z"/><circle cx="8" cy="8" r="1.6"/>'
+};
 function baBadge(brand,kind){
-  const h=BA_HUE[kind]!=null?BA_HUE[kind]:215,sl=baSlug(brand),short=brand.length>11?brand.split(/\s+/)[0]:brand;
-  return '<span class="babadge" style="--h:'+h+'" aria-hidden="true"><img alt="" src="img/logos/'+sl+'.svg" onload="this.parentNode.classList.add(\'haslogo\')" onerror="if(!this.dataset.p){this.dataset.p=1;this.src=\'img/logos/'+sl+'.png\'}else{this.remove()}"><b style="--n:'+short.length+'">'+esc(short)+'</b></span>';
+  const sl=baSlug(brand),ic=BA_ICON[kind]||BA_ICON.city;
+  return '<span class="babadge k-'+(kind||'city')+'" aria-hidden="true"><img alt="" src="img/logos/'+sl+'.svg" onload="this.parentNode.classList.add(\'haslogo\')" onerror="if(!this.dataset.p){this.dataset.p=1;this.src=\'img/logos/'+sl+'.png\'}else{this.remove()}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+ic+'</svg></span>';
 }
 function baPrice(b,stu){return b.month?baMoney(stu&&b.monthStd?b.month:(b.monthStd||b.month))+'/month':(b.buyTo?baMoney(b.buy)+'–'+baMoney(b.buyTo):baMoney(b.buy))}
 function baRank(budget,use,e){
@@ -2414,15 +2423,14 @@ h3{font-stretch:108%;font-weight:700;letter-spacing:-.01em}
 #bike .ground{opacity:.35}
 #bike .decal{filter:drop-shadow(0 .4px .6px rgba(0,0,0,.5))}
 
-/* Brand plates */
-.babadge{flex:0 0 64px;width:64px;height:48px;border-radius:12px;display:grid;place-items:center;position:relative;overflow:hidden;padding:4px;
- background:linear-gradient(160deg,hsl(var(--h) 45% 96%),hsl(var(--h) 40% 89%));border:1px solid hsl(var(--h) 30% 80%);color:hsl(var(--h) 55% 24%)}
-.babadge b{font-family:var(--f-head);font-weight:800;font-stretch:calc(125% - var(--n)*3%);font-size:13px;line-height:1.05;letter-spacing:-.02em;text-align:center;word-break:break-word}
-.babadge img{position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);object-fit:contain;opacity:0}
-.babadge.haslogo{background:#fff;border-color:var(--line)}
-.babadge.haslogo img{opacity:1}.babadge.haslogo b{visibility:hidden}
-:root[data-theme="dark"] .babadge:not(.haslogo){background:linear-gradient(160deg,hsl(var(--h) 30% 20%),hsl(var(--h) 35% 14%));border-color:hsl(var(--h) 25% 30%);color:hsl(var(--h) 60% 82%)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .babadge:not(.haslogo){background:linear-gradient(160deg,hsl(var(--h) 30% 20%),hsl(var(--h) 35% 14%));border-color:hsl(var(--h) 25% 30%);color:hsl(var(--h) 60% 82%)}}
-.barow .babadge{flex-basis:56px;width:56px;height:42px}.barow .babadge b{font-size:11.5px}
+/* Brand icon: round, like a device list */
+.babadge{flex:0 0 52px;width:52px;height:52px;border-radius:50%;display:grid;place-items:center;position:relative;overflow:hidden;background:var(--surface2);color:var(--ink);border:0}
+.babadge svg{width:30px;height:30px}
+.babadge.k-ebike svg path:last-child{stroke:var(--signal)}
+.babadge img{position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);object-fit:contain;opacity:0}
+.babadge.haslogo{background:#fff;box-shadow:inset 0 0 0 1px var(--line)}.babadge.haslogo img{opacity:1}.babadge.haslogo svg{visibility:hidden}
+.barow .babadge{flex-basis:44px;width:44px;height:44px;background:var(--surface)}.barow .babadge svg{width:24px;height:24px}
+.babrand{display:block;font-family:var(--f-body);font-size:13px;font-weight:600;color:var(--mute);letter-spacing:0;margin-bottom:1px}
+.barow b{font-weight:600}
 </style>
 </body></html>
