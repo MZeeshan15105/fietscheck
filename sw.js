@@ -1,5 +1,5 @@
 /* FietsCheck offline support. Change VERSION whenever you upload new files. */
-const VERSION = 'fietscheck-v1.7.0';
+const VERSION = 'fietscheck-v1.8.0';
 const FILES = ['./', 'index.html', 'privacy.html', 'terms.html', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/favicon-32.png', 'icons/apple-touch-icon.png',
   'fonts/inter-400.woff', 'fonts/inter-500.woff', 'fonts/inter-600.woff', 'fonts/inter-700.woff', 'fonts/inter-800.woff'];
@@ -11,7 +11,10 @@ self.addEventListener('activate', e => {
 });
 self.addEventListener('fetch', e => {
   const req = e.request;
-  if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
+  const url = new URL(req.url);
+  if (req.method !== 'GET' || url.origin !== location.origin) return;
+  // never cache downloads (the APK) or other big files
+  if (url.pathname.includes('/download/') || /\.(apk|zip|mp4)$/i.test(url.pathname)) return;
   // pages: network first so updates show, cache when offline
   if (req.mode === 'navigate') {
     e.respondWith(fetch(req).then(r => { const c = r.clone(); caches.open(VERSION).then(x => x.put(req, c)); return r; })
