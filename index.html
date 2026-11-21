@@ -1,5 +1,6 @@
 <!doctype html><html lang="en"><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}.ticket .langt{font:inherit;font-size:11.5px;font-weight:700;letter-spacing:.08em;color:var(--on-asphalt);background:transparent;border:1.5px solid #3A4654;border-radius:99px;padding:0 12px;min-height:44px;margin:-12px -6px -12px 0;cursor:pointer}.ticket.nlonly .en,.ticket.nlonly .perf{display:none}.ticket .scode{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:12px;border-top:1px solid #2A343F;font-size:12px;color:var(--mute-asphalt)}.ticket .scode b{white-space:nowrap;font-family:ui-monospace,Menlo,monospace;font-size:13px;letter-spacing:.04em;color:var(--on-asphalt)}.ticket .scode .btn{margin-left:auto;min-height:44px;min-width:44px;padding:0 14px;font-size:13px}
 .whcard{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}select.field{min-height:48px;appearance:auto}input.field{min-height:48px}.whchk{display:flex;gap:10px;align-items:flex-start;text-transform:none;letter-spacing:0;font:400 14.5px var(--f-body);color:var(--ink);padding:10px 0;min-height:44px;margin:0}.whchk input{width:22px;height:22px;flex:0 0 22px;margin-top:1px;accent-color:var(--signal)}
+.whwarn{background:#FFF4E5;border-color:#F3C98B}
 </style><meta name="description" content="FietsCheck: tap the part of your bike that feels off and see the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic."><meta name="theme-color" content="#11161C"><link rel="manifest" href="manifest.webmanifest"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="FietsCheck"><meta property="og:title" content="FietsCheck: know the likely fault before you pay"><meta property="og:description" content="Tap the part of your bike that feels wrong. See the likely fault, if it is safe to ride, a typical Dutch repair price and a note for the mechanic."><meta property="og:image" content="https://mzeeshan15105.github.io/fietscheck/icons/og.png">
 <meta property="og:image:width" content="1024">
 <meta property="og:image:height" content="500">
@@ -625,7 +626,7 @@ details.fold[open]>summary{margin-bottom:8px}
       <p class="hint" style="text-align:center">24 faults · tools and time · Dutch price check · mechanic note</p>
       <div id="season"></div>
       <details class="diy" id="quick"><summary>60-second safety check before you ride</summary><ol id="quickList"></ol></details>
-      <div class="card whcard"><div style="min-width:0;flex:1 1 200px"><h3 style="margin:0">E-bike under warranty?</h3><p class="hint">We check if it is likely covered and write the support email for you.</p></div><button class="btn dark" id="whOpenBtn" type="button">Warranty helper</button></div>
+      <div class="card whcard"><div style="min-width:0;flex:1 1 200px"><h3 style="margin:0">Bike under warranty?</h3><p class="hint">10 brands checked. We tell you if it is likely covered, where to go, and write the email.</p></div><button class="btn dark" id="whOpenBtn" type="button">Warranty helper</button></div>
       <p><button class="linkbtn" id="demo" type="button">Try an example</button></p>
     </div>
 
@@ -1221,39 +1222,110 @@ $('demo').addEventListener('click',()=>{
 });
 
 /* ---------- Warranty helper ---------- */
+/* Brand data: every number from the brand's own policy page (src), checked on the date shown.
+   months: per part area; null = not stated separately. kind: 'dealer' = claim via the shop, 'direct' = claim with the brand. */
+const WH_CHECKED='21 November 2026';
+const WH_KF='Kwik-Fit has a branch in Groningen that services city bikes and e-bikes (<a href="https://www.kwik-fit.nl/fiets-reparatie/stadsfietsen" target="_blank" rel="noopener">see services</a>).';
 const WH_BRANDS={
-  fiido:{name:'Fiido',email:'support@fiido.com',src:'https://eu.fiido.com/pages/warranty-policy',checked:'21 November 2026',
-    months:{display:24,battery:24,motor:24,frame:36,lights:3,brakes:3,other:null},
-    repair:'Fiido lets you use any local bike shop for a warranty repair, but only after Fiido approves the shop’s diagnosis or estimate. After the repair, send Fiido the itemised invoice for reimbursement. Do not send anything back to Fiido without their approval.'},
-  other:{name:'',email:'',src:'',checked:'',months:{},repair:'Ask the brand or the seller whether you may use a local bike shop, and get their approval in writing before any work starts.'}
+ gazelle:{name:'Gazelle',kind:'dealer',models:['Ultimate','Grenoble','Paris','Orange','Arroyo','Medeo','Avignon','Makki','Cabby'],
+  months:{display:24,battery:24,motor:24,brakes:24,lights:24,frame:120,other:24},
+  note:'Frame and rigid fork: up to 10 years (Makki and Cabby: 5). Suspension fork and paint: 5 years. Wear and tear is not covered.',
+  claim:'Take the bike to a Gazelle dealer with your proof of purchase. The dealer handles the claim.',
+  src:'https://www.gazellebikes.com/en-gb/service/warranty'},
+ batavus:{name:'Batavus',kind:'dealer',models:['Finez','Altura','Dinsdag','Mambo','Razer','Fonk'],
+  months:{display:24,battery:24,motor:24,brakes:24,lights:24,frame:120,other:24},
+  note:'Frame and rigid fork: 10 years. Electrical parts, suspension fork, paint and other parts: 2 years. You had to register the bike within 4 weeks of purchase.',
+  claim:'Only an official Batavus dealer can inspect the bike and submit the claim. Bring your original receipt.',
+  status:'Batavus’s former owner Accell went bankrupt in August 2026. In October 2026 Dutech Group took over the Batavus brand, but it is not clear whether old warranty claims moved with it. Ask the shop where you bought the bike first; your legal rights against that seller stay.',
+  statusSrc:'https://www.bike-magazin.de/fahrraeder/accell-meldet-deal-dutech-ubernimmt-teilbereiche/',
+  src:'https://batavus.com/en-be/pages/service/warranty-terms-and-conditions'},
+ sparta:{name:'Sparta',kind:'dealer',models:['a-Shine','c-Grid','M-Grid','Pick-Up','d-Burst'],
+  months:{display:null,battery:24,motor:24,brakes:24,lights:24,frame:120,other:24},
+  note:'Frame and rigid fork: 10 years (suspension fork 2). Motor, battery and other parts: 2 years. First owner only; register within 4 weeks.',
+  claim:'Claims go through a Sparta dealer, who sends the faulty part to Sparta for assessment.',
+  status:'Sparta’s owner Accell went bankrupt in August 2026, and Sparta was not named in the October 2026 sale of Accell brands. Warranty handling is uncertain. Go to the shop where you bought the bike first; your legal rights against that seller stay.',
+  statusSrc:'https://nos.nl/l/2626411',
+  src:'https://spartabikes.com/en-nl/pages/support/warranty-on-your-sparta-e-bike'},
+ cortina:{name:'Cortina',kind:'dealer',models:['E-Common','E-Tide','E-U4','Common','U4','Speed'],
+  months:{display:null,battery:24,motor:null,brakes:24,lights:24,frame:60,other:24},
+  note:'Frame and rigid fork: 5 years. Battery and other parts: 2 years. Motor and display have no separate period; ask your dealer. First owner only.',
+  claim:'Contact your Cortina dealer first. Bring the original receipt with the frame number; for a battery claim also bring its charger. E-bikes from 2017 need a diagnostic report from the dealer.',
+  src:'https://kruitboschmarketing.blob.core.windows.net/cortinafietsen/content-pagina/handleidingen/Cortina-Veiligheidsvoorschriften-Garantievoorwaarden-V3-DEF.pdf'},
+ qwic:{name:'QWIC',kind:'dealer',models:['Premium','Performance','Atlas'],
+  months:{display:24,battery:24,motor:24,brakes:24,lights:24,frame:24,other:24},
+  note:'Most new QWIC e-bikes have 2 years of manufacturer’s warranty, some models 5. First owner only, with proof of purchase.',
+  claim:'Go to your QWIC dealer. If that dealer no longer exists, the nearest QWIC dealer handles the claim.',
+  status:'QWIC went bankrupt in early 2024 and was restarted by a new owner. Dealers may struggle to recover warranty costs, so lean on your legal rights against the shop that sold the bike.',
+  statusSrc:'https://mijn.bovag.nl/actueel/nieuws/qwic-hoe-zit-het-op-dit-moment-met-garantie',
+  src:'https://mijn.bovag.nl/actueel/nieuws/qwic-hoe-zit-het-op-dit-moment-met-garantie'},
+ vanmoof:{name:'VanMoof',kind:'partner',models:['S6','S5','A5','S3','X3'],
+  months:{display:36,battery:36,motor:36,brakes:36,lights:36,frame:36,other:36},
+  note:'For the S6: frame and parts 3 years; battery, motor and electronics 3 years or 7,500 km, whichever comes first. Keep the original box.',
+  claim:'Go to a local VanMoof Partner with your original proof of purchase. Covered repairs are done on the spot and the partner settles the cost with VanMoof.',
+  status:'These terms are for the S6. VanMoof went bankrupt in 2023 and was taken over; for older bikes (S3, X3, S5, A5) contact VanMoof support about what still applies.',
+  statusSrc:'https://help.vanmoof.com/hc/en-us/articles/28409389508125-Warranty-Support',
+  src:'https://help.vanmoof.com/hc/en-us/articles/28409389508125-Warranty-Support'},
+ cowboy:{name:'Cowboy',kind:'direct',email:'',link:'https://help.cowboy.com',models:['Classic','Cruiser','Cross','Cruiser ST'],
+  months:{display:24,battery:24,motor:24,brakes:24,lights:24,frame:24,other:24},
+  note:'2 years of legal guarantee on defects in workmanship and materials, extendable by 1 year to 3 years in total. Parts and labour by Cowboy-approved service are included.',
+  claim:'Start a request through Cowboy support (help.cowboy.com). Repairs are done by Cowboy mobile mechanics, Cowboy stores or certified partner shops.',
+  src:'https://cowboy.com/pages/warranty'},
+ fiido:{name:'Fiido',kind:'direct',email:'support@fiido.com',models:['C11','C21','D11','D3 Pro','T1','X'],
+  months:{display:24,battery:24,motor:24,brakes:3,lights:3,frame:36,other:null},
+  note:'Display, controller, charger, motor and battery: 24 months. Frame: 36 months. Lights, brake levers and switches: only 3 months.',
+  claim:'Bought on Fiido’s website: submit the warranty form or email support@fiido.com. Bought elsewhere: contact that seller.',
+  repair:'Fiido names no Dutch repair partners. You may use any local bike shop, but only after Fiido approves the shop’s diagnosis or estimate; then send the itemised invoice for reimbursement. Never send parts back without approval.',
+  src:'https://eu.fiido.com/pages/warranty-policy'},
+ engwe:{name:'ENGWE',kind:'direct',email:'service@engwe.com',models:['EP-2','Engine Pro','P275','L20','M20','X26'],
+  months:{display:12,battery:12,motor:12,brakes:12,lights:6,frame:12,other:6},
+  note:'Standard: frame, battery, motor, controller and display 12 months (EP-2 3.0 Boost: 24). Lights and small parts 6 months, saddle and brake pads 3, tyres 1.',
+  claim:'Email service@engwe.com with a description, photos or a short video, your order number and where you bought it. They usually reply within one business day.',
+  repair:'ENGWE works with certified partner shops (see its repair-shop map), but you must contact ENGWE before visiting one. Unapproved repairs are not covered.',
+  src:'https://engwe.com/pages/warranty'},
+ amslod:{name:'Amslod',kind:'gone',models:['Eton','Linton','Kent','Trent','Premium Plus'],
+  months:{},
+  note:'',
+  claim:'Amslod went bankrupt in December 2024 and its own stores closed. A company that takes over the brand does not have to honour old warranties.',
+  status:'Amslod is bankrupt. If you bought from another shop, claim from that shop under Dutch legal guarantee. The Eton, Linton, Kent and Trent were recalled because the front fork could break: stop riding one with an unrepaired fork.',
+  statusSrc:'https://www.bright.nl/nieuws/1257667/failliet-e-bike-merk-kan-nog-doorstart-maken.html',
+  src:'https://www.bright.nl/nieuws/1257667/failliet-e-bike-merk-kan-nog-doorstart-maken.html'},
+ other:{name:'',kind:'direct',email:'',models:[],months:{},note:'',claim:'',src:''}
 };
+const WH_GROUPS=[['Dutch brands (claim via the shop)',['gazelle','batavus','sparta','cortina','qwic']],['Online and direct brands',['vanmoof','cowboy','fiido','engwe','amslod']]];
 const WH_AREAS={display:'Display or power button',battery:'Battery or charging',motor:'Motor or pedal assist',brakes:'Brakes or brake levers',lights:'Lights',frame:'Frame',other:'Something else'};
 const WH_CHECKS=['The battery is fully charged and correctly locked in place.','The battery’s own power switch is on.','The cable connections look secure and undamaged.','Neither brake lever is stuck in the pressed position.'];
 function whMonthsSince(d){const p=new Date(d),n=new Date();if(isNaN(p))return null;return (n.getFullYear()-p.getFullYear())*12+(n.getMonth()-p.getMonth())-(n.getDate()<p.getDate()?1:0)}
+function whYears(m){return m%12===0?(m/12)+' year'+(m===12?'':'s'):m+' months'}
 function whOpen(){
-  const w=JSON.parse(store('fc_wh_v1')||'{}');
+  let w={};try{w=JSON.parse(store('fc_wh_v1')||'{}')}catch(e){}
   const opt=(o,v)=>Object.keys(o).map(k=>'<option value="'+k+'"'+(k===v?' selected':'')+'>'+esc(o[k])+'</option>').join('');
-  const inp=(id,l,t,ph)=>'<div><label for="'+id+'">'+l+'</label><input class="field" id="'+id+'" type="'+t+'" placeholder="'+(ph||'')+'" value="'+esc(w[id]||'')+'"></div>';
+  const inp=(id,l,t,ph,extra)=>'<div><label for="'+id+'">'+l+'</label><input class="field" id="'+id+'" type="'+t+'" placeholder="'+(ph||'')+'" value="'+esc(w[id]||'')+'"'+(extra||'')+'></div>';
+  const cur=w.whBrand||'fiido';
+  const brandOpts=WH_GROUPS.map(([g,ks])=>'<optgroup label="'+esc(g)+'">'+ks.map(k=>'<option value="'+k+'"'+(k===cur?' selected':'')+'>'+esc(WH_BRANDS[k].name)+'</option>').join('')+'</optgroup>').join('')+'<option value="other"'+(cur==='other'?' selected':'')+'>Other brand</option>';
   openSheet('<div class="shead"><h2 id="sheetTitle">Warranty helper</h2><button class="iconbtn" id="shClose" type="button" aria-label="Close">'+IC.close+'</button></div>'+
-  '<p class="hint" style="margin-top:4px">Tell us what broke. We check if it is likely covered and write the support email for you.</p>'+
+  '<p class="hint" style="margin-top:4px">For normal bikes and e-bikes. Tell us what broke: we check if it is likely covered, tell you where to go and write the email for you.</p>'+
   '<div class="stack" style="gap:12px;margin-top:12px">'+
-   '<div><label for="whBrand">Brand</label><select class="field" id="whBrand"><option value="fiido"'+(w.whBrand!=='other'?' selected':'')+'>Fiido</option><option value="other"'+(w.whBrand==='other'?' selected':'')+'>Other brand</option></select></div>'+
-   '<div id="whOtherBox"'+(w.whBrand==='other'?'':' hidden')+'>'+inp('whBrandName','Brand name','text','e.g. VanMoof')+inp('whEmail','Support email (from the brand’s website)','email','support@brand.com')+'</div>'+
-   inp('whModel','Model','text','e.g. C11')+
+   '<div><label for="whBrand">Brand</label><select class="field" id="whBrand">'+brandOpts+'</select></div>'+
+   '<div id="whBrandInfo"></div>'+
+   '<div id="whOtherBox"'+(cur==='other'?'':' hidden')+'>'+inp('whBrandName','Brand name','text','e.g. Giant')+inp('whEmail','Support email (from the brand’s website)','email','support@brand.com')+'</div>'+
+   inp('whModel','Model','text','e.g. C11',' list="whModels" autocomplete="off"')+'<datalist id="whModels"></datalist>'+
    '<div><label for="whArea">What broke?</label><select class="field" id="whArea">'+opt(WH_AREAS,w.whArea||'display')+'</select></div>'+
    '<div><label for="whDesc">What happens exactly?</label><textarea class="field" id="whDesc" placeholder="e.g. Pressing the power button on the display does nothing, the screen stays off.">'+esc(w.whDesc||'')+'</textarea></div>'+
    inp('whSince','Since when?','date')+
    inp('whDate','Purchase date','date')+
-   '<div><label for="whFrom">Where did you buy it?</label><select class="field" id="whFrom"><option value="brand"'+(w.whFrom!=='shop'?' selected':'')+'>The brand’s own website</option><option value="shop"'+(w.whFrom==='shop'?' selected':'')+'>A shop or another platform</option></select></div>'+
-   inp('whOrder','Order number','text','From your order email')+
+   '<div><label for="whFrom">Where did you buy it?</label><select class="field" id="whFrom"><option value="brand"'+(w.whFrom!=='shop'?' selected':'')+'>From the brand itself (website or brand store)</option><option value="shop"'+(w.whFrom==='shop'?' selected':'')+'>From a bike shop or another platform</option></select></div>'+
+   inp('whOrder','Order or receipt number','text','From your order email or receipt')+
    inp('whFrame','Frame number','text','Stamped on the frame, often under the bottom bracket')+
    '<div><span class="label">What have you already checked?</span>'+WH_CHECKS.map((c,i)=>'<label class="whchk"><input type="checkbox" data-c="'+i+'"'+((w.checks||[]).includes(i)?' checked':'')+'> <span>'+esc(c)+'</span></label>').join('')+'</div>'+
    inp('whName','Your name','text')+
-   '<button class="btn primary" id="whGo" type="button">Write my email</button>'+
+   '<button class="btn primary" id="whGo" type="button">Check and write my email</button>'+
    '<div id="whOut" class="stack" style="gap:12px"></div>'+
   '</div>',sh=>{
     sh.querySelector('#shClose').onclick=closeSheet;
-    sh.querySelector('#whBrand').onchange=e=>{sh.querySelector('#whOtherBox').hidden=e.target.value!=='other'};
+    const upd=()=>{const k=sh.querySelector('#whBrand').value,B=WH_BRANDS[k];sh.querySelector('#whOtherBox').hidden=k!=='other';
+      sh.querySelector('#whModels').innerHTML=(B.models||[]).map(m=>'<option value="'+esc(m)+'">').join('');
+      sh.querySelector('#whBrandInfo').innerHTML=B.status?'<div class="card whwarn"><span class="label">Heads-up about '+esc(B.name)+'</span><p style="font-size:14px">'+esc(B.status)+'</p></div>':''};
+    sh.querySelector('#whBrand').onchange=upd;upd();
     sh.querySelector('#whGo').onclick=()=>whBuild(sh);
   });
 }
@@ -1267,35 +1339,39 @@ function whBuild(sh){
   const area=WH_AREAS[d.whArea];
   const age=d.whDate?whMonthsSince(d.whDate):null;
   const lim=B.months[d.whArea];
+  const viaShop=d.whFrom==='shop'||B.kind==='dealer'||B.kind==='gone';
   let status='',covered=null;
-  if(d.whBrand==='fiido'&&lim){
-    if(age==null)status='Fiido covers this part for <b>'+lim+' months</b>. Add your purchase date to check if you are still within it.';
-    else{covered=age<lim;status=covered?'Likely covered: Fiido gives <b>'+lim+' months</b> on this part, and your bike is about <b>'+age+' months</b> old.':'Outside Fiido’s <b>'+lim+'-month</b> warranty for this part (your bike is about <b>'+age+' months</b> old). Dutch legal guarantee may still help, see below.'}
-    if(d.whArea==='display')status+=' Tip: describe it as a <b>display</b> fault. Fiido covers the display for 24 months but separate switches for only 3.';
-  }else status='We have no checked warranty data for this brand yet. Look up its warranty page before you send.';
-  const fromShop=d.whFrom==='shop';
-  const to=fromShop?'':(d.whBrand==='other'?d.whEmail:B.email);
+  if(B.kind==='gone')status='<b>'+esc(B.name)+' no longer handles warranty.</b> '+esc(B.claim);
+  else if(d.whBrand!=='other'&&lim){
+    if(age==null)status=esc(brand)+' covers this part for <b>'+whYears(lim)+'</b>. Add your purchase date to check if you are still within it.';
+    else{covered=age<lim;status=covered?'Likely covered: '+esc(brand)+' gives <b>'+whYears(lim)+'</b> on this part, and your bike is about <b>'+age+' months</b> old.':'Outside '+esc(brand)+'’s <b>'+whYears(lim)+'</b> warranty for this part (your bike is about <b>'+age+' months</b> old). Dutch legal guarantee may still help, see below.'}
+    if(d.whBrand==='fiido'&&d.whArea==='display')status+=' Tip: describe it as a <b>display</b> fault. Fiido covers the display for 24 months but separate switches for only 3.';
+  }else if(d.whBrand!=='other')status=esc(brand)+' does not state a separate warranty period for this part. Ask your dealer which period applies; usually it is 2 years.';
+  else status='We have no checked warranty data for this brand yet. Look up its warranty page before you send.';
+  const to=viaShop?'':(d.whBrand==='other'?d.whEmail:(B.email||''));
   const date=s=>{if(!s)return '';const p=s.split('-');return p.length===3?p[2]+'-'+p[1]+'-'+p[0]:s};
   const ask=covered===false
    ?'Although the factory warranty period for this part has passed, I believe this is a defect the product should not have at this age. I would like to know what repair or replacement options you can offer.'
-   :'I would like a replacement '+area.toLowerCase()+' part to be sent to me. Alternatively, please approve a repair at a local bike shop, so I can submit the shop’s invoice for reimbursement.';
-  const body='Dear '+(fromShop?'Customer Service':brand+' After-Sales Team')+',\n\n'+
+   :(viaShop?'I would like you to repair or replace the faulty '+area.toLowerCase()+' part under warranty, free of charge.':'I would like a replacement '+area.toLowerCase()+' part to be sent to me. Alternatively, please approve a repair at a local bike shop, so I can submit the shop’s invoice for reimbursement.');
+  const body='Dear '+(viaShop?'Customer Service':brand+' After-Sales Team')+',\n\n'+
    'I would like to file a warranty claim for my '+model+'. '+(d.whDesc||'[DESCRIBE THE PROBLEM]')+'\n\n'+
-   'Bike details\n- Model: '+model+'\n- Order number: '+(d.whOrder||'[ORDER NUMBER]')+'\n- Purchase date: '+(date(d.whDate)||'[DD-MM-YYYY]')+'\n- Frame number: '+(d.whFrame||'[FRAME NUMBER]')+'\n- Country: the Netherlands\n\n'+
+   'Bike details\n- Model: '+model+'\n- Order or receipt number: '+(d.whOrder||'[ORDER NUMBER]')+'\n- Purchase date: '+(date(d.whDate)||'[DD-MM-YYYY]')+'\n- Frame number: '+(d.whFrame||'[FRAME NUMBER]')+'\n- Country: the Netherlands\n\n'+
    'The problem\n- Part: '+area+'\n- Since: '+(date(d.whSince)||'[DATE]')+'\n\n'+
    (d.checks.length?'What I have already checked\n'+d.checks.map(i=>'- '+WH_CHECKS[i]).join('\n')+'\nThe problem remains.\n\n':'')+
    'What I am asking for\n'+ask+'\n\n'+
-   'Attached\n- A short video showing the problem\n- Photos of the part, its label and the frame number\n- My order confirmation or invoice\n\n'+
+   'Attached\n- A short video showing the problem\n- Photos of the part, its label and the frame number\n- My order confirmation or receipt\n\n'+
    'I would appreciate a reply within a few working days. Thank you for your help.\n\nKind regards,\n'+(d.whName||'[YOUR NAME]');
   const subject='Warranty claim: '+model+' '+area.toLowerCase()+' problem'+(d.whOrder?' (Order '+d.whOrder+')':'');
+  const where=B.kind==='gone'?'You bought it from another shop: send this email to <b>that shop</b>.':(viaShop?(B.kind==='dealer'?'Send this to, or bring it to, <b>the '+esc(B.name)+' dealer where you bought the bike</b>. '+esc(B.claim):'You bought it from a shop or platform, so send this to <b>that seller</b>. In the Netherlands the seller is responsible for a faulty product.'):esc(B.claim||'Send it to the brand’s support address from its website.'));
+  const repair=B.repair?esc(B.repair)+' '+WH_KF:(B.kind==='dealer'?'Warranty repairs are done by the dealer. If your dealer is gone, the brand can point you to the nearest one.':(B.kind==='partner'||B.kind==='direct'?esc(B.claim):'Any good local bike shop can repair it at your own cost.')+(B.kind==='gone'?' '+WH_KF:''));
   const out=sh.querySelector('#whOut');
   out.innerHTML=
-   '<div class="card"><span class="label">Warranty check</span><p style="font-size:14.5px">'+status+'</p>'+(B.src?'<p class="fine" style="margin-top:6px">Source: <a href="'+B.src+'" target="_blank" rel="noopener">'+esc(brand)+' warranty policy</a>, checked '+B.checked+'.</p>':'')+'</div>'+
-   (fromShop?'<div class="card"><span class="label">Who to send it to</span><p style="font-size:14.5px">You bought it from a shop or platform, so send this to <b>that seller</b>. In the Netherlands the seller is responsible for a faulty product.</p></div>':'')+
+   '<div class="card"><span class="label">Warranty check</span><p style="font-size:14.5px">'+status+'</p>'+(B.note?'<p class="hint" style="margin-top:6px">'+esc(B.note)+'</p>':'')+(B.src?'<p class="fine" style="margin-top:6px">Source: <a href="'+B.src+'" target="_blank" rel="noopener">'+esc(B.kind==='gone'?'news report':brand+' warranty terms')+'</a>, checked '+WH_CHECKED+'.</p>':'')+'</div>'+
+   '<div class="card"><span class="label">Who to send it to</span><p style="font-size:14.5px">'+where+'</p>'+(B.link?'<p style="margin-top:6px"><a href="'+B.link+'" target="_blank" rel="noopener">Open '+esc(B.name)+' support</a></p>':'')+'</div>'+
    '<div><label for="whMail">Your email (edit anything)</label><textarea class="field" id="whMail" style="min-height:260px">'+esc(body)+'</textarea></div>'+
-   '<div class="btns">'+(to?'<a class="btn primary" id="whSend" href="#">Open in my mail app</a>':'')+'<button class="btn" id="whCopy" type="button">Copy email</button></div><p class="msg" id="whMsg" role="status"></p>'+
-   '<div class="card"><span class="label">Before you send</span><ul class="dots"><li>Film a short video of the problem.</li><li>Photograph the part, its label and the frame number.</li><li>Attach your order confirmation or invoice.</li></ul></div>'+
-   '<div class="card"><span class="label">Where to get it repaired</span><p style="font-size:14.5px">'+esc(B.repair)+'</p><p style="margin-top:8px"><button class="linkbtn" id="whShops" type="button">See bike shops in Groningen</button></p></div>'+
+   '<div class="btns">'+(to?'<a class="btn primary" id="whSend" href="#">Open in my mail app</a>':'')+'<button class="btn'+(to?'':' primary')+'" id="whCopy" type="button">Copy email</button></div><p class="msg" id="whMsg" role="status"></p>'+
+   '<div class="card"><span class="label">Before you send</span><ul class="dots"><li>Film a short video of the problem.</li><li>Photograph the part, its label and the frame number.</li><li>Attach your order confirmation or receipt'+(B.name==='Cortina'?', and bring the charger for a battery claim':'')+'.</li></ul></div>'+
+   '<div class="card"><span class="label">Where to get it repaired</span><p style="font-size:14.5px">'+repair+'</p><p style="margin-top:8px"><button class="linkbtn" id="whShops" type="button">See bike shops in Groningen</button></p></div>'+
    '<div class="card"><span class="label">Your rights in the Netherlands</span><p style="font-size:14.5px">The seller must fix a faulty product, whatever the factory warranty says. In the first year after purchase, the seller has to prove you caused the fault.</p><p class="fine" style="margin-top:6px">General information, not legal advice. <a href="https://www.acm.nl/nl/onderwerpen/consumentenrecht/garantie-en-conformiteit/recht-op-een-deugdelijk-product/" target="_blank" rel="noopener">Read the official ACM page</a>.</p></div>';
   const ta=out.querySelector('#whMail');
   const send=out.querySelector('#whSend');
