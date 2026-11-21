@@ -2267,7 +2267,8 @@ setTimeout(function(){setBrk(bk.dataset.type==="ebike"?"disc":cur())},0)})();</s
 window.FC_FEEDBACK=window.FC_FEEDBACK||""; /* put your feedback email between the quotes, e.g. "hello@yourdomain.nl" */
 (function(){
   if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost') && !/claude\.ai|claudeusercontent/.test(location.host)){
-    window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})});
+    window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js',{updateViaCache:'none'}).then(function(r){r.update().catch(function(){})}).catch(function(){})});
+    document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&navigator.serviceWorker.getRegistration)navigator.serviceWorker.getRegistration().then(function(r){if(r)r.update().catch(function(){})})});
   }
   var dp=null;window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();dp=e;var b=document.getElementById('installBtn');if(b)b.hidden=false});
   document.addEventListener('click',function(e){var b=e.target.closest('#installBtn');if(!b||!dp)return;e.preventDefault();dp.prompt();dp.userChoice.finally(function(){dp=null;b.hidden=true})});
