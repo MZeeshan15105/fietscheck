@@ -83,7 +83,9 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
   await page.goBack();
   await page.waitForTimeout(500);
   await page.click('#themeBtn');
+  await page.waitForTimeout(800);
   await page.click('#themeBtn');
+  await page.waitForTimeout(800);
   await page.reload();
   await page.waitForTimeout(500);
   ok((await page.evaluate(() => document.documentElement.dataset.theme)) === 'dark', 'theme: dark mode is remembered');

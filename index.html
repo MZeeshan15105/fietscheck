@@ -1232,11 +1232,12 @@ function stepB(){
   });
 }
 function loadingStep(){
-  W.busy=true;
-  const html='<div class="loadbox" role="status"><svg viewBox="0 0 100 100" style="color:var(--ink);animation:spin 1.1s linear infinite"><use href="#whl"/></svg><div><h2 id="sheetTitle" style="font-size:22px">Looking at your bike</h2><p class="hint" style="margin-top:4px">This can take up to a minute.</p></div><button class="btn" id="stop" type="button">Stop</button></div>';
+  W.busy=true;W.t0=performance.now();
+  const pn=(S.part&&PARTS[S.part])||'your bike';
+  const html='<div class="loadbox diag" role="status"><div class="diagring" aria-hidden="true"><svg viewBox="0 0 100 100" style="color:var(--ink);animation:spin 1.1s linear infinite"><use href="#whl"/></svg><i></i><i></i><b></b></div><div><h2 id="sheetTitle" style="font-size:22px">Checking '+esc(pn.toLowerCase())+'</h2>'+(S.sample?'<p class="hint" style="margin-top:4px">This can take up to a minute.</p>':'')+'</div><ol class="diagsteps"><li>Matching your answers to 26 known faults</li><li>Checking if it is safe to ride</li><li>Pricing it against Groningen shops</li></ol><button class="btn" id="stop" type="button">Stop</button></div>';
   openSheet(html,sh=>{
     if(REDUCE())sh.querySelector('svg').style.animationDuration='4s';
-    sh.querySelector('#stop').onclick=()=>{if(S.ctl)S.ctl.abort()};
+    sh.querySelector('#stop').onclick=()=>{if(S.ctl&&!S.ctl.signal.aborted)S.ctl.abort();else{W.busy=false;W.step='B';stepB()}};
   });
 }
 $('demo').addEventListener('click',()=>{
@@ -1792,6 +1793,8 @@ async function run(extra){
   res.notice=notice;
   res.escalate=/brake|brakes|rem\b|remmen|steer|stuur|handlebar|crack|scheur|frame|fork|vork/i.test(text+' '+(extra||''))&&res.id!=='unsure'&&FAULTS[res.id]&&FAULTS[res.id].safety==='green';
   S.result=res;S.lastFault=res.id;S.saved=false;
+  if(!REDUCE()){const wait=1250-(performance.now()-(W.t0||0));if(wait>0)await new Promise(r=>setTimeout(r,wait))}
+  if(!W.busy)return;
   W.busy=false;closeSheet();
   $('home').hidden=true;navEnsure();
   renderResult();updLean();
@@ -2319,5 +2322,69 @@ if(tabs){const pill=document.createElement('span');pill.className='tabpill';pill
 .tabpill{position:absolute;left:0;top:6px;bottom:6px;border-radius:20px;background:color-mix(in srgb,var(--signal) 12%,transparent);transition:transform .42s cubic-bezier(.3,1.35,.5,1),width .3s;pointer-events:none;z-index:0}
 .tab{position:relative;z-index:1}
 @media (prefers-reduced-motion:reduce){#bike{transition:none}.tabpill{transition:none}.band.stamp,.band.stamp *{animation:none!important}}
+</style>
+<script>
+/* ---------- Motion 2: haptics, theme reveal, ticket print, sheet drag, diagnosis scene ---------- */
+(function(){
+const R=()=>window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const hap=p=>{try{if(!R()&&navigator.vibrate)navigator.vibrate(p)}catch(e){}};
+/* Haptics on Android: dots, tabs, verdicts */
+document.addEventListener('click',e=>{if(e.target.closest('#bike .dot'))hap(8);else if(e.target.closest('.tab'))hap(5);else if(e.target.closest('.opt'))hap(6)},true);
+const res=document.getElementById('result');
+if(res)new MutationObserver(()=>{if(res.hidden)return;const b=res.querySelector('.band');if(!b||b.dataset.buzzed)return;b.dataset.buzzed=1;
+  hap(b.classList.contains('stop')?[40,60,40]:b.classList.contains('caution')?[18,40,18]:14)}).observe(res,{childList:true,attributes:true,attributeFilter:['hidden']});
+/* Mechanic ticket prints out like a receipt when it scrolls into view */
+if(res&&'IntersectionObserver' in window){const io=new IntersectionObserver(es=>es.forEach(en=>{if(en.isIntersecting){const t=en.target.querySelector('.ticket');if(t)t.classList.add('printing');io.unobserve(en.target)}}),{threshold:.2});
+  new MutationObserver(()=>{const t=document.getElementById('ticket');if(t&&!t.dataset.pr&&!R()){t.dataset.pr=1;t.classList.add('toprint');io.observe(t.parentElement)}}).observe(res,{childList:true,subtree:true})}
+/* Theme switch: circular reveal from the button */
+const tb=document.getElementById('themeBtn');
+if(tb&&document.startViewTransition){tb.addEventListener('click',e=>{if(tb.dataset.vt==='pass')return;if(tb.dataset.vt==='busy'){e.stopImmediatePropagation();return}if(R())return;e.stopImmediatePropagation();
+  const r=tb.getBoundingClientRect(),x=r.left+r.width/2,y=r.top+r.height/2,rad=Math.hypot(Math.max(x,innerWidth-x),Math.max(y,innerHeight-y));
+  document.documentElement.style.setProperty('--vtx',x+'px');document.documentElement.style.setProperty('--vty',y+'px');document.documentElement.style.setProperty('--vtr',rad+'px');
+  tb.dataset.vt='busy';const v=document.startViewTransition(()=>{tb.dataset.vt='pass';tb.click();tb.dataset.vt='busy'});v.finished.finally(()=>{delete tb.dataset.vt})},true);
+}
+/* Sheet: drag down to close (phones) */
+const sh=document.getElementById('sheet');
+if(sh){let y0=0,dy=0,t0=0,drag=false;
+  sh.addEventListener('pointerdown',e=>{if(!sh.classList.contains('on')||sh.getBoundingClientRect().bottom<innerHeight-4||e.button>0)return;
+    const top=sh.getBoundingClientRect().top;if(e.clientY-top>72||e.target.closest('button,a,input,select,textarea,label'))return;
+    drag=true;y0=e.clientY;dy=0;t0=performance.now();sh.style.transition='none';try{sh.setPointerCapture(e.pointerId)}catch(_){}});
+  sh.addEventListener('pointermove',e=>{if(!drag)return;dy=Math.max(0,e.clientY-y0);sh.style.transform='translateY('+(dy<160?dy:160+(dy-160)*.6)+'px)'});
+  const end=()=>{if(!drag)return;drag=false;const v=dy/Math.max(1,performance.now()-t0);sh.style.transition='';
+    if(dy>110||v>.6){hap(6);sh.style.transform='translateY(105%)';const bk=document.getElementById('backdrop');if(bk)bk.classList.remove('on');setTimeout(()=>{sh.style.transform='';history.length&&sh.classList.contains('on')&&document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))},10)}
+    else sh.style.transform=''};
+  sh.addEventListener('pointerup',end);sh.addEventListener('pointercancel',end);}
+})();
+</script>
+<style>
+/* press feedback */
+.btn,.opt,.tool,.seg button,.bachips button,.barow,.iconbtn{transition:transform .12s ease-out,background-color .2s,color .2s,box-shadow .2s}
+.btn:active,.opt:active,.tool:active,.seg button:active,.bachips button:active,.barow:active,.iconbtn:active{transform:scale(.96)}
+/* diagnosis scene */
+.diag{gap:16px}
+.diagring{position:relative;width:132px;height:132px;display:grid;place-items:center}
+.diagring svg{width:84px!important}
+.diagring i{position:absolute;inset:0;border-radius:50%;border:2px solid var(--signal);opacity:0;animation:dring 1.6s cubic-bezier(.2,.7,.3,1) infinite}
+.diagring i+i{animation-delay:.8s}
+.diagring b{position:absolute;inset:-4px;border-radius:50%;background:conic-gradient(from 0deg,transparent 0 70%,color-mix(in srgb,var(--signal) 55%,transparent) 100%);animation:spin 1.25s linear infinite;mask:radial-gradient(circle,transparent 58%,#000 60%);-webkit-mask:radial-gradient(circle,transparent 58%,#000 60%)}
+@keyframes dring{from{transform:scale(.55);opacity:.9}to{transform:scale(1.15);opacity:0}}
+.diagsteps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;text-align:left;font-size:14px;color:var(--mute);min-width:250px}
+.diagsteps li{display:flex;gap:10px;align-items:center;opacity:.35;animation:dstep .3s ease forwards}
+.diagsteps li::before{content:"";width:18px;height:18px;flex:0 0 18px;border-radius:50%;border:2px solid var(--line);box-sizing:border-box}
+.diagsteps li:nth-child(1){animation-delay:.15s}.diagsteps li:nth-child(2){animation-delay:.5s}.diagsteps li:nth-child(3){animation-delay:.85s}
+@keyframes dstep{to{opacity:1;color:var(--ink)}}
+.diagsteps li{--ck:none}
+.diagsteps li::before{animation:dtick .35s ease forwards;animation-delay:inherit}
+.diagsteps li:nth-child(1)::before{animation-delay:.3s}.diagsteps li:nth-child(2)::before{animation-delay:.65s}.diagsteps li:nth-child(3)::before{animation-delay:1s}
+@keyframes dtick{to{background:var(--safe) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M5 9.5l2.5 2.5L13 6.5' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/100% no-repeat;border-color:var(--safe)}}
+/* receipt print */
+.ticket.toprint{clip-path:inset(0 0 100% 0)}
+.ticket.toprint.printing{animation:printT 1.1s cubic-bezier(.45,.05,.25,1) forwards}
+@keyframes printT{0%{clip-path:inset(0 0 100% 0);transform:translateY(-14px)}15%{clip-path:inset(0 0 82% 0)}30%{clip-path:inset(0 0 70% 0)}55%{clip-path:inset(0 0 38% 0)}75%{clip-path:inset(0 0 16% 0)}100%{clip-path:inset(0 0 0 0);transform:none}}
+/* theme reveal */
+::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+::view-transition-new(root){animation:vtReveal .6s cubic-bezier(.3,.6,.2,1)}
+@keyframes vtReveal{from{clip-path:circle(0 at var(--vtx,50%) var(--vty,0))}to{clip-path:circle(var(--vtr,150vmax) at var(--vtx,50%) var(--vty,0))}}
+@media (prefers-reduced-motion:reduce){.diagring i,.diagring b,.diagsteps li,.diagsteps li::before{animation:none!important;opacity:1}.ticket.toprint{clip-path:none}}
 </style>
 </body></html>
