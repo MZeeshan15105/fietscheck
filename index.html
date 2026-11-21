@@ -28,7 +28,7 @@
   --safe:#0E7A4E; --safe-bg:#E3F4EB; --caution:#7A5200; --caution-bg:#FFF1CC; --caution-solid:#F5B301; --stop:#B71F35; --stop-bg:#FDE8EB;
   --focus:#1F6FEB; --mk-ring:#12171D; --shadow:0 10px 30px rgba(17,22,28,.12);
   --f-head:'Archivo','Segoe UI',system-ui,sans-serif;
-  --f-body:'Archivo','Segoe UI',system-ui,sans-serif;
+  --f-body:-apple-system,BlinkMacSystemFont,system-ui,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif;
   --f-mono:'Archivo','Segoe UI',system-ui,sans-serif;
 }
 @media (prefers-color-scheme: dark){
@@ -2037,7 +2037,7 @@ function renderGarage(){
     }).join('')+'</div><p class="hint" style="font-size:13px">Intervals are common rules of thumb, not a manufacturer schedule.</p></div>';
   }
   h+='<div class="stack" style="gap:10px"><h3 style="font-size:20px;margin:0">History</h3><div class="card" style="padding:4px 16px">';
-  if(!S.checks.length)h+='<p class="hint" style="padding:12px 0">Your checks will appear here after your first diagnosis.</p>';
+  if(!S.checks.length)h+='<p class="hint" style="padding:12px 0 10px">Your checks will appear here after your first diagnosis.</p><button class="btn primary" type="button" onclick="document.querySelector(\'[data-tab=check]\').click()">Check my bike</button>';
   h+=S.checks.map(c=>'<button class="hrow" type="button" data-check="'+esc(c.id)+'"><span class="dotc '+SAFETY[c.safety||'amber'].k+'" aria-hidden="true"></span><span class="tx"><b>'+esc(c.faultName||'Check')+'</b><span class="hint">'+dateLabel(c.ts)+(c.paid!=null?' · paid '+eur(c.paid):'')+'</span></span><span class="pr">'+(c.estLo!=null?range(c.estLo,c.estHi):'')+'</span></button>').join('')+'</div></div>';
   h+='<div class="card"><h3>Privacy</h3><p class="hint" style="margin-bottom:12px">'+(S.local?'Your bikes and checks are saved only on this device. Nobody else can see them, including us. Clearing your browser or app data deletes them.':'Your bikes and checks are stored under your own account and are not visible to other users, including the app owner.')+'</p>'+
     '<label class="switch"><input type="checkbox" id="shareBox" '+(S.prefs.share?'checked':'')+(S.canWrite?'':' disabled')+'><span><b>Share anonymous results to improve FietsCheck</b><span class="hint" style="display:block">Sends only the fault type, a price band and the verdict. No name, no account id.</span></span></label>'+
@@ -2401,5 +2401,9 @@ h3{font-stretch:108%;font-weight:700;letter-spacing:-.01em}
 .stat b{font-weight:750;font-stretch:108%;letter-spacing:-.02em}
 .ticket .nl{font-stretch:100%;font-weight:750;letter-spacing:-.015em}
 .btn,.tab,.seg button,.opt{font-stretch:104%}
+
+/* Selected states readable in both themes */
+.seg button[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.pill.on{background:var(--ink);color:var(--paper)}
 </style>
 </body></html>
