@@ -13,3 +13,7 @@ FietsCheck is a free web app for cyclists in Groningen. Tap the part of your bik
 FietsCheck gives guidance, not a guarantee. It is not a replacement for a mechanic.
 
 [Privacy](privacy.html) · [Terms](terms.html)
+
+## Tests
+Run `node tests/smoke.js` (needs `npm install playwright` and `npx playwright install chromium`).
+GitHub runs the same tests on every push (see `.github/workflows/test.yml`).
