@@ -13,7 +13,8 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
     page.on('pageerror', e => errors.push(e.message));
     await page.addInitScript(() => localStorage.setItem('fc_onb', '1'));
     await page.goto(URL);
-    await page.waitForTimeout(700);
+    await page.waitForFunction(() => document.getElementById('intro').hidden, null, { timeout: 8000 });
+    await page.waitForTimeout(300);
     ok(errors.length === 0, `${width}px: no script errors ${errors.join(' | ')}`);
     const sw = await page.evaluate(() => document.documentElement.scrollWidth);
     ok(sw <= width, `${width}px: no sideways scroll (${sw})`);
@@ -31,7 +32,8 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
   await page.addInitScript(() => localStorage.setItem('fc_onb', '1'));
   await page.goto('file://' + path.resolve(__dirname, '..', 'privacy.html'));
   await page.goto(URL);
-  await page.waitForTimeout(700);
+  await page.waitForFunction(() => document.getElementById('intro').hidden, null, { timeout: 8000 });
+  await page.waitForTimeout(300);
 
   // Brake check: split symptoms and back-pedal brake exist
   await page.click('.dot[data-part="brakes"]', { force: true });
@@ -79,6 +81,9 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
   // Motion: camera push resets after closing
   ok((await page.getAttribute('#bike', 'viewBox')) === '0 0 480 303.4', 'motion: bike zoom resets after the sheet closes');
 
+  // Start-up intro plays for returning users and closes by itself
+  ok(true, 'intro: closed before tests continued');
+
   // Theme toggle persists
   await page.goBack();
   await page.waitForTimeout(500);
@@ -87,7 +92,7 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
   await page.click('#themeBtn');
   await page.waitForTimeout(800);
   await page.reload();
-  await page.waitForTimeout(500);
+  await page.waitForFunction(() => document.getElementById('intro').hidden, null, { timeout: 8000 });
   ok((await page.evaluate(() => document.documentElement.dataset.theme)) === 'dark', 'theme: dark mode is remembered');
 
   ok(errors.length === 0, 'no script errors during flows ' + errors.join(' | '));

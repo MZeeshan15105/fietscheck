@@ -693,7 +693,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
     </div>
   </section></details>
   <div class="wf-about">
-    <div class="card"><div class="eyebrow">About</div><h3 style="margin-top:6px">Built for Groningen cyclists</h3><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
+    <div class="card"><div class="eyebrow">About</div><h3 style="margin-top:6px">Built for Groningen cyclists</h3><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
     <div class="card"><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
   </div>
   <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.0 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
@@ -1023,7 +1023,27 @@ function toast(msg){const t=$('toast');t.textContent=msg;t.classList.add('on');c
 function dateLabel(ts){try{return new Date(ts).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}catch(e){return ''}}
 
 /* ---------- Entrance ---------- */
-function playIntro(full){
+/* Bicycle bell, synthesised (no audio file). Browsers only allow sound after a tap, so a blocked ring waits for the first tap. */
+const BELL={ctx:null,pending:0};
+function bellOn(){try{return localStorage.getItem('fc_sound')!=='0'}catch(e){return true}}
+function bellStrike(ctx,t){
+  const out=ctx.createGain();out.gain.value=.2;out.connect(ctx.destination);
+  [[2637,.55,1.5],[3951,.26,1.0],[5810,.13,.65],[7850,.06,.4]].forEach(([f,g,d])=>{
+    const o=ctx.createOscillator(),v=ctx.createGain();o.type='sine';o.frequency.value=f;
+    v.gain.setValueAtTime(0,t);v.gain.linearRampToValueAtTime(g,t+.003);v.gain.exponentialRampToValueAtTime(.0001,t+d);
+    o.connect(v);v.connect(out);o.start(t);o.stop(t+d+.05)});
+  const n=ctx.createBuffer(1,ctx.sampleRate*.03,ctx.sampleRate),dd=n.getChannelData(0);for(let i=0;i<dd.length;i++)dd[i]=(Math.random()*2-1)*(1-i/dd.length);
+  const src=ctx.createBufferSource(),hp=ctx.createBiquadFilter(),ng=ctx.createGain();src.buffer=n;hp.type='highpass';hp.frequency.value=3000;ng.gain.value=.25;src.connect(hp);hp.connect(ng);ng.connect(out);src.start(t);
+}
+function fcBell(){
+  if(!bellOn()||REDUCE())return;
+  try{BELL.ctx=BELL.ctx||new (window.AudioContext||window.webkitAudioContext)()}catch(e){return}
+  const ctx=BELL.ctx;
+  const ring=()=>{const t=ctx.currentTime+.02;bellStrike(ctx,t);bellStrike(ctx,t+.24)};
+  if(ctx.state==='running')ring();else{BELL.pending=performance.now();ctx.resume().then(()=>{if(BELL.pending&&ctx.state==='running'){BELL.pending=0;ring()}}).catch(()=>{})}
+}
+document.addEventListener('pointerdown',()=>{const c=BELL.ctx;if(!c)return;c.resume().then(()=>{if(BELL.pending&&performance.now()-BELL.pending<6000){BELL.pending=0;const t=c.currentTime+.02;bellStrike(c,t);bellStrike(c,t+.24)}}).catch(()=>{})},true);
+function playIntro(full,quick){
   const ov=$('intro');ov.hidden=false;
   const wm=$('iWm');
   wm.innerHTML='Fiets'.split('').map(c=>'<span>'+c+'</span>').join('')+'Check'.split('').map(c=>'<span class="c">'+c+'</span>').join('');
@@ -1031,11 +1051,20 @@ function playIntro(full){
   function close(){
     if(done)return;done=true;clearTimeout(timer);
     anims.forEach(a=>{try{a.finish()}catch(e){}});
-    const f=ov.animate([{opacity:1},{opacity:0}],{duration:reduce?150:280,easing:'ease-out',fill:'forwards'});
-    f.onfinish=()=>{ov.hidden=true;try{f.cancel()}catch(e){}};
+    const logo=document.querySelector('.brand img'),onb=$('onb'),isvg=ov.querySelector('svg');
+    const dock=full&&!reduce&&logo&&(!onb||onb.hidden)&&isvg;
+    if(dock){
+      const a=isvg.getBoundingClientRect(),b=logo.getBoundingClientRect();
+      const sc=b.width/(a.width*.62),dx=(b.left+b.width/2)-(a.left+a.width/2),dy=(b.top+b.height/2)-(a.top+a.height/2);
+      isvg.animate([{transform:'none',opacity:1},{transform:'translate('+dx+'px,'+dy+'px) scale('+sc+')',opacity:.0}],{duration:620,easing:'cubic-bezier(.6,0,.2,1)',fill:'forwards'});
+      ov.querySelectorAll('.iwm,#iTag,.iskip').forEach(e=>e.animate([{opacity:getComputedStyle(e).opacity},{opacity:0,transform:'translateY(-8px)'}],{duration:260,fill:'forwards'}));
+      logo.animate([{transform:'scale(.6)',opacity:0},{transform:'scale(1.15)',opacity:1,offset:.7},{transform:'scale(1)',opacity:1}],{duration:420,delay:430,easing:'ease-out',fill:'backwards'});
+    }
+    const f=ov.animate(dock?[{clipPath:'circle(150% at 50% 50%)'},{clipPath:'circle(0% at 50% 50%)'}]:[{opacity:1},{opacity:0}],{duration:reduce?150:(dock?620:280),delay:dock?80:0,easing:dock?'cubic-bezier(.6,0,.2,1)':'ease-out',fill:'forwards'});
+    f.onfinish=()=>{ov.hidden=true;try{f.cancel()}catch(e){}ov.querySelectorAll('svg,.iwm,#iTag,.iskip').forEach(e=>e.getAnimations().forEach(x=>{try{x.cancel()}catch(_){}}));const fx=$('iFx');if(fx)fx.remove();const bw=$('iBell');if(bw)bw.remove()};
     ov.removeEventListener('pointerdown',early);document.removeEventListener('keydown',early);
   }
-  const t0=performance.now();const early=()=>{if(performance.now()-t0>1800)close()};
+  const t0=performance.now();const early=()=>{if(quick||performance.now()-t0>1800)close()};
   ov.addEventListener('pointerdown',early);document.addEventListener('keydown',early);
   if(!full||reduce){ov.querySelector('.iskip').style.opacity=0;ov.querySelectorAll('#iWm span').forEach(s=>{s.style.transform='none'});timer=setTimeout(close,reduce?2200:700);return}
   const A=(el,kf,o)=>{const a=el.animate(kf,Object.assign({fill:'both'},o));anims.push(a);return a};
@@ -1062,8 +1091,22 @@ function playIntro(full){
     A(g,[{transform:'rotate(0deg)'},{transform:'rotate(360deg)'}],{duration:1400,delay:1000,iterations:Infinity,easing:'linear'});
     g.querySelectorAll('.ld').forEach((c,i)=>A(c,[{opacity:0},{opacity:1,offset:.5},{opacity:.15}],{duration:1400,delay:1000+i*(1400/12),iterations:Infinity,easing:'ease-in-out'}));
   });
-  A(ov.querySelector('.iskip'),[{opacity:0},{opacity:1}],{duration:400,delay:1800});
-  timer=setTimeout(close,3500);
+  /* Speed streaks while the bike rolls in, dust when it stops */
+  const NSI='http://www.w3.org/2000/svg',isvg=ov.querySelector('svg');
+  const fx=document.createElementNS(NSI,'g');fx.setAttribute('id','iFx');isvg.insertBefore(fx,isvg.firstChild);
+  [[30,'.9'],[44,'.6'],[58,'.95'],[66,'.55'],[22,'.5'],[50,'.7']].forEach(([y,o],k)=>{const l=document.createElementNS(NSI,'line');l.setAttribute('x1',-46);l.setAttribute('x2',-6);l.setAttribute('y1',y);l.setAttribute('y2',y);l.setAttribute('stroke','#FF6B2C');l.setAttribute('stroke-opacity',o);l.setAttribute('stroke-width',k%2?1.2:2);l.setAttribute('stroke-linecap','round');fx.appendChild(l);
+    A(l,[{transform:'translateX(-60px)',opacity:0},{transform:'translateX(40px)',opacity:1,offset:.4},{transform:'translateX(90px)',opacity:0}],{duration:900,delay:k*60,easing:'cubic-bezier(.2,.7,.3,1)'})});
+  [[24,73],[96,73]].forEach(([x,y])=>{for(let k=0;k<5;k++){const c=document.createElementNS(NSI,'circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r',1.4);c.setAttribute('fill','#9AA6B2');fx.appendChild(c);
+    const dx=(k-2)*5+(Math.random()*2-1),dy=-3-Math.random()*4;A(c,[{transform:'translate(0,0) scale(.6)',opacity:0},{transform:'translate(0,0) scale(1)',opacity:.8,offset:.1},{transform:'translate('+dx+'px,'+dy+'px) scale(2.2)',opacity:0}],{duration:650,delay:900,easing:'cubic-bezier(.2,.7,.3,1)'})}});
+  /* Bell ring: bar shakes, sound waves, sound */
+  const bw=document.createElementNS(NSI,'g');bw.setAttribute('id','iBell');isvg.appendChild(bw);
+  [0,1,2].forEach(k=>{const a=document.createElementNS(NSI,'path');const r=4.5+k*4.2;a.setAttribute('d','M'+(88+r*.15)+' '+(9-r)+' A'+r+' '+r+' 0 0 1 '+(88+r)+' '+(9+r*.2));a.setAttribute('fill','none');a.setAttribute('stroke','#FFD66B');a.setAttribute('stroke-width',1.9);a.setAttribute('stroke-linecap','round');a.style.opacity=0;a.style.transformBox='fill-box';a.style.transformOrigin='0% 100%';bw.appendChild(a);
+    [1450,1690].forEach(t0=>A(a,[{opacity:0,transform:'scale(.7)'},{opacity:1,transform:'scale(1)',offset:.35},{opacity:0,transform:'scale(1.25)'}],{duration:520,delay:t0+k*70,easing:'ease-out',fill:'none'}))});
+  bw.style.transformOrigin='80px 10px';
+  A($('iBar'),[{rotate:'0deg'},{rotate:'-9deg'},{rotate:'7deg'},{rotate:'-5deg'},{rotate:'3deg'},{rotate:'0deg'}],{duration:520,delay:1450,composite:'add'});
+  setTimeout(()=>{if(!done)fcBell()},1450);
+  A(ov.querySelector('.iskip'),[{opacity:0},{opacity:1}],{duration:400,delay:1500});
+  timer=setTimeout(close,quick?2250:2900);
 }
 
 /* ---------- Tabs ---------- */
@@ -1418,6 +1461,7 @@ function whBuild(sh,mail){
   setTimeout(()=>{try{out.firstChild.scrollIntoView({behavior:REDUCE()?'auto':'smooth',block:'start'})}catch(e){}},60);
 }
 $('whOpenBtn').addEventListener('click',whOpen);
+(function(){const b=$('soundBtn');if(!b)return;const set=()=>{const on=bellOn();b.textContent='Start-up bell: '+(on?'on':'off');b.setAttribute('aria-pressed',String(on))};set();b.onclick=()=>{try{localStorage.setItem('fc_sound',bellOn()?'0':'1')}catch(e){}set();if(bellOn())fcBell()}})();
 $('quickBtn').addEventListener('click',()=>{const q=$('quick');q.hidden=!q.hidden;q.open=!q.hidden;if(!q.hidden)setTimeout(()=>q.scrollIntoView({behavior:REDUCE()?'auto':'smooth',block:'start'}),30)});
 /* ---------- Bike buying advisor ---------- */
 /* Prices from the linked page, checked 21 November 2026. fit 0-3 per use. buy = one-off, month = monthly. */
@@ -2157,7 +2201,7 @@ $('infoBtn').addEventListener('click',()=>{
 
 /* ---------- Boot ---------- */
 S.cost=store('fc_cost')||'';S.age=store('fc_age')||'0.8';
-(function(){let seen=false;try{seen=localStorage.getItem('fc_onb')==='1'}catch(e){}if(!seen)playIntro(true)})();
+(function(){let seen=false;try{seen=localStorage.getItem('fc_onb')==='1'}catch(e){}if(!seen)playIntro(true);else playIntro(true,true)})();
 (async function(){
   try{
     if(!window.claude||!window.claude.use){localBoot();return;}
