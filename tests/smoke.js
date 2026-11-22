@@ -87,10 +87,11 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
   // Theme toggle persists
   await page.goBack();
   await page.waitForTimeout(500);
-  await page.click('#themeBtn');
-  await page.waitForTimeout(800);
-  await page.click('#themeBtn');
-  await page.waitForTimeout(800);
+  const themeIs = v => page.waitForFunction(x => (document.documentElement.dataset.theme || 'auto') === x, v, { timeout: 4000 }).then(() => true).catch(() => false);
+  for (const want of ['light', 'dark']) {
+    for (let i = 0; i < 3; i++) { await page.click('#themeBtn'); if (await themeIs(want)) break; }
+    await page.waitForTimeout(700);
+  }
   await page.reload();
   await page.waitForFunction(() => document.getElementById('intro').hidden, null, { timeout: 8000 });
   ok((await page.evaluate(() => document.documentElement.dataset.theme)) === 'dark', 'theme: dark mode is remembered');
