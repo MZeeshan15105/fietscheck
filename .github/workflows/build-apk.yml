@@ -1,0 +1,58 @@
+name: Build Flutter APK
+
+on:
+  push:
+    branches: [flutter]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      # Only lib/, assets and pubspec are kept in git. This fills in the
+      # android/ folder without touching our own files.
+      - name: Generate platform files
+        run: |
+          flutter create --org io.github.mzeeshan15105 --project-name fietscheck --platforms android .
+          rm -f test/widget_test.dart
+          sed -i 's/android:label="fietscheck"/android:label="FietsCheck"/' android/app/src/main/AndroidManifest.xml
+
+      - run: flutter pub get
+      - run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Rename
+        run: cp build/app/outputs/flutter-apk/app-release.apk FietsCheck-flutter.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: FietsCheck-flutter
+          path: FietsCheck-flutter.apk
+
+      # One fixed download link that always holds the newest build
+      - name: Publish to "flutter-latest" release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete flutter-latest --yes --cleanup-tag || true
+          gh release create flutter-latest FietsCheck-flutter.apk \
+            --target "${{ github.sha }}" --prerelease \
+            --title "FietsCheck Flutter (test build)" \
+            --notes "Automatic build from the flutter branch. Separate from the live web app."
