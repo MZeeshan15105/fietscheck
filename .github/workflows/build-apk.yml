@@ -28,12 +28,23 @@ jobs:
       # android/ folder without touching our own files.
       - name: Generate platform files
         run: |
-          flutter create --org io.github.mzeeshan15105 --project-name fietscheck --platforms android .
+          flutter create --org io.github.mzeeshan15105 --project-name fietscheck --platforms android,web .
           rm -f test/widget_test.dart
           sed -i 's/android:label="fietscheck"/android:label="FietsCheck"/' android/app/src/main/AndroidManifest.xml
 
       - run: flutter pub get
       - run: flutter analyze --no-fatal-infos --no-fatal-warnings
+
+      - name: Build web preview
+        run: |
+          flutter create --platforms web .
+          flutter build web --release --no-web-resources-cdn --base-href /
+          rm -f build/web/.last_build_id
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fietscheck-web
+          path: build/web
 
       - name: Build APK
         run: flutter build apk --release
