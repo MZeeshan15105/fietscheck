@@ -41,10 +41,14 @@ jobs:
           flutter build web --release --no-web-resources-cdn --base-href /
           rm -f build/web/.last_build_id
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: fietscheck-web
-          path: build/web
+      - name: Push web preview to flutter-web branch
+        run: |
+          cd build/web
+          git init -q -b flutter-web
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add -A && git commit -qm "Web preview of ${{ github.sha }}"
+          git push -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" flutter-web
 
       - name: Build APK
         run: flutter build apk --release
