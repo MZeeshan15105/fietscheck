@@ -633,7 +633,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
         <div class="bopts"><div class="grp"><span>Bike</span><div class="mini" id="typeSeg"><button type="button" data-t="city" aria-pressed="true">City bike</button><button type="button" data-t="ebike" aria-pressed="false">E-bike</button></div></div><div class="grp"><span>Brakes</span><div class="mini" id="brkSeg"><button type="button" data-b="rim" aria-pressed="true">Rim</button><button type="button" data-b="disc" aria-pressed="false">Disc</button></div></div></div>
         <div class="heroFoot"><span class="where" id="partName">Pick a part</span><span style="display:flex;gap:6px;align-items:center"><button class="linkbtn" id="pickList" type="button">Choose from a list</button><span aria-hidden="true" style="color:#566474">·</span><button class="linkbtn" id="notSure" type="button">Not sure where</button></span></div>
       </div>
-      <div class="tools" role="group" aria-label="More tools"><button class="tool" id="baOpenBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l4-7h5l3 7M10 9l3 7M9 6h3"/></svg></span><b>Find a bike</b><small>100 bikes, €50 to cargo</small></button><button class="tool" id="whOpenBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span><b>Warranty help</b><small>Is the repair free?</small></button><button class="tool" id="quickBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></svg></span><b>Pre-ride check</b><small>7 things, 60 seconds</small></button><button class="tool" id="demo" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7z"/></svg></span><b>Try an example</b><small>See a sample result</small></button></div>
+      <div class="tools" role="group" aria-label="More tools"><button class="tool gfeat" id="gfOpen" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 0 0 5.4-5.4l-2.6 2.6-2.4-.6-.6-2.4z"/></svg></span><span class="gf-t"><b>Fix it yourself</b><small>Animated step-by-step repair guides</small></span><span class="gf-go">Start</span></button><button class="tool" id="baOpenBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="16" r="3.5"/><circle cx="18" cy="16" r="3.5"/><path d="M6 16l4-7h5l3 7M10 9l3 7M9 6h3"/></svg></span><b>Find a bike</b><small>100 bikes, €50 to cargo</small></button><button class="tool" id="whOpenBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/></svg></span><b>Warranty help</b><small>Is the repair free?</small></button><button class="tool" id="quickBtn" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></svg></span><b>Pre-ride check</b><small>7 things, 60 seconds</small></button><button class="tool" id="demo" type="button"><span class="tic" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7z"/></svg></span><b>Try an example</b><small>See a sample result</small></button></div>
       <div id="season"></div>
       <details class="diy" id="quick" hidden><summary>60-second safety check before you ride</summary><ol id="quickList"></ol></details>
     </div>
@@ -696,7 +696,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
     <div class="card"><div class="eyebrow">About</div><h3 style="margin-top:6px">Built for Groningen cyclists</h3><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
     <div class="card"><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
   </div>
-  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.20 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
+  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.21 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
 </footer>
 <script>document.addEventListener('click',function(e){var b=e.target.closest('#goPrices');if(!b)return;var t=document.querySelector('.tab[data-tab="prices"]');if(t){t.click();window.scrollTo({top:0,behavior:'smooth'})}});</script>
 
@@ -907,6 +907,7 @@ const AGE_LABEL={'1':'under 1 year old','0.8':'1 to 2 years old','0.6':'3 to 5 y
 
 /* ---------- Tools, time and DIY: our own estimates, not shop quotes ---------- */
 const LV={0:'Leave to a shop',1:'Easy',2:'Medium',3:'Hard'};
+window.FC={get HOW(){return HOW},get LV(){return LV},get IC(){return IC},get S(){return S},esc:x=>esc(x),openSheet:(h,f)=>openSheet(h,f),closeSheet:()=>closeSheet(),showTab:t=>showTab(t),reduce:()=>REDUCE()};
 const HOW={
  flat_tyre:{lv:1,diy:'20 to 40 min',shop:'Often same day, about 30 min',tools:['Tyre levers (2 or 3)','Bucket or bowl of water','Puncture repair kit or a new inner tube','Pump','Spanners for the axle nuts (usually 15 mm)'],steps:['Turn the bike upside down or lift the wheel. On a Dutch city bike the rear wheel is awkward (chain case, hub brake). If it has a hub gear or roller brake, leave the rear wheel to a shop.','Let out any air, loosen the axle nuts and take the wheel off.','Push a tyre lever under the tyre edge, hook it on a spoke and run a second lever around to free one side.','Pull out the inner tube. Pump it up a little and hold it under water to find the bubbles.','Run your fingers inside the tyre to find the thorn or glass. Remove it, or the new hole comes straight back.','Patch the hole, or fit a new tube. Tuck the valve in first, work the tyre back on by hand.','Pump to the pressure printed on the tyre side, refit the wheel and tighten the nuts firmly.'],tip:'A new tube costs only a little more than a patch and is faster.'},
  soft_tyre:{lv:1,diy:'5 min',shop:'Not needed',tools:['Pump with a Dutch (Dunlop) or Sclaverand valve head','Pressure gauge (optional)'],steps:['Find the pressure range printed on the tyre side.','Check your valve type: Dunlop (Dutch, wide), Presta (thin) or Schrader (car type).','Pump up to the range and press the tyre firmly with your thumb.','If it is soft again in a day or two, it has a slow leak. See the flat tyre guide.'],tip:'Free air is often at petrol stations, and many shops will pump for free.'},
@@ -1952,6 +1953,7 @@ function renderResult(){
       '<div class="lvrow"><div><div class="k">Difficulty</div><b>'+dots+' '+esc(lvl?LV[lvl]:hw.diy)+'</b></div><div><div class="k">Your time</div><b class="mono">'+esc(lvl?hw.diy:'Not DIY')+'</b></div><div><div class="k">At a shop</div><b>'+esc(hw.shop)+'</b></div></div>';
     if(hw.why)h+='<p class="hint" style="font-size:14px;margin-top:10px">'+esc(hw.why)+'</p>';
     if(hw.tools.length)h+='<h4>Tools and parts</h4><ul class="tools">'+hw.tools.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul><div class="buy"><a class="btn" target="_blank" rel="noopener" href="https://www.google.com/search?q='+encodeURIComponent(hw.tools[0])+'"><span>Search for tools</span>'+IC.out+'</a><button class="btn" id="toStores" type="button"><span>Stores in Groningen</span>'+IC.chev+'</button></div>';
+    if(hw.steps.length)h+='<button class="btn primary" type="button" data-guide="'+r.id+'" style="width:100%;margin-top:12px">Start guided fix</button>';
     if(hw.steps.length)h+='<details class="diy" style="margin-top:12px"><summary>Step by step ('+hw.steps.length+' steps)</summary><ol>'+hw.steps.map(s=>'<li>'+esc(s)+'</li>').join('')+'</ol>'+(hw.tip?'<p class="hint" style="margin-top:10px">Tip: '+esc(hw.tip)+'</p>':'')+'</details>';
     h+='<p class="fine" style="margin-top:12px">Times and tools are our estimates for a first-timer. Shop times are typical, not promises.</p></details></div>';
   }else if(f.diy&&DIY[f.diy]){
@@ -2202,7 +2204,7 @@ $('infoBtn').addEventListener('click',()=>{
   '<div><h3 style="font-size:16px">How it works</h3><ul class="dots" style="margin-top:6px">'+(ai?'<li>The AI only classifies. It picks the most likely fault from a fixed list of 26.</li>':'<li>A guided check matches the part you tap and the words you use to a fixed list of 26 common faults.</li>')+'<li>Prices, safety ratings, DIY steps and Dutch notes come from our own tables. Labour prices come from NS Fiets &amp; Service and Radar, checked 2 Oct 2026.</li><li>It can be wrong. It cannot see hidden damage. If brakes, steering or the frame feel wrong, do not ride and ask a mechanic.</li></ul></div>'+
   '<div><h3 style="font-size:16px">Your data</h3><p class="hint" style="margin-top:4px">'+(S.local?'No account, no tracking. Your garage is saved only on this device.':'When AI is on, the text and photo you submit go to Claude through your own account, only when you tap Check. The Garage stores bikes and checks privately under your account.')+'</p></div>'+
   '<div class="btns" style="gap:8px;flex-wrap:wrap"><a class="btn small" href="privacy.html">Privacy policy</a><a class="btn small" href="terms.html">Terms and disclaimer</a>'+(window.FC_FEEDBACK?'<a class="btn small" href="mailto:'+window.FC_FEEDBACK+'?subject=FietsCheck%20feedback">Send feedback</a>':'')+'</div>'+
-  '<p class="fine">Version 1.20 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
+  '<p class="fine">Version 1.21 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
   '<button class="btn" id="replay" type="button">Replay intro</button></div>';
   openSheet(html,sh=>{sh.querySelector('#shClose').onclick=closeSheet;sh.querySelector('#replay').onclick=()=>{closeSheet();setTimeout(()=>playIntro(true),300)}});
 });
@@ -2520,4 +2522,174 @@ body::before{opacity:.085}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--glass:color-mix(in srgb,var(--surface) 55%,transparent)}}
 main .card:not(.ticket):not(.band),main .tool,main .stat,.webfoot .card,.wf-more>summary,main details.season{background:var(--glass)!important;background-image:none!important}
 </style>
+<style>
+/* Guided fix player */
+main .tools .tool.gfeat{grid-column:1/-1;flex-direction:row;align-items:center;gap:14px;min-height:88px;background:var(--ink)!important;color:var(--paper);border-color:var(--ink)}
+.tool.gfeat small{color:inherit;opacity:.72}
+.tool.gfeat .tic{background:var(--signal);color:var(--on-signal)}
+.tool.gfeat .gf-t{display:flex;flex-direction:column;gap:3px}
+.tool.gfeat .gf-go{margin-left:auto;font-weight:700;font-size:14px;color:var(--signal);white-space:nowrap}
+.tool.gfeat .tic svg{animation:gfwiggle 2.6s ease-in-out infinite;transform-origin:50% 50%}
+@keyframes gfwiggle{0%,70%,100%{transform:rotate(0)}78%{transform:rotate(-18deg)}86%{transform:rotate(12deg)}93%{transform:rotate(-6deg)}}
+.glist{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.glist button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface2);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font:inherit;cursor:pointer;min-height:64px}
+.glist b{display:block;font-size:15px}.glist small{display:block;color:var(--mute);font-size:13px;margin-top:2px}
+.glist .gtag{margin-left:auto;font-size:12px;font-weight:700;color:var(--signal-ink);background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px 9px;white-space:nowrap}
+.gp{display:flex;flex-direction:column;gap:12px}
+.gbar{display:flex;gap:4px}.gbar i{flex:1;height:4px;border-radius:2px;background:var(--line);overflow:hidden;position:relative}
+.gbar i.on::after{content:"";position:absolute;inset:0;background:var(--signal);transform-origin:left;animation:gfill .45s ease-out both}
+.gbar i.done::after{content:"";position:absolute;inset:0;background:var(--signal)}
+@keyframes gfill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+.gstage{position:relative;border-radius:22px;background:var(--surface2);border:1px solid var(--line);aspect-ratio:16/9;overflow:hidden;color:var(--ink);touch-action:pan-y}
+.gstage svg{position:absolute;inset:0;width:100%;height:100%}
+.gstage .sc{animation:gin .45s cubic-bezier(.2,.8,.2,1) both}
+.gstage.back .sc{animation-name:ginb}
+@keyframes gin{from{opacity:0;transform:translateX(28px)}to{opacity:1;transform:none}}
+@keyframes ginb{from{opacity:0;transform:translateX(-28px)}to{opacity:1;transform:none}}
+.gnum{position:absolute;left:14px;top:12px;font:700 13px var(--f-head);color:var(--mute)}
+.gtxt{font-size:17px;line-height:1.42;color:var(--ink);min-height:4.4em}
+.gtxt small{display:block;font-size:13px;color:var(--mute);margin-bottom:6px;font-weight:600}
+.gnav{display:flex;gap:10px;position:sticky;bottom:0;background:var(--surface);padding-top:8px}.gnav .btn{flex:1}
+.gdone{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;padding:18px 0}
+.gdone svg{width:120px;height:120px}
+.gdone .ck{stroke-dasharray:120;stroke-dashoffset:120;animation:gck .7s .15s ease-out forwards}
+.gdone .cr{stroke-dasharray:380;stroke-dashoffset:380;animation:gck .6s ease-out forwards}
+@keyframes gck{to{stroke-dashoffset:0}}
+/* scene parts */
+.s-ln{fill:none;stroke:currentColor;stroke-width:5;stroke-linecap:round;stroke-linejoin:round}
+.s-th{fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;opacity:.45}
+.s-ac{fill:none;stroke:var(--signal);stroke-width:6;stroke-linecap:round;stroke-linejoin:round}
+.s-af{fill:var(--signal)}
+.s-wf{fill:var(--surface)}
+.s-water{fill:var(--signal);opacity:.16}
+.a-flip{transform-origin:160px 104px;animation:aflip 3.2s ease-in-out infinite}
+@keyframes aflip{0%,15%{transform:rotate(0)}45%,70%{transform:rotate(180deg)}100%{transform:rotate(180deg)}}
+.a-spin{transform-box:fill-box;transform-origin:center;animation:aspin 1.2s linear infinite}
+@keyframes aspin{to{transform:rotate(360deg)}}
+.a-drop{animation:adrop 3s ease-in-out infinite}
+@keyframes adrop{0%,35%{transform:translateY(0)}70%,100%{transform:translateY(46px);opacity:0}}
+.a-pry{transform-origin:150px 66px;animation:apry 2.2s ease-in-out infinite}
+@keyframes apry{0%,20%{transform:rotate(0)}55%,80%{transform:rotate(-28deg)}100%{transform:rotate(0)}}
+.a-bub{animation:abub 2.4s ease-in infinite;opacity:0}
+@keyframes abub{0%{transform:translateY(0);opacity:0}15%{opacity:.9}100%{transform:translateY(-70px);opacity:0}}
+.a-pulse{transform-box:fill-box;transform-origin:center;animation:apulse 1.4s ease-in-out infinite}
+@keyframes apulse{0%,100%{transform:scale(1)}50%{transform:scale(1.35)}}
+.a-press{animation:apress 2.4s ease-in-out infinite}
+@keyframes apress{0%{transform:translateY(-60px);opacity:0}30%{opacity:1}55%,80%{transform:translateY(0)}100%{transform:translateY(0)}}
+.a-pump{animation:apump 1.1s ease-in-out infinite}
+@keyframes apump{0%,100%{transform:translateY(0)}50%{transform:translateY(34px)}}
+.a-needle{transform-origin:250px 128px;animation:aneedle 3.3s ease-out infinite}
+@keyframes aneedle{0%{transform:rotate(-70deg)}80%,100%{transform:rotate(40deg)}}
+.a-wipe{animation:awipe 1.8s ease-in-out infinite}
+@keyframes awipe{0%,100%{transform:translateX(-70px)}50%{transform:translateX(70px)}}
+.a-chain{animation:achain 1.2s linear infinite}
+@keyframes achain{to{stroke-dashoffset:-36}}
+.a-lube{animation:alube 1.4s ease-in infinite;opacity:0}
+@keyframes alube{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(58px);opacity:0}}
+.a-clock{stroke-dasharray:252;stroke-dashoffset:252;animation:aclock 3s linear infinite}
+@keyframes aclock{to{stroke-dashoffset:0}}
+.a-blink{animation:ablink 1.2s steps(2,end) infinite}
+@keyframes ablink{50%{opacity:.15}}
+.a-scan{animation:ascan 3s ease-in-out infinite}
+@keyframes ascan{0%,100%{transform:translateX(-60px)}50%{transform:translateX(60px)}}
+.a-cycle1{animation:acyc 3.6s infinite}.a-cycle2{animation:acyc 3.6s 1.2s infinite}.a-cycle3{animation:acyc 3.6s 2.4s infinite}
+@keyframes acyc{0%,33%{opacity:1}34%,100%{opacity:.25}}
+.a-thumb{animation:athumb 1.8s ease-in-out infinite}
+@keyframes athumb{0%,100%{transform:translateY(-16px)}45%,65%{transform:translateY(6px)}}
+.a-squish{transform-origin:160px 168px;animation:asquish 1.8s ease-in-out infinite}
+@keyframes asquish{0%,100%{transform:scaleY(1)}45%,65%{transform:scaleY(.96)}}
+.a-bob{transform-box:fill-box;transform-origin:center;animation:abob 2.4s ease-in-out infinite}
+@keyframes abob{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+@media (prefers-reduced-motion:reduce){.gstage *,.gdone *,.tool.gfeat .tic svg{animation:none!important}.gdone .ck,.gdone .cr{stroke-dashoffset:0}.a-bub,.a-lube{opacity:.8}}
+</style>
+<script>
+/* ---------- Guided fix player ---------- */
+(function(){
+  const F=window.FC;if(!F)return;const $=id=>document.getElementById(id);
+  const HOW=new Proxy({},{get:(_,k)=>F.HOW[k],ownKeys:()=>Reflect.ownKeys(F.HOW),getOwnPropertyDescriptor:(_,k)=>({enumerable:true,configurable:true,value:F.HOW[k]})});
+  const LV=F.LV,esc=F.esc,openSheet=F.openSheet,closeSheet=F.closeSheet,showTab=F.showTab,REDUCE=F.reduce;
+  const IC=F.IC;
+  const W2='<svg viewBox="0 0 320 200" aria-hidden="true">';
+  const wheel=(cx,cy,r)=>'<circle class="s-ln" cx="'+cx+'" cy="'+cy+'" r="'+r+'"/><circle class="s-th" cx="'+cx+'" cy="'+cy+'" r="'+(r-12)+'"/><circle cx="'+cx+'" cy="'+cy+'" r="5" fill="currentColor"/>';
+  const chain=(y,cls)=>'<line x1="40" y1="'+y+'" x2="280" y2="'+y+'" stroke="currentColor" stroke-width="16" stroke-linecap="round" opacity=".18"/><line class="'+(cls||'')+'" x1="40" y1="'+y+'" x2="280" y2="'+y+'" stroke="currentColor" stroke-width="10" stroke-dasharray="14 4" stroke-linecap="butt"/>';
+  const pump='<rect class="s-ln" x="96" y="70" width="40" height="110" rx="8"/><g class="a-pump"><line class="s-ln" x1="116" y1="30" x2="116" y2="70"/><line class="s-ac" x1="88" y1="30" x2="144" y2="30"/></g><path class="s-th" d="M136 160 C170 160 180 140 205 140"/><circle class="s-ln" cx="250" cy="128" r="40"/><path class="s-th" d="M222 140 A30 30 0 1 1 278 140"/><line class="s-ac a-needle" x1="250" y1="128" x2="250" y2="98"/><circle cx="250" cy="128" r="6" class="s-af"/>';
+  const rag='<path class="s-af" d="M0 0 q14 -10 30 0 q10 12 -2 22 q-16 8 -30 -2 q-8 -10 2 -20z" opacity=".9"/>';
+  const SC={
+    flat_tyre:[
+      W2+'<g class="a-flip"><circle class="s-ln" cx="95" cy="130" r="36"/><circle class="s-ln" cx="225" cy="130" r="36"/><path class="s-ln" d="M95 130 L135 75 L200 75 L225 130 M135 75 L160 130 L200 75 M160 130 L95 130 M128 62 h22 M200 75 L195 58 h18"/></g><line class="s-th" x1="30" y1="190" x2="290" y2="190"/></svg>',
+      W2+'<path class="s-ln" d="M120 20 L150 100 M200 20 L170 100"/><g class="a-drop">'+wheel(160,100,62)+'</g><g transform="translate(160 100)"><polygon class="s-af a-spin" points="0,-14 12,-7 12,7 0,14 -12,7 -12,-7"/></g></svg>',
+      W2+'<circle class="s-ln" cx="160" cy="150" r="120"/><circle class="s-th" cx="160" cy="150" r="100"/><g class="a-pry"><rect class="s-ac" x="142" y="20" width="16" height="80" rx="8"/></g><rect class="s-ln" x="200" y="24" width="14" height="70" rx="7" transform="rotate(25 207 59)"/></svg>',
+      W2+'<path class="s-water" d="M50 110 h220 l-18 70 h-184z"/><path class="s-ln" d="M40 100 h240 l-20 82 h-200z"/><ellipse class="s-ln" cx="160" cy="98" rx="86" ry="20"/>'+[0,1,2,3,4].map(i=>'<circle class="s-ln a-bub" style="animation-delay:'+(i*0.45)+'s" cx="'+(176+(i%2)*10)+'" cy="128" r="'+(5+i%3*2)+'"/>').join('')+'<circle class="s-af a-pulse" cx="181" cy="112" r="6"/></svg>',
+      W2+'<circle class="s-ln" cx="160" cy="100" r="78"/><circle class="s-th" cx="160" cy="100" r="62"/><path class="s-af a-pulse" d="M232 74 l18 -8 l-8 18z"/><circle r="11" class="s-af" opacity=".8"><animateMotion dur="3.4s" repeatCount="indefinite" path="M160 22 A78 78 0 1 1 159 22"/></circle></svg>',
+      W2+'<path class="s-ln" d="M30 112 C110 100 210 100 290 112 M30 152 C110 140 210 140 290 152"/><circle class="s-af" cx="160" cy="128" r="5"/><g class="a-press"><rect class="s-wf" x="126" y="106" width="68" height="44" rx="10"/><rect class="s-ac" x="126" y="106" width="68" height="44" rx="10"/></g></svg>',
+      W2+pump+'</svg>'
+    ],
+    chain_dry:[
+      W2+chain(120)+'<g class="a-wipe" transform="translate(0 0)"><g transform="translate(145 98)">'+rag+'</g></g></svg>',
+      W2+chain(150,'a-chain')+'<g transform="rotate(-35 120 50)"><rect class="s-ln" x="96" y="20" width="44" height="70" rx="10"/><path class="s-ln" d="M140 50 h26"/></g>'+[0,1,2].map(i=>'<circle class="s-af a-lube" style="animation-delay:'+(i*.45)+'s" cx="178" cy="86" r="6"/>').join('')+'</svg>',
+      W2+'<circle class="s-th" cx="110" cy="96" r="40"/><circle class="s-ac a-clock" cx="110" cy="96" r="40" transform="rotate(-90 110 96)"/><line class="s-ln" x1="110" y1="96" x2="110" y2="70"/>'+chain(165)+'<g class="a-wipe"><g transform="translate(200 142)">'+rag+'</g></g></svg>',
+      W2+chain(130)+'<rect class="s-wf" x="96" y="86" width="128" height="34" rx="8"/><rect class="s-ln" x="96" y="86" width="128" height="34" rx="8"/><line class="s-ln" x1="120" y1="120" x2="120" y2="134"/><line class="s-ln" x1="200" y1="120" x2="200" y2="134"/><text x="160" y="110" text-anchor="middle" font-size="15" font-weight="700" fill="currentColor">0.75  1.0</text><circle class="s-af a-blink" cx="236" cy="70" r="9"/></svg>'
+    ],
+    soft_tyre:[
+      W2+'<circle class="s-ln" cx="160" cy="210" r="160"/><circle class="s-th" cx="160" cy="210" r="138"/><text x="160" y="86" text-anchor="middle" font-size="16" font-weight="700" fill="currentColor" opacity=".7" letter-spacing="2">4.0 - 6.0 BAR</text><g class="a-scan"><circle class="s-ac" cx="160" cy="80" r="34"/><line class="s-ac" x1="184" y1="104" x2="206" y2="128"/></g></svg>',
+      W2+'<g class="a-cycle1"><rect class="s-ln" x="52" y="60" width="44" height="90" rx="10"/><rect class="s-ln" x="62" y="40" width="24" height="22" rx="4"/><text x="74" y="178" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">Dunlop</text></g><g class="a-cycle2"><rect class="s-ln" x="146" y="70" width="28" height="80" rx="8"/><line class="s-ln" x1="160" y1="30" x2="160" y2="70"/><text x="160" y="178" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">Presta</text></g><g class="a-cycle3"><rect class="s-ln" x="224" y="60" width="44" height="90" rx="12"/><circle class="s-ln" cx="246" cy="48" r="10"/><text x="246" y="178" text-anchor="middle" font-size="13" font-weight="700" fill="currentColor">Schrader</text></g></svg>',
+      W2+pump+'</svg>',
+      W2+'<g class="a-squish"><circle class="s-ln" cx="160" cy="250" r="110"/><circle class="s-th" cx="160" cy="250" r="90"/></g><g class="a-thumb"><rect class="s-wf" x="138" y="70" width="44" height="72" rx="22"/><rect class="s-ac" x="138" y="70" width="44" height="72" rx="22"/></g></svg>'
+    ]
+  };
+  const generic=(i)=>W2+'<g transform="translate(160 100)"><g class="a-bob"><path class="s-ln" d="M-40 40 L10 -10 M8 -12 a26 26 0 1 1 22 22 l-12 -12 4 -14 14 -4z"/></g></g><circle class="s-th" cx="160" cy="100" r="80"/></svg>';
+  const DOT=n=>'<span class="lvd" aria-hidden="true">'+[1,2,3].map(i=>'<i'+(i<=n?' on':'')+'></i>').join('')+'</span>';
+  const buzz=p=>{try{if(!REDUCE()&&navigator.vibrate)navigator.vibrate(p)}catch(e){}};
+  const TITLE={flat_tyre:'Fix a flat tyre',soft_tyre:'Pump up a soft tyre',chain_dry:'Clean and oil the chain',tyre_replace:'Replace a tyre',chain_worn:'Replace a worn chain',gear_adjust:'Adjust derailleur gears',brake_pads:'Replace brake pads',brake_squeal:'Stop squeaky brakes',brake_adjust:'Adjust your brakes',light_fail:'Fix a light',saddle_loose:'Tighten a loose saddle',steering_loose:'Tighten loose steering',bell_broken:'Fix or swap the bell',pedal_crank:'Tighten a pedal or crank',kickstand:'Fix the kickstand',mudguard:'Fix a rattling mudguard',lock_broken:'Sort out the lock',brake_cable:'Replace a brake cable',gear_replace:'Replace gear parts',coaster:'Back-pedal brake'};
+  const FEAT=['flat_tyre','chain_dry','soft_tyre'];
+  const guides=()=>Object.keys(HOW).filter(k=>HOW[k].lv>=1&&HOW[k].steps&&HOW[k].steps.length).sort((a,b)=>(FEAT.indexOf(b)>-1)-(FEAT.indexOf(a)>-1)||HOW[a].lv-HOW[b].lv);
+  function openList(){
+    const ks=guides();
+    openSheet('<div class="shead"><h2 id="sheetTitle">Fix it yourself</h2><button class="iconbtn" id="shClose" type="button" aria-label="Close">'+IC.close+'</button></div><p class="hint">Step by step, one thing at a time. Easy ones first.</p><div class="glist">'+ks.map(k=>{const h=HOW[k];return '<button type="button" data-guide="'+k+'"><span><b>'+esc(TITLE[k]||k)+'</b><small>'+DOT(h.lv)+' '+esc(LV[h.lv])+' · '+esc(h.diy)+'</small></span>'+(SC[k]?'<span class="gtag">Animated</span>':'')+'</button>'}).join('')+'</div>',sh=>{sh.querySelector('#shClose').onclick=closeSheet});
+  }
+  function play(k){
+    const h=HOW[k];if(!h||!h.steps||!h.steps.length)return;
+    const n=h.steps.length;let i=0,dir=1;
+    const draw=()=>{
+      const sh=$('sheet');
+      if(i>=n){
+        sh.querySelector('.gp').innerHTML='<div class="gdone"><svg viewBox="0 0 120 120"><circle class="cr" cx="60" cy="60" r="54" fill="none" stroke="var(--signal)" stroke-width="8"/><path class="ck" d="M36 62 l16 16 l32 -34" fill="none" stroke="var(--ink)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/></svg><h2 style="font-size:24px">Nice work</h2><p class="hint">Test it slowly before you ride.'+(h.tip?' '+esc(h.tip):'')+'</p></div><div class="gnav"><button class="btn" id="gShop" type="button">Still not fixed? Find a shop</button><button class="btn primary" id="gEnd" type="button">Done</button></div>';
+        buzz([20,40,30]);
+        sh.querySelector('#gEnd').onclick=closeSheet;
+        sh.querySelector('#gShop').onclick=()=>{closeSheet();F.S.shopM='stores';showTab('shops')};
+        return;
+      }
+      const sc=(SC[k]&&SC[k][i])||generic(i);
+      const st=sh.querySelector('.gstage');st.classList.toggle('back',dir<0);
+      st.innerHTML='<div class="sc" style="position:absolute;inset:0">'+sc+'</div><span class="gnum">'+(i+1)+' / '+n+'</span>';
+      if(REDUCE())st.querySelectorAll('animateMotion').forEach(a=>a.remove());
+      sh.querySelector('.gbar').innerHTML=Array.from({length:n},(_,j)=>'<i class="'+(j<i?'done':j===i?'on':'')+'"></i>').join('');
+      sh.querySelector('.gtxt').innerHTML='<small>Step '+(i+1)+' of '+n+'</small>'+esc(h.steps[i]);
+      sh.querySelector('#gBack').disabled=i===0;
+      sh.querySelector('#gNext').textContent=i===n-1?'I did it':'Next';
+    };
+    const go=d=>{if(i+d<0)return;dir=d;i+=d;buzz(8);draw()};
+    openSheet('<div class="shead"><h2 id="sheetTitle">'+esc(TITLE[k]||'Fix it yourself')+'</h2><button class="iconbtn" id="shClose" type="button" aria-label="Close">'+IC.close+'</button></div><div class="gp"><div class="gbar" aria-hidden="true"></div><div class="gstage" role="img" aria-label="Animation of this step"></div><p class="gtxt" aria-live="polite"></p><div class="gnav"><button class="btn" id="gBack" type="button">Back</button><button class="btn primary" id="gNext" type="button">Next</button></div></div>',sh=>{
+      sh.querySelector('#shClose').onclick=closeSheet;
+      sh.querySelector('#gBack').onclick=()=>go(-1);
+      sh.querySelector('#gNext').onclick=()=>go(1);
+      let x0=null;const st=sh.querySelector('.gstage');
+      st.addEventListener('touchstart',e=>{x0=e.touches[0].clientX},{passive:true});
+      st.addEventListener('touchend',e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0;x0=null;if(Math.abs(dx)>45)go(dx<0?1:-1)},{passive:true});
+      draw();
+    });
+  }
+  document.addEventListener('click',e=>{
+    const g=e.target.closest('[data-guide]');if(g){e.preventDefault();play(g.dataset.guide);return}
+    if(e.target.closest('#gfOpen'))openList();
+  });
+  document.addEventListener('keydown',e=>{
+    const sh=$('sheet');if(!sh||sh.hidden||!sh.querySelector('.gp .gstage'))return;
+    if(e.key==='ArrowRight'){const b=sh.querySelector('#gNext');if(b)b.click()}
+    if(e.key==='ArrowLeft'){const b=sh.querySelector('#gBack');if(b&&!b.disabled)b.click()}
+  });
+  window.fcGuide={play,openList};
+})();
+</script>
+
 </body></html>
