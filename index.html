@@ -349,6 +349,11 @@ details.fold>summary::after{content:"+";font-size:22px;color:var(--signal-ink);l
 details.fold[open]>summary::after{content:"\2212"}
 details.fold>summary em{font:500 13px var(--f-body);font-style:normal;color:var(--mute);margin-left:auto}
 details.fold[open]>summary{margin-bottom:8px}
+/* 44px tap targets; heading kept at h3 size where the level had to change */
+.season>summary{min-height:44px}
+.dirhead{padding:14px 4px 0}
+a.tap44{display:inline-block;padding:13.5px 1px;margin:-13.5px -1px}
+.webfoot h2.as-h3,h2.as-h3{font-size:18px;font-weight:700;letter-spacing:-.01em;line-height:1.12;font-stretch:108%;margin:6px 0;max-width:none}
 .season .sbar{height:6px;border-radius:9px;background:var(--line);margin:10px 0 6px;overflow:hidden}
 .season .sbar i{display:block;height:100%;background:var(--signal);border-radius:9px;transition:width .4s}
 .chk{display:flex;gap:10px;align-items:flex-start;padding:8px 0;border-top:1px solid var(--line);font-size:14px;cursor:pointer}
@@ -693,10 +698,10 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
     </div>
   </section></details>
   <div class="wf-about">
-    <div class="card"><div class="eyebrow">About</div><h3 style="margin-top:6px">Built for Groningen cyclists</h3><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
+    <div class="card"><div class="eyebrow">About</div><h2 class="as-h3" style="margin-top:6px">Built for Groningen cyclists</h2><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a class="tap44" href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
     <div class="card"><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
   </div>
-  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.23 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
+  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.24 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
 </footer>
 <script>document.addEventListener('click',function(e){var b=e.target.closest('#goPrices');if(!b)return;var t=document.querySelector('.tab[data-tab="prices"]');if(t){t.click();window.scrollTo({top:0,behavior:'smooth'})}});</script>
 
@@ -725,7 +730,7 @@ const FAULTS={
     labour:[18,18],src:'ns',labourLabel:'Tyre repair',parts:[0,3],buy:'fietsband plakset',
     nl:'Mijn band is lek. Kunt u de band plakken en vooraf een prijs noemen?',
     en:'My tyre has a puncture. Can you patch it and tell me the price beforehand?',
-    kw:['flat','puncture','punctur','deflat','no air','loses air','losing air','leaking','lek','lekke','plat','leeg'],fits:['tyre'],diy:'flat'},
+    kw:['flat','puncture','punctur','deflat','no air','loses air','losing air','holding air','hold air','leaking','lek','lekke','plat','leeg'],fits:['tyre'],diy:'flat'},
   soft_tyre:{part:'wheel',name:'Soft tyre that only needs air',short:'Tyre feels soft',safety:'green',free:true,
     safetyMsg:'Safe to ride once it is pumped up to the pressure printed on the tyre. If it is soft again within a day, it has a slow leak.',
     labour:[0,0],src:'free',labourLabel:'Pumping up yourself',parts:[0,0],buy:null,
@@ -756,7 +761,7 @@ const FAULTS={
     labour:[13,13],src:'ns',labourLabel:'Tightening and lubricating chain',parts:[0,5],buy:'kettingolie fiets',
     nl:'Mijn ketting is los, droog of piept. Kunt u de ketting strak zetten en smeren?',
     en:'My chain is loose, dry or squeaking. Can you tighten and lubricate it?',
-    kw:['dry','rust','loose chain','falls off','fell off','chain off','roest','piept','eraf','ketting valt','los','squeak','creak'],fits:['chain'],diy:'chain'},
+    kw:['dry','rust','loose chain','falls off','fell off','falling off','came off','chain off','roest','piept','eraf','ketting valt','los','squeak','creak'],fits:['chain'],diy:'chain'},
   chaincase:{part:'chain',name:'Broken or rattling chain case',short:'Chain case broken or rattles',safety:'green',
     safetyMsg:'Safe to ride. A broken chain case lets dirt and your trouser leg reach the chain, so fix it when convenient.',
     labour:[40,40],src:'radar',labourLabel:'Replacing chain case (price includes the part)',parts:[0,0],buy:'kettingkast fiets',
@@ -769,7 +774,7 @@ const FAULTS={
     labour:[10,10],src:'ns',labourLabel:'Adjusting gears',parts:[0,0],buy:null,
     nl:'Mijn versnellingen springen of schakelen niet goed. Kunt u de versnellingen afstellen?',
     en:'My gears jump or do not shift well. Can you adjust the gears?',
-    kw:['gear','shift','change gear','won\'t change','schakel','versnelling','springt','verspringt'],fits:['gears'],diy:'gears'},
+    kw:['gear','gears slip','shift','change gear','won\'t change','schakel','versnelling','springt','verspringt'],fits:['gears'],diy:'gears'},
   gear_replace:{part:'gears',name:'Gear cable or derailleur broken',short:'Gear cable snapped or gears dead',safety:'amber',
     safetyMsg:'Rideable only if the bike stays in a usable gear. Have it fixed soon, and avoid hills and traffic until then.',
     labour:[17.5,17.5],src:'ns',labourLabel:'Replacing gears',parts:[12,40],buy:'versnellingskabel fiets',
@@ -788,13 +793,13 @@ const FAULTS={
     labour:[10,10],src:'ns',labourLabel:'Replacing brake pads',parts:[6,14],buy:'remblokken fiets',
     nl:'Mijn remmen werken slecht en ik sta niet snel stil. Kunt u de remblokken controleren en zo nodig vervangen?',
     en:'My brakes are weak and I stop slowly. Can you check the brake pads and replace them if needed?',
-    kw:['brake','grinding','remmen','remblok','remt','remt niet','weak brake','slow to stop'],fits:['brakes'],diy:null},
+    kw:['brake','breaks','grinding','remmen','remblok','remt','remt niet','weak brake','slow to stop'],fits:['brakes'],diy:null},
   brake_squeal:{part:'brakes',name:'Brakes squeal but stop fine',short:'Brakes squeal, but stop fine',safety:'amber',
     safetyMsg:'Usually safe to ride while the bike still stops quickly. Squealing often means dirt, a wet rim or pads at a bad angle. If stopping gets weaker, stop riding.',
     labour:[10,10],src:'ns',labourLabel:'Adjusting brakes',parts:[0,14],buy:'remblokken fiets',
     nl:'Mijn remmen piepen, maar ik sta nog goed stil. Kunt u de remmen schoonmaken en afstellen, en de remblokken controleren?',
     en:'My brakes squeal but still stop well. Can you clean and adjust the brakes and check the pads?',
-    kw:['squeal','squeak','piept','piepen','piepende rem','noise brake'],fits:['brakes'],diy:null},
+    kw:['squeal','squeak','piept','piepen','piepende rem','noise brake','brakes squeak','brake squeak','squeaky brake','squealing brake','brakes squeal','remmen piepen'],fits:['brakes'],diy:null},
   coaster:{part:'brakes',name:'Back-pedal brake (terugtraprem) weak or slips',short:'Back-pedal brake weak or slips',safety:'red',
     safetyMsg:'Do not ride if pedalling backwards does not stop you firmly. Check first that the chain is on and tight: a loose chain also stops this brake working.',
     labour:[15,45],src:'est',labourLabel:'No fixed price published',parts:[0,40],buy:null,
@@ -838,7 +843,7 @@ const FAULTS={
     labour:[0,5],src:'est',labourLabel:'No fixed price published',parts:[4,10],buy:'fietsbel',
     nl:'Mijn fietsbel werkt niet. Kunt u een nieuwe bel monteren?',
     en:'My bell does not work. Can you fit a new bell?',
-    kw:['bell','bel ','fietsbel','ding','horn'],fits:['service'],diy:null},
+    kw:['bell','bel ','fietsbel',' ding','horn'],fits:['service'],diy:null},
 
   pedal_crank:{part:'pedals',name:'Loose pedal or creaking crank',short:'Pedal loose or crank creaks',safety:'amber',
     safetyMsg:'Ride gently and get it checked soon. A pedal or crank that comes loose can drop you onto the frame.',
@@ -871,7 +876,7 @@ const FAULTS={
     labour:null,src:'est',labourLabel:'',parts:null,buy:null,
     nl:'Mijn elektrische fiets heeft een probleem met de motor, accu of het display. Kunt u dat onderzoeken en vooraf een prijsindicatie geven?',
     en:'My e-bike has a problem with the motor, battery or display. Can you investigate it and give me a price estimate first?',
-    kw:['e-bike','ebike','electric','motor','battery pack','accu','elektrische','display','assist'],fits:['ebike'],diy:null},
+    kw:['e-bike','e-bike battery','ebike','electric','motor','battery pack','accu','elektrische','display','assist'],fits:['ebike'],diy:null},
   frame_crack:{part:'frame',name:'Cracked or bent frame',short:'Frame cracked or bent',safety:'red',noPrice:true,
     safetyMsg:'Do not ride. A cracked or bent frame cannot be trusted, and a bike with frame damage is often cheaper to replace than to repair.',
     labour:null,src:'est',labourLabel:'',parts:null,buy:null,
@@ -1782,7 +1787,14 @@ $('baOpenBtn').addEventListener('click',baOpen);
 /* ---------- Offline (guided) diagnosis ---------- */
 function guided(text,chip){
   if(chip&&FAULTS[chip])return{id:chip,conf:null,source:'chosen',reason:'You picked this symptom.'};
-  const t=text.toLowerCase();let best=null,bs=0;
+  /* Ignore what the user says is fine. Split into clauses; drop a clause that says a part is fine
+     ("brakes are fine", "light works ok"), and drop the words after "no problem" or "nothing wrong".
+     "no brakes", "no air" and "does not brake well" stay, because there the words describe the fault. */
+  const t=text.toLowerCase().split(/[.,;:!?]|\b(?:but|and|although|maar|en)\b/).map(c=>{
+    if(/\b(?:is|are|seems?|works?|working|zijn|doen het|doet het)\s+(?:all\s+|still\s+)?(?:fine|ok|okay|good|prima|goed|in orde)\b/.test(c))return '';
+    const m=c.match(/\b(?:no (?:problems?|issues?|trouble) (?:with|at)?|nothing wrong(?: with)?|geen (?:probleem|problemen)(?: met)?)\b/);
+    return m?c.slice(0,m.index+m[0].length):c;
+  }).join(' , ');let best=null,bs=0;
   const pool=S.part&&S.part!=='other'?byPart(S.part):IDS;
   pool.forEach(id=>{
     let s=0;FAULTS[id].kw.forEach(k=>{if(t.includes(k))s+=k.length>4?2:1});
@@ -1892,8 +1904,16 @@ function tween(el,from,to,fmt,ms){
   const t0=performance.now();
   (function f(t){const k=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-k,3);el.textContent=fmt(from+(to-from)*e);if(k<1)requestAnimationFrame(f)})(t0);
 }
+/* "Was this diagnosis right?" answers go to the FietsCheck Google Form: the fault id and right/wrong, nothing else.
+   It stays off until all three values below are filled in (from the form's pre-filled link). "Not sure yet" is never sent. */
+const FB_FORM={action:'',fault:'',answer:''}; // action: https://docs.google.com/forms/d/e/<form id>/formResponse, fault/answer: 'entry.<number>'
+function sendFeedback(id,v){
+  if(!FB_FORM.action||!FB_FORM.fault||!FB_FORM.answer||(v!=='yes'&&v!=='no'))return false;
+  const body=new URLSearchParams();body.set(FB_FORM.fault,id);body.set(FB_FORM.answer,v==='yes'?'right':'wrong');
+  try{fetch(FB_FORM.action,{method:'POST',mode:'no-cors',body}).catch(()=>{});return true}catch(e){return false}
+}
 function renderResult(){
-  const r=S.result;const f=r.id==='unsure'?UNSURE:FAULTS[r.id];
+  const r=S.result;S.fbSent=false;const f=r.id==='unsure'?UNSURE:FAULTS[r.id];
   const d=decision(f);const sf=SAFETY[r.escalate?'amber':f.safety];
   let i=0;const rv=()=>'class="rv" style="--i:'+(i++)+'"';
   let h='<div><button class="back" id="again" type="button">'+IC.back+'New check</button></div><ol class="steps" aria-label="Progress"><li class="done">Describe</li><li class="now" aria-current="step">Result</li><li>Find a shop</li></ol>';
@@ -1906,7 +1926,8 @@ function renderResult(){
     const hw0=r.id==='unsure'?null:HOW[r.id];
     const pr=f.labour&&f.parts?(d.free?'Free':range(d.lo,d.hi)):'Quote';
     const vd=d&&d.key?({repair:'Repair it',quote:'Get a 2nd quote',replace:'Consider replacing'})[d.key]:'';
-    h+='<div '+rv()+'><div class="sumrow"><div><span>Cost</span><b class="mono">'+pr+'</b></div>'+(vd?'<div><span>Advice</span><b>'+vd+'</b></div>':'')+(hw0?'<div><span>DIY</span><b>'+esc(hw0.lv?LV[hw0.lv]:'Shop')+'</b></div>':'')+'</div></div>';
+    /* The price card below shows the price; only repeat it here when there is no card (no published price). */
+    h+='<div '+rv()+'><div class="sumrow">'+(f.labour&&f.parts?'':'<div><span>Cost</span><b class="mono">'+pr+'</b></div>')+(vd?'<div><span>Advice</span><b>'+vd+'</b></div>':'')+(hw0?'<div><span>DIY</span><b>'+esc(hw0.lv?LV[hw0.lv]:'Shop')+'</b></div>':'')+'</div></div>';
   }
   if(r.source==='ai'&&r.followUp&&r.conf<70){
     h+='<div '+rv()+'><div class="card"><h3>One more question</h3><p>'+esc(r.followUp)+'</p><label class="visually-hidden" for="fu">Your answer</label><input id="fu" class="field" type="text" placeholder="Your answer" style="margin-top:8px"><div class="btns" style="margin-top:10px"><button class="btn" id="fuGo" type="button">Re-check with my answer</button></div></div></div>';
@@ -1987,7 +2008,8 @@ function renderResult(){
     S.fbVal=b.dataset.v;
     let ok=false;
     if(S.db&&S.canWrite&&S.uid&&S.checkId){try{await S.db.doc(ST()+'/checks/'+S.checkId).update({fb:b.dataset.v});ok=true}catch(_){}}
-    $('fbMsg').textContent=ok?'Thanks, saved with this check.':'Thanks. Sign in to Claude to keep your answers.';
+    if(!S.fbSent&&sendFeedback(r.id,b.dataset.v))S.fbSent=true; // one answer per result
+    $('fbMsg').textContent=ok?'Thanks, saved with this check.':(S.local?'Thanks for your answer.':'Thanks. Sign in to Claude to keep your answers.');
   });
   const ts=$('toStores');if(ts)ts.addEventListener('click',()=>{S.shopM='stores';showTab('shops')});
   $('again').addEventListener('click',()=>{S.result=null;S.lastExtra='';S.chip=null;S.part=null;S.desc='';setPart(null,false);$('result').hidden=true;$('home').hidden=false;updLean();window.scrollTo(0,0)});
@@ -2022,10 +2044,10 @@ $('quickList').innerHTML=QUICK.map(x=>'<li>'+esc(x)+'</li>').join('');
 })();
 
 /* ---------- Shops tab ---------- */
-function shopCard(s,match,maybe){
+function shopCard(s,match,maybe,grouped){
   const q=encodeURIComponent(s.name+' '+s.addr);
   const tags='<div class="tags">'+(s.v?'<span class="tag ok">Checked on own site</span>':'<span class="tag">Directory listing</span>')+(match?'<span class="tag ok">Lists this repair</span>':'')+(!match&&maybe?'<span class="tag">General repairs</span>':'')+(s.ebike===true?'<span class="tag sig">E-bikes</span>':'')+(s.ebike===false?'<span class="tag">No e-bikes</span>':'')+(s.parts?'<span class="tag">Sells parts</span>':'')+'</div>';
-  const facts=s.v?'<dl class="facts"><dt>Hours</dt><dd>'+esc(s.hours)+'</dd><dt>Prices</dt><dd>'+esc(s.prices)+'</dd>'+(s.book?'<dt>Booking</dt><dd>'+esc(s.book)+'</dd>':'')+(s.phone?'<dt>Phone</dt><dd class="mono">'+esc(s.phone)+'</dd>':'')+'</dl>':'<p class="hint" style="font-size:14px">We only have the address from a directory. Check hours and prices before you go.</p>';
+  const facts=s.v?'<dl class="facts"><dt>Hours</dt><dd>'+esc(s.hours)+'</dd><dt>Prices</dt><dd>'+esc(s.prices)+'</dd>'+(s.book?'<dt>Booking</dt><dd>'+esc(s.book)+'</dd>':'')+(s.phone?'<dt>Phone</dt><dd class="mono">'+esc(s.phone)+'</dd>':'')+'</dl>':(grouped?'':'<p class="hint" style="font-size:14px">We only have the address from a directory. Check hours and prices before you go.</p>');
   const web=s.url?'<a class="btn" target="_blank" rel="noopener" href="'+esc(s.url)+'">Website</a>':'<a class="btn" target="_blank" rel="noopener" href="https://www.google.com/search?q='+q+'">Search</a>';
   return '<article class="card shop"><div class="hd"><span class="ini" aria-hidden="true">'+esc(s.name.trim()[0])+'</span><div style="min-width:0"><div class="nm">'+esc(s.name)+'</div><div class="ad">'+esc(s.addr)+'</div></div></div>'+tags+facts+
     '<div class="btns"><a class="btn primary" target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&query='+q+'" style="flex:1">Directions</a>'+web+'</div></article>';
@@ -2052,7 +2074,11 @@ function renderShops(){
   items.sort((a,b)=>(b.s.v-a.s.v)||(b.match-a.match)||(b.maybe-a.maybe));
   $('shopLead').textContent=(fault?'Sorted for: '+fault.short.toLowerCase()+'. ':'')+(SHOPS.length)+' checked on their own websites (2 to 4 Oct 2026) and '+DIRECTORY.length+' more from a directory. This is not every shop in the city.';
   $('shopFilter').querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.f===S.shopF)));
-  $('shopList').innerHTML=items.length?items.map(x=>shopCard(x.s,x.match,x.maybe)).join(''):'<div class="card empty"><p>No shop matches that filter.</p></div>';
+  /* Directory-only shops go last, under one heading that says the "check first" line once. */
+  const ver=items.filter(x=>x.s.v),dir=items.filter(x=>!x.s.v);
+  $('shopList').innerHTML=items.length?ver.map(x=>shopCard(x.s,x.match,x.maybe)).join('')+
+    (dir.length?'<div class="dirhead"><h2 class="as-h3">From a directory</h2><p class="hint" style="font-size:14px">We only have the address from a directory. Check hours and prices before you go.</p></div>'+dir.map(x=>shopCard(x.s,x.match,x.maybe,true)).join(''):'')
+    :'<div class="card empty"><p>No shop matches that filter.</p></div>';
 }
 $('shopFilter').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.shopF=b.dataset.f;renderShops()});
 $('shopMode').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.shopM=b.dataset.m;renderShops()});
@@ -2204,19 +2230,21 @@ $('infoBtn').addEventListener('click',()=>{
   '<div><h3 style="font-size:16px">How it works</h3><ul class="dots" style="margin-top:6px">'+(ai?'<li>The AI only classifies. It picks the most likely fault from a fixed list of 26.</li>':'<li>A guided check matches the part you tap and the words you use to a fixed list of 26 common faults.</li>')+'<li>Prices, safety ratings, DIY steps and Dutch notes come from our own tables. Labour prices come from NS Fiets &amp; Service and Radar, checked 2 Oct 2026.</li><li>It can be wrong. It cannot see hidden damage. If brakes, steering or the frame feel wrong, do not ride and ask a mechanic.</li></ul></div>'+
   '<div><h3 style="font-size:16px">Your data</h3><p class="hint" style="margin-top:4px">'+(S.local?'No account, no tracking. Your garage is saved only on this device.':'When AI is on, the text and photo you submit go to Claude through your own account, only when you tap Check. The Garage stores bikes and checks privately under your account.')+'</p></div>'+
   '<div class="btns" style="gap:8px;flex-wrap:wrap"><a class="btn small" href="privacy.html">Privacy policy</a><a class="btn small" href="terms.html">Terms and disclaimer</a>'+(window.FC_FEEDBACK?'<a class="btn small" href="mailto:'+window.FC_FEEDBACK+'?subject=FietsCheck%20feedback">Send feedback</a>':'')+'</div>'+
-  '<p class="fine">Version 1.23 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
+  '<p class="fine">Version 1.24 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
   '<button class="btn" id="replay" type="button">Replay intro</button></div>';
   openSheet(html,sh=>{sh.querySelector('#shClose').onclick=closeSheet;sh.querySelector('#replay').onclick=()=>{closeSheet();setTimeout(()=>playIntro(true),300)}});
 });
 
 /* ---------- Boot ---------- */
 S.cost=store('fc_cost')||'';S.age=store('fc_age')||'0.8';
-(function(){let seen=false;try{seen=localStorage.getItem('fc_onb')==='1'}catch(e){}if(!seen)playIntro(true);else playIntro(true,true)})();
+/* Full intro on the first visit only. After that the short intro plays at most once a day (launch or return). */
+function introToday(){const d=new Date().toDateString();try{if(localStorage.getItem('fc_intro_day')===d)return false;localStorage.setItem('fc_intro_day',d)}catch(e){}return true}
+(function(){let seen=false;try{seen=localStorage.getItem('fc_onb')==='1'}catch(e){}if(!seen){introToday();playIntro(true)}else if(introToday())playIntro(true,true)})();
 /* Phones keep the app running in the background, so "opening" it is often a resume, not a reload.
    Replay the opening when the app comes back after 30 seconds or more away. */
 (function(){let hiddenAt=0;
   const replay=()=>{const ov=$('intro'),o=$('onb');if(!ov||!ov.hidden||(o&&!o.hidden))return;
-    const sh=$('sheet');if(sh&&!sh.hidden)return;window.scrollTo(0,0);playIntro(true,true)};
+    const sh=$('sheet');if(sh&&!sh.hidden)return;if(!introToday())return;window.scrollTo(0,0);playIntro(true,true)};
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')hiddenAt=Date.now();else if(hiddenAt&&Date.now()-hiddenAt>30000){hiddenAt=0;replay()}});
   window.addEventListener('pageshow',e=>{if(e.persisted)replay()});
 })();

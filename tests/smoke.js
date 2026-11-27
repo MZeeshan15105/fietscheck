@@ -5,6 +5,48 @@ const URL = 'file://' + path.resolve(__dirname, '..', 'index.html');
 let failed = 0;
 const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if (!cond) failed++; };
 
+// Free-text matcher: run the real guided() from index.html (no browser needed)
+(() => {
+  const fs = require('fs'), vm = require('vm');
+  const src = fs.readFileSync(path.resolve(__dirname, '..', 'index.html'), 'utf8');
+  const faults = src.slice(src.indexOf('const FAULTS={'), src.indexOf('const byPart='));
+  const gs = src.indexOf('function guided(');
+  const guided = src.slice(gs, src.indexOf('\n}\n', gs) + 2);
+  const ctx = {};
+  vm.runInNewContext(faults + "\nconst byPart=p=>IDS.filter(id=>FAULTS[id].part===p);\nconst S={part:'other',local:true};\n" + guided + '\nthis.guided=guided;', ctx);
+  const cases = [
+    // phrases the matcher used to get wrong
+    ['my chain keeps falling off', 'chain_dry'],
+    ['chain came off', 'chain_dry'],
+    ['no problem with brakes, light is broken', 'light_fail'],
+    ['breaks dont work', 'brake_pads'],
+    ['e-bike battery dies fast', 'ebike_issue'],
+    ['gears slipping', 'gear_adjust'],
+    // phrases that already worked and must keep working
+    ['brakes are fine but the chain squeaks', 'chain_dry'],
+    ['I have no brakes', 'brake_pads'],
+    ['flat tyre', 'flat_tyre'],
+    ['lekke band', 'flat_tyre'],
+    ['mijn remmen doen het niet', 'brake_pads'],
+    ['ketting valt eraf', 'chain_dry'],
+    ['licht doet het niet', 'light_fail'],
+    ['motor not working', 'ebike_issue'],
+    ['it does not brake well', 'brake_pads'],
+    ['brakes squeak loudly', 'brake_squeal'],
+    ['ok so my brakes squeal', 'brake_squeal'],
+    ['light works fine but the brakes grind', 'brake_pads'],
+    ['fine until I brake hard, then grinding', 'brake_pads'],
+    ['my chain squeaks', 'chain_dry'],
+    ['my tyre is not holding air', 'flat_tyre'],
+    ['my bell does not ding', 'bell_broken'],
+    ['asdfgh', 'unsure'],
+  ];
+  for (const [text, want] of cases) {
+    const got = ctx.guided(text, null).id;
+    ok(got === want, `matcher: "${text}" -> ${want}` + (got === want ? '' : ` (got ${got})`));
+  }
+})();
+
 (async () => {
   const browser = await chromium.launch();
   for (const width of [320, 390, 768]) {
@@ -81,8 +123,24 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
   // Motion: camera push resets after closing
   ok((await page.getAttribute('#bike', 'viewBox')) === '0 0 480 303.4', 'motion: bike zoom resets after the sheet closes');
 
-  // Start-up intro plays for returning users and closes by itself
-  ok(true, 'intro: closed before tests continued');
+  // Start-up intro: full on first visit, short at most once a day after that
+  {
+    const visit = async (init) => {
+      const pg = await browser.newPage({ viewport: { width: 390, height: 844 } });
+      await pg.addInitScript(init);
+      await pg.goto(URL);
+      const played = await pg.evaluate(() => !document.getElementById('intro').hidden);
+      const day = await pg.evaluate(() => localStorage.getItem('fc_intro_day'));
+      await pg.close();
+      return { played, day };
+    };
+    const first = await visit(() => { localStorage.removeItem('fc_onb'); localStorage.removeItem('fc_intro_day'); });
+    ok(first.played, 'intro: plays on the first visit');
+    const sameDay = await visit(() => { localStorage.setItem('fc_onb', '1'); localStorage.setItem('fc_intro_day', new Date().toDateString()); });
+    ok(!sameDay.played, 'intro: skipped when it already played today');
+    const nextDay = await visit(() => { localStorage.setItem('fc_onb', '1'); localStorage.setItem('fc_intro_day', 'Mon Jan 01 2001'); });
+    ok(nextDay.played && nextDay.day === new Date().toDateString(), 'intro: short intro plays once on a new day');
+  }
 
   // Theme toggle persists
   await page.goBack();
