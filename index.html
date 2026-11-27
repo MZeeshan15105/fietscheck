@@ -696,7 +696,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
     <div class="card"><div class="eyebrow">About</div><h3 style="margin-top:6px">Built for Groningen cyclists</h3><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
     <div class="card"><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
   </div>
-  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.23 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
+  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.24 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
 </footer>
 <script>document.addEventListener('click',function(e){var b=e.target.closest('#goPrices');if(!b)return;var t=document.querySelector('.tab[data-tab="prices"]');if(t){t.click();window.scrollTo({top:0,behavior:'smooth'})}});</script>
 
@@ -907,7 +907,7 @@ const AGE_LABEL={'1':'under 1 year old','0.8':'1 to 2 years old','0.6':'3 to 5 y
 
 /* ---------- Tools, time and DIY: our own estimates, not shop quotes ---------- */
 const LV={0:'Leave to a shop',1:'Easy',2:'Medium',3:'Hard'};
-window.FC={get HOW(){return HOW},get LV(){return LV},get IC(){return IC},get S(){return S},esc:x=>esc(x),openSheet:(h,f)=>openSheet(h,f),closeSheet:()=>closeSheet(),showTab:t=>showTab(t),reduce:()=>REDUCE()};
+window.FC={get busy(){try{return W.busy}catch(e){return false}},get HOW(){return HOW},get LV(){return LV},get IC(){return IC},get S(){return S},esc:x=>esc(x),openSheet:(h,f)=>openSheet(h,f),closeSheet:()=>closeSheet(),showTab:t=>showTab(t),reduce:()=>REDUCE()};
 const HOW={
  flat_tyre:{lv:1,diy:'20 to 40 min',shop:'Often same day, about 30 min',tools:['Tyre levers (2 or 3)','Bucket or bowl of water','Puncture repair kit or a new inner tube','Pump','Spanners for the axle nuts (usually 15 mm)'],steps:['Turn the bike upside down or lift the wheel. On a Dutch city bike the rear wheel is awkward (chain case, hub brake). If it has a hub gear or roller brake, leave the rear wheel to a shop.','Let out any air, loosen the axle nuts and take the wheel off.','Push a tyre lever under the tyre edge, hook it on a spoke and run a second lever around to free one side.','Pull out the inner tube. Pump it up a little and hold it under water to find the bubbles.','Run your fingers inside the tyre to find the thorn or glass. Remove it, or the new hole comes straight back.','Patch the hole, or fit a new tube. Tuck the valve in first, work the tyre back on by hand.','Pump to the pressure printed on the tyre side, refit the wheel and tighten the nuts firmly.'],tip:'A new tube costs only a little more than a patch and is faster.'},
  soft_tyre:{lv:1,diy:'5 min',shop:'Not needed',tools:['Pump with a Dutch (Dunlop) or Sclaverand valve head','Pressure gauge (optional)'],steps:['Find the pressure range printed on the tyre side.','Check your valve type: Dunlop (Dutch, wide), Presta (thin) or Schrader (car type).','Pump up to the range and press the tyre firmly with your thumb.','If it is soft again in a day or two, it has a slow leak. See the flat tyre guide.'],tip:'Free air is often at petrol stations, and many shops will pump for free.'},
@@ -2204,7 +2204,7 @@ $('infoBtn').addEventListener('click',()=>{
   '<div><h3 style="font-size:16px">How it works</h3><ul class="dots" style="margin-top:6px">'+(ai?'<li>The AI only classifies. It picks the most likely fault from a fixed list of 26.</li>':'<li>A guided check matches the part you tap and the words you use to a fixed list of 26 common faults.</li>')+'<li>Prices, safety ratings, DIY steps and Dutch notes come from our own tables. Labour prices come from NS Fiets &amp; Service and Radar, checked 2 Oct 2026.</li><li>It can be wrong. It cannot see hidden damage. If brakes, steering or the frame feel wrong, do not ride and ask a mechanic.</li></ul></div>'+
   '<div><h3 style="font-size:16px">Your data</h3><p class="hint" style="margin-top:4px">'+(S.local?'No account, no tracking. Your garage is saved only on this device.':'When AI is on, the text and photo you submit go to Claude through your own account, only when you tap Check. The Garage stores bikes and checks privately under your account.')+'</p></div>'+
   '<div class="btns" style="gap:8px;flex-wrap:wrap"><a class="btn small" href="privacy.html">Privacy policy</a><a class="btn small" href="terms.html">Terms and disclaimer</a>'+(window.FC_FEEDBACK?'<a class="btn small" href="mailto:'+window.FC_FEEDBACK+'?subject=FietsCheck%20feedback">Send feedback</a>':'')+'</div>'+
-  '<p class="fine">Version 1.23 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
+  '<p class="fine">Version 1.24 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
   '<button class="btn" id="replay" type="button">Replay intro</button></div>';
   openSheet(html,sh=>{sh.querySelector('#shClose').onclick=closeSheet;sh.querySelector('#replay').onclick=()=>{closeSheet();setTimeout(()=>playIntro(true),300)}});
 });
@@ -2734,4 +2734,58 @@ main .tools .tool.gfeat{grid-column:1/-1;flex-direction:row;align-items:center;g
 })();
 </script>
 
+<style id="fcMotion">
+/* v1.24 smoother motion: springy press, card-stack sheet, swipe to close */
+.btn,.opt,.tool,.seg button,.bachips button,.barow,.iconbtn,.card[role="button"],.card[tabindex]{transition:transform .32s cubic-bezier(.34,1.56,.64,1),box-shadow .18s ease,filter .18s}
+.btn:active,.opt:active,.tool:active,.seg button:active,.bachips button:active,.barow:active,.iconbtn:active{transition-duration:.08s}
+.sheet{transition:transform .5s cubic-bezier(.22,1.12,.36,1)}
+.sheet.drag{transition:none}
+@media (max-width:959px){
+ header.top,main.wrap{transition:transform .5s cubic-bezier(.22,1,.36,1),border-radius .5s,filter .5s;transform-origin:50% 0}
+ body.fc-up header.top{transform:translateY(10px) scale(.94);filter:brightness(.85)}
+ body.fc-up main.wrap{transform:translateY(10px) scale(.94);border-radius:22px;overflow:hidden;filter:brightness(.85)}
+ body.fc-up{background:#000}
+}
+@media (prefers-reduced-motion:reduce){
+ .btn,.opt,.tool,.seg button,.bachips button,.barow,.iconbtn,.sheet,header.top,main.wrap{transition:none!important}
+ body.fc-up header.top,body.fc-up main.wrap{transform:none!important;filter:none!important}
+}
+</style>
+<script>(function(){
+  var sh=document.getElementById('sheet');if(!sh)return;
+  var R=function(){return window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches};
+  var wasOn=false;
+  new MutationObserver(function(){
+    var on=sh.classList.contains('on')&&!sh.hidden;
+    var m=document.querySelector('main.wrap');if(on&&!wasOn&&m){var r=m.getBoundingClientRect();m.style.transformOrigin='50% '+Math.round(innerHeight/2-r.top)+'px'}
+    document.body.classList.toggle('fc-up',on);
+    if(on&&!wasOn&&!R()){
+      [].slice.call(sh.children,1,9).forEach(function(c,i){
+        if(c.animate)c.animate([{opacity:0,transform:'translateY(18px)'},{opacity:1,transform:'none'}],{duration:460,delay:90+i*45,easing:'cubic-bezier(.2,.8,.2,1)',fill:'backwards'});
+      });
+    }
+    wasOn=on;
+  }).observe(sh,{attributes:true,attributeFilter:['class','hidden']});
+  /* swipe down to close (mobile) */
+  var y0=null,dy=0,t0=0,drag=false;
+  sh.addEventListener('touchstart',function(e){
+    if(window.innerWidth>=960||e.touches.length!==1)return;
+    if(sh.scrollTop>0&&!e.target.closest('.grab'))return;
+    if(e.target.closest('input,textarea,select,.gstage'))return;
+    y0=e.touches[0].clientY;dy=0;t0=Date.now();drag=false;
+  },{passive:true});
+  sh.addEventListener('touchmove',function(e){
+    if(y0===null)return;dy=e.touches[0].clientY-y0;
+    if(!drag){if(dy>8&&sh.scrollTop<=0){drag=true;sh.classList.add('drag')}else if(dy<-4){y0=null;return}else return}
+    if(e.cancelable)e.preventDefault();
+    var d=Math.max(0,dy);sh.style.transform='translateY('+d+'px)';
+  },{passive:false});
+  function end(){
+    if(y0===null)return;y0=null;if(!drag)return;drag=false;sh.classList.remove('drag');
+    var v=dy/Math.max(1,Date.now()-t0);sh.style.transform='';
+    var busy=window.FC&&FC.busy;
+    if(!busy&&(dy>130||v>.6)&&window.FC)FC.closeSheet();
+  }
+  sh.addEventListener('touchend',end);sh.addEventListener('touchcancel',end);
+})();</script>
 </body></html>
