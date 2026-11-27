@@ -3,6 +3,9 @@ on:
   push:
     branches: [main]
   pull_request:
+# Tests only read the code; they never need to write to the repo.
+permissions:
+  contents: read
 jobs:
   smoke:
     runs-on: ubuntu-latest
