@@ -730,7 +730,7 @@ const FAULTS={
     labour:[18,18],src:'ns',labourLabel:'Tyre repair',parts:[0,3],buy:'fietsband plakset',
     nl:'Mijn band is lek. Kunt u de band plakken en vooraf een prijs noemen?',
     en:'My tyre has a puncture. Can you patch it and tell me the price beforehand?',
-    kw:['flat','puncture','punctur','deflat','no air','loses air','losing air','leaking','lek','lekke','plat','leeg'],fits:['tyre'],diy:'flat'},
+    kw:['flat','puncture','punctur','deflat','no air','loses air','losing air','holding air','hold air','leaking','lek','lekke','plat','leeg'],fits:['tyre'],diy:'flat'},
   soft_tyre:{part:'wheel',name:'Soft tyre that only needs air',short:'Tyre feels soft',safety:'green',free:true,
     safetyMsg:'Safe to ride once it is pumped up to the pressure printed on the tyre. If it is soft again within a day, it has a slow leak.',
     labour:[0,0],src:'free',labourLabel:'Pumping up yourself',parts:[0,0],buy:null,
@@ -799,7 +799,7 @@ const FAULTS={
     labour:[10,10],src:'ns',labourLabel:'Adjusting brakes',parts:[0,14],buy:'remblokken fiets',
     nl:'Mijn remmen piepen, maar ik sta nog goed stil. Kunt u de remmen schoonmaken en afstellen, en de remblokken controleren?',
     en:'My brakes squeal but still stop well. Can you clean and adjust the brakes and check the pads?',
-    kw:['squeal','squeak','piept','piepen','piepende rem','noise brake'],fits:['brakes'],diy:null},
+    kw:['squeal','squeak','piept','piepen','piepende rem','noise brake','brakes squeak','brake squeak','squeaky brake','squealing brake','brakes squeal','remmen piepen'],fits:['brakes'],diy:null},
   coaster:{part:'brakes',name:'Back-pedal brake (terugtraprem) weak or slips',short:'Back-pedal brake weak or slips',safety:'red',
     safetyMsg:'Do not ride if pedalling backwards does not stop you firmly. Check first that the chain is on and tight: a loose chain also stops this brake working.',
     labour:[15,45],src:'est',labourLabel:'No fixed price published',parts:[0,40],buy:null,
@@ -843,7 +843,7 @@ const FAULTS={
     labour:[0,5],src:'est',labourLabel:'No fixed price published',parts:[4,10],buy:'fietsbel',
     nl:'Mijn fietsbel werkt niet. Kunt u een nieuwe bel monteren?',
     en:'My bell does not work. Can you fit a new bell?',
-    kw:['bell','bel ','fietsbel','ding','horn'],fits:['service'],diy:null},
+    kw:['bell','bel ','fietsbel',' ding','horn'],fits:['service'],diy:null},
 
   pedal_crank:{part:'pedals',name:'Loose pedal or creaking crank',short:'Pedal loose or crank creaks',safety:'amber',
     safetyMsg:'Ride gently and get it checked soon. A pedal or crank that comes loose can drop you onto the frame.',
@@ -1787,12 +1787,12 @@ $('baOpenBtn').addEventListener('click',baOpen);
 /* ---------- Offline (guided) diagnosis ---------- */
 function guided(text,chip){
   if(chip&&FAULTS[chip])return{id:chip,conf:null,source:'chosen',reason:'You picked this symptom.'};
-  /* Ignore what the user says is fine. Split into clauses; drop a clause that says something is fine,
-     and drop the words after "no problem", "nothing wrong" or "not" within a clause. "no brakes" and
-     "no air" stay, because there "no" describes the fault. */
+  /* Ignore what the user says is fine. Split into clauses; drop a clause that says a part is fine
+     ("brakes are fine", "light works ok"), and drop the words after "no problem" or "nothing wrong".
+     "no brakes", "no air" and "does not brake well" stay, because there the words describe the fault. */
   const t=text.toLowerCase().split(/[.,;:!?]|\b(?:but|and|although|maar|en)\b/).map(c=>{
-    if(/\b(?:fine|ok|okay|prima|in orde)\b/.test(c))return '';
-    const m=c.match(/\b(?:no (?:problems?|issues?|trouble) (?:with|at)?|nothing wrong(?: with)?|geen (?:probleem|problemen)(?: met)?|not|niet)\b/);
+    if(/\b(?:is|are|seems?|works?|working|zijn|doen het|doet het)\s+(?:all\s+|still\s+)?(?:fine|ok|okay|good|prima|goed|in orde)\b/.test(c))return '';
+    const m=c.match(/\b(?:no (?:problems?|issues?|trouble) (?:with|at)?|nothing wrong(?: with)?|geen (?:probleem|problemen)(?: met)?)\b/);
     return m?c.slice(0,m.index+m[0].length):c;
   }).join(' , ');let best=null,bs=0;
   const pool=S.part&&S.part!=='other'?byPart(S.part):IDS;

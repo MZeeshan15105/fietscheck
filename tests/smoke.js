@@ -31,6 +31,14 @@ const ok = (cond, name) => { console.log((cond ? 'PASS ' : 'FAIL ') + name); if 
     ['ketting valt eraf', 'chain_dry'],
     ['licht doet het niet', 'light_fail'],
     ['motor not working', 'ebike_issue'],
+    ['it does not brake well', 'brake_pads'],
+    ['brakes squeak loudly', 'brake_squeal'],
+    ['ok so my brakes squeal', 'brake_squeal'],
+    ['light works fine but the brakes grind', 'brake_pads'],
+    ['fine until I brake hard, then grinding', 'brake_pads'],
+    ['my chain squeaks', 'chain_dry'],
+    ['my tyre is not holding air', 'flat_tyre'],
+    ['my bell does not ding', 'bell_broken'],
     ['asdfgh', 'unsure'],
   ];
   for (const [text, want] of cases) {
