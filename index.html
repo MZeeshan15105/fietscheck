@@ -696,7 +696,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
     <div class="card"><div class="eyebrow">About</div><h3 style="margin-top:6px">Built for Groningen cyclists</h3><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
     <div class="card"><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
   </div>
-  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.22 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
+  <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.23 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
 </footer>
 <script>document.addEventListener('click',function(e){var b=e.target.closest('#goPrices');if(!b)return;var t=document.querySelector('.tab[data-tab="prices"]');if(t){t.click();window.scrollTo({top:0,behavior:'smooth'})}});</script>
 
@@ -2204,7 +2204,7 @@ $('infoBtn').addEventListener('click',()=>{
   '<div><h3 style="font-size:16px">How it works</h3><ul class="dots" style="margin-top:6px">'+(ai?'<li>The AI only classifies. It picks the most likely fault from a fixed list of 26.</li>':'<li>A guided check matches the part you tap and the words you use to a fixed list of 26 common faults.</li>')+'<li>Prices, safety ratings, DIY steps and Dutch notes come from our own tables. Labour prices come from NS Fiets &amp; Service and Radar, checked 2 Oct 2026.</li><li>It can be wrong. It cannot see hidden damage. If brakes, steering or the frame feel wrong, do not ride and ask a mechanic.</li></ul></div>'+
   '<div><h3 style="font-size:16px">Your data</h3><p class="hint" style="margin-top:4px">'+(S.local?'No account, no tracking. Your garage is saved only on this device.':'When AI is on, the text and photo you submit go to Claude through your own account, only when you tap Check. The Garage stores bikes and checks privately under your account.')+'</p></div>'+
   '<div class="btns" style="gap:8px;flex-wrap:wrap"><a class="btn small" href="privacy.html">Privacy policy</a><a class="btn small" href="terms.html">Terms and disclaimer</a>'+(window.FC_FEEDBACK?'<a class="btn small" href="mailto:'+window.FC_FEEDBACK+'?subject=FietsCheck%20feedback">Send feedback</a>':'')+'</div>'+
-  '<p class="fine">Version 1.22 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
+  '<p class="fine">Version 1.23 beta · Made in Groningen by Muhammad Zeeshan · © 2026</p>'+
   '<button class="btn" id="replay" type="button">Replay intro</button></div>';
   openSheet(html,sh=>{sh.querySelector('#shClose').onclick=closeSheet;sh.querySelector('#replay').onclick=()=>{closeSheet();setTimeout(()=>playIntro(true),300)}});
 });
@@ -2533,13 +2533,18 @@ main .tools .tool.gfeat{grid-column:1/-1;flex-direction:row;align-items:center;g
 .tool.gfeat .gf-go{margin-left:auto;font-weight:700;font-size:14px;color:var(--signal);white-space:nowrap;position:relative;z-index:1}
 .tool.gfeat .tic svg{animation:gfwiggle 2.6s ease-in-out infinite;transform-origin:50% 50%}
 @keyframes gfwiggle{0%,70%,100%{transform:rotate(0)}78%{transform:rotate(-18deg)}86%{transform:rotate(12deg)}93%{transform:rotate(-6deg)}}
-.glist{display:flex;flex-direction:column;gap:8px;margin-top:10px}
-.glist button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface2);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:12px 14px;font:inherit;cursor:pointer;min-height:64px}
-.glist button.hero{background:#11161C;color:#F2F5F8;border-color:#11161C}
-.glist button.hero small{color:#9AA7B6}
-.glist b{display:block;font-size:15px;font-family:var(--f-head)}.glist small{display:block;color:var(--mute);font-size:13px;margin-top:2px}
-.glist .gtag{margin-left:auto;font-size:12px;font-weight:700;color:#11161C;background:var(--signal);border-radius:999px;padding:3px 9px;white-space:nowrap}
-.glist h4{margin:14px 2px 2px;font-size:13px;color:var(--mute);font-weight:600}
+.ggrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.gtile{display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;background:none;border:0;padding:0;color:var(--ink);font:inherit;cursor:pointer}
+.gtile .gth{position:relative;display:block;width:100%;aspect-ratio:4/3;border-radius:16px;background-color:#0E1217;background-image:url(img/bike-city.webp);background-repeat:no-repeat;margin-bottom:6px;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);transition:transform .2s}
+.gtile .gth::after{content:"";position:absolute;inset:0;background:radial-gradient(90% 90% at 50% 45%,transparent 50%,rgba(5,8,11,.75) 100%)}
+.gtile:active .gth{transform:scale(.97)}
+.gplay{position:absolute;left:10px;bottom:10px;z-index:1;width:30px;height:30px;border-radius:50%;background:var(--signal);color:#11161C;display:grid;place-items:center}.gplay svg{width:14px;height:14px;margin-left:2px}
+.gsteps{position:absolute;right:10px;bottom:13px;z-index:1;font:700 11px var(--f-head);color:#F2F5F8}
+.gtile b{font-family:var(--f-head);font-size:15px;line-height:1.2}.gtile small{color:var(--mute);font-size:13px}
+.gmore{margin:22px 0 4px;font-size:13px;font-weight:600;color:var(--mute)}
+.grows{display:flex;flex-direction:column}
+.grow{display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--line);padding:13px 2px;min-height:48px;font:inherit;font-size:15px;color:var(--ink);cursor:pointer}
+.grow small{color:var(--mute);font-size:13px;white-space:nowrap}
 .gp{display:flex;flex-direction:column;gap:12px}
 .gbar{display:flex;gap:4px}.gbar i{flex:1;height:4px;border-radius:2px;background:var(--line);overflow:hidden;position:relative}
 .gbar i.on::after,.gbar i.done::after{content:"";position:absolute;inset:0;background:var(--signal)}
@@ -2628,7 +2633,7 @@ main .tools .tool.gfeat{grid-column:1/-1;flex-direction:row;align-items:center;g
   const pumpHead=(x,y)=>'<g class="o-press"><rect class="o-w" x="'+(x-5)+'" y="'+(y+6)+'" width="10" height="16" rx="2"/><rect class="o-f" x="'+(x-3)+'" y="'+(y+22)+'" width="6" height="12" rx="2"/></g>';
   const rag=(x,y)=>'<g class="o-wipe"><path class="o-w" opacity=".92" d="M'+(x-9)+' '+(y-7)+' q8 -6 17 0 q6 7 -1 13 q-9 5 -17 -1 q-5 -6 1 -12z"/></g>';
   const G={
-    flat_tyre:{t:'Fix a flat tyre',hero:1,s:[
+    flat_tyre:{t:'Fix a flat tyre',th:[396,160,2.4],s:[
       {c:[240,152,1],lift:1,fx:ring(105,205,10)+'<path class="o-ln" d="M60 150 v-26 m-8 9 l8 -9 8 9"/>',hud:chip(16,240,178,'Lift the wheel','Rear hub gear? Leave it to a shop'),h:'Lift the wheel'},
       {c:[384,203,2.2],fx:hex(384,203,6)+arc(384,203,14,-150,120,'o-dash'),hud:chip(16,250,150,'Axle nuts: 15 mm'),h:'Take the wheel off'},
       {c:[384,128,2.8],fx:'<g class="o-pry"><rect class="o-f" x="372" y="104" width="7" height="30" rx="3.5"/></g><rect class="o-w" x="392" y="102" width="6" height="28" rx="3" transform="rotate(20 395 116)"/>'+arc(384,203,80,-125,-55,'o-ln'),hud:chip(16,250,160,'2 tyre levers'),h:'Lever the tyre off'},
@@ -2636,32 +2641,32 @@ main .tools .tool.gfeat{grid-column:1/-1;flex-direction:row;align-items:center;g
       {c:[384,203,1.9],fx:'<circle r="5" class="o-f"><animateMotion dur="3.2s" repeatCount="indefinite" path="M384 125 A78 78 0 1 1 383.9 125"/></circle><path class="o-f o-pulse" d="M446 156 l9 -4 -4 9z"/>',hud:chip(16,250,200,'Feel for glass or a thorn'),h:'Find what caused it'},
       {c:[412,146,3],fx:'<path class="o-wl" d="M392 132 Q412 128 432 136 M390 158 Q410 154 432 162"/><g class="o-press"><rect x="402" y="137" width="20" height="16" rx="4" fill="#11161C" stroke="#FF6B2C" stroke-width="3" vector-effect="non-scaling-stroke"/></g>',hud:chip(16,250,200,'Patch or a new tube'),h:'Patch it'},
       {c:[384,262,2.6],fx:ring(384,279,6)+pumpHead(384,244),hud:gauge,h:'Pump and refit'}]},
-    soft_tyre:{t:'Pump up a soft tyre',hero:1,s:[
+    soft_tyre:{t:'Pump up a soft tyre',th:[384,262,2.6],s:[
       {c:[352,262,2.6],fx:arc(384,203,81,95,165,'o-ln')+ring(352,276,5),hud:chip(16,240,200,'4.0 to 6.0 bar','Printed on the tyre side'),h:'Find the right pressure'},
       {c:[384,272,3],fx:ring(384,279,6),hud:'<g><rect class="h-chip" x="16" y="221" width="290" height="66" rx="14"/><g class="h-cyc1"><text class="h-t" x="32" y="248">Dunlop</text><text class="h-s" x="32" y="266">Dutch, wide</text></g><g class="h-cyc2"><text class="h-t" x="128" y="248">Presta</text><text class="h-s" x="128" y="266">Thin</text></g><g class="h-cyc3"><text class="h-t" x="210" y="248">Schrader</text><text class="h-s" x="210" y="266">Car type</text></g></g>',h:'Check the valve type'},
       {c:[384,262,2.6],fx:ring(384,279,6)+pumpHead(384,244),hud:gauge,h:'Pump it up'},
       {c:[384,132,2.6],fx:'<g class="o-press"><rect class="o-w" x="377" y="98" width="14" height="22" rx="7"/></g>'+arc(384,203,80,-120,-60,'o-ln'),hud:chip(16,250,190,'Firm, barely gives'),h:'Thumb test'}]},
-    chain_dry:{t:'Clean and oil the chain',hero:1,s:[
+    chain_dry:{t:'Clean and oil the chain',th:[180,210,2.6],s:[
       {c:[168,212,2.6],fx:'<path class="o-dash" d="M110 206 L222 212"/>'+rag(165,209),hud:chip(16,250,150,'Dry rag first'),h:'Wipe the chain'},
       {c:[190,206,2.4],fx:'<path class="o-dash" d="M110 206 L222 212"/>'+arc(225,218,18,200,-20,'o-ln')+'<path class="o-f" d="M246 214 l4 9 -9 -2z"/><rect class="o-w" x="174" y="170" width="10" height="16" rx="2" transform="rotate(25 179 178)"/>'+[0,1,2].map(i=>'<circle class="o-f o-drop" style="animation-delay:'+(i*.4)+'s" cx="184" cy="190" r="2.2"/>').join(''),hud:chip(16,250,190,'Pedal backwards slowly'),h:'Drip on the lube'},
       {c:[168,212,2.6],fx:rag(165,209),hud:'<g><rect class="h-chip" x="16" y="227" width="200" height="60" rx="14"/><circle cx="46" cy="256" r="14" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="4"/><circle class="h-clock" cx="46" cy="256" r="14" fill="none" stroke="#FF6B2C" stroke-width="4" transform="rotate(-90 46 256)"/><text class="h-t" x="70" y="253">1 minute</text><text class="h-s" x="70" y="272">then wipe the extra</text></g>',h:'Wait, then wipe'},
       {c:[168,212,2.8],fx:'<rect x="146" y="196" width="40" height="11" rx="3" fill="#11161C" stroke="#FF6B2C" stroke-width="3" vector-effect="non-scaling-stroke"/><circle class="o-f o-pulse" cx="192" cy="198" r="3"/>',hud:chip(16,240,200,'Still skips or squeaks?','It may be worn: shop check'),h:'Check for wear'}]},
-    brake_squeal:{t:'Stop squeaky brakes',hero:1,s:[
+    brake_squeal:{t:'Stop squeaky brakes',th:[300,70,2.4],s:[
       {c:[384,203,1.9],fx:arc(384,203,76,0,359,'o-ln o-sweep'),hud:chip(16,240,190,'Rag + a little alcohol','Never oil near brakes'),h:'Clean the rim'},
       {c:[362,128,2.8],fx:'<rect x="352" y="122" width="16" height="7" rx="2" fill="#11161C" stroke="#FF6B2C" stroke-width="3" vector-effect="non-scaling-stroke" class="o-pulse"/>'+ring(360,125,5),hud:chip(16,240,200,'Grooves gone or shiny?','Sand lightly or replace'),h:'Check the pads'},
       {c:[362,128,2.8],fx:arc(384,203,80,-120,-100,'o-wl')+'<g class="o-twist"><rect x="352" y="122" width="16" height="7" rx="2" fill="#11161C" stroke="#FF6B2C" stroke-width="3" vector-effect="non-scaling-stroke"/></g>',hud:chip(16,250,200,'Front edge touches first'),h:'Line the pads up'},
       {c:[284,52,2.8],fx:'<g class="o-squeeze"><path class="o-ln" d="M296 46 L270 66"/></g>'+ring(282,52,5),hud:chip(16,240,200,'Squeeze hard','Test at walking speed'),h:'Test the brake'}]},
-    light_fail:{t:'Fix a light',hero:1,s:[
+    light_fail:{t:'Fix a light',th:[330,58,2.8],s:[
       {c:[338,60,2.8],fx:ring(338,52,8),hud:'<g><rect class="h-chip" x="16" y="235" width="196" height="52" rx="14"/><rect x="30" y="250" width="34" height="18" rx="3" fill="none" stroke="#F2F5F8" stroke-width="2.5"/><rect x="64" y="255" width="4" height="8" rx="1" fill="#F2F5F8"/><rect class="h-bat" x="33" y="253" width="28" height="12" rx="2" fill="#FF6B2C"/><text class="h-t" x="80" y="266">Fresh battery</text></g>',h:'Check the battery'},
       {c:[356,130,2],fx:'<path class="o-dash" d="M340 60 C350 90 360 120 372 160 S382 196 384 203"/>',hud:chip(16,240,200,'Cuts, loose plugs, rust?','Follow the wire down'),h:'Check the wires'},
       {c:[384,203,2.2],fx:ring(384,203,9)+arc(384,203,40,-60,60,'o-ln o-spinr'),hud:chip(16,240,200,'Dynamo on?','It must touch or turn freely'),h:'Check the dynamo'},
       {c:[350,62,2.4],fx:'<path class="o-beam" d="M346 52 L440 26 L440 80 Z" fill="url(#gbeam)"/>'+ring(338,52,6),hud:chip(16,240,200,'Still dead?','A new light is a cheap fix'),h:'Light up'}]},
-    saddle_loose:{t:'Tighten a loose saddle',hero:1,s:[
+    saddle_loose:{t:'Tighten a loose saddle',th:[172,72,2.8],s:[
       {c:[172,78,2.6],fx:'<path class="o-dash" d="M140 62 H206"/><g class="o-bob"><path class="o-ln" d="M214 54 v26 m-6 -20 l6 -6 6 6 m-12 14 l6 6 6 -6"/></g>',hud:chip(16,250,190,'Level, at hip height'),h:'Set height and angle'},
       {c:[172,86,2.8],fx:hex(176,84,5)+arc(176,84,12,-160,100,'o-ln'),hud:chip(16,240,170,'6 mm hex or 13 mm','Firm, not forced'),h:'Tighten the clamp'},
       {c:[172,70,2.6],fx:'<g class="o-twist"><path class="o-ln" d="M146 54 Q172 42 198 54"/></g>'+ring(172,66,6),hud:chip(16,250,170,'Push it: no turning'),h:'Test it'}]}
   };
-  const DOT=n=>'<span class="lvd" aria-hidden="true">'+[1,2,3].map(i=>'<i'+(i<=n?' on':'')+'></i>').join('')+'</span>';
+  const DOT=n=>'<span class="lvd" aria-hidden="true">'+[1,2,3].map(i=>'<i'+(i<=n?' class="on"':'')+'></i>').join('')+'</span>';
   const buzz=p=>{try{if(!REDUCE()&&navigator.vibrate)navigator.vibrate(p)}catch(e){}};
   const NAMES={tyre_replace:'Replace a tyre',chain_worn:'Replace a worn chain',gear_adjust:'Adjust derailleur gears',brake_pads:'Replace brake pads',brake_adjust:'Adjust your brakes',steering_loose:'Tighten loose steering',bell_broken:'Fix or swap the bell',pedal_crank:'Tighten a pedal or crank',kickstand:'Fix the kickstand',mudguard:'Fix a rattling mudguard',lock_broken:'Sort out the lock',brake_cable:'Replace a brake cable',gear_replace:'Replace gear parts',coaster:'Back-pedal brake'};
   const title=k=>(G[k]&&G[k].t)||NAMES[k]||k;
@@ -2669,8 +2674,10 @@ main .tools .tool.gfeat{grid-column:1/-1;flex-direction:row;align-items:center;g
     const HOW=F.HOW,LV=F.LV,IC=F.IC;
     const main=Object.keys(G).filter(k=>HOW[k]);
     const rest=Object.keys(HOW).filter(k=>!G[k]&&HOW[k].lv>=1&&HOW[k].steps&&HOW[k].steps.length).sort((a,b)=>HOW[a].lv-HOW[b].lv);
-    const row=(k,hero)=>{const h=HOW[k];return '<button type="button" class="'+(hero?'hero':'')+'" data-guide="'+k+'"><span><b>'+esc(title(k))+'</b><small>'+DOT(h.lv)+' '+esc(LV[h.lv])+' · '+esc(h.diy)+'</small></span>'+(hero?'<span class="gtag">Watch</span>':'')+'</button>'};
-    openSheet('<div class="shead"><h2 id="sheetTitle">Fix it yourself</h2><button class="iconbtn" id="shClose" type="button" aria-label="Close">'+IC.close+'</button></div><p class="hint">The 6 most common bike problems, shown on a real bike. One step at a time.</p><div class="glist">'+main.map(k=>row(k,1)).join('')+'<h4>More guides (text steps)</h4>'+rest.map(k=>row(k,0)).join('')+'</div>',sh=>{sh.querySelector('#shClose').onclick=closeSheet});
+    const thumb=k=>{const c=G[k].th,z=c[2],px=(c[0]/480*z-.5)/(z-1)*100,py=(c[1]/303.4*z*.6321-.375)/(z*.6321-.75)*100;return 'background-size:'+(z*100)+'% auto;background-position:'+px.toFixed(1)+'% '+py.toFixed(1)+'%'};
+    const tile=k=>{const h=HOW[k];return '<button type="button" class="gtile" data-guide="'+k+'"><span class="gth" style="'+thumb(k)+'"><span class="gplay" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M8 5l11 7-11 7z" fill="currentColor"/></svg></span><span class="gsteps">'+h.steps.length+' steps</span></span><b>'+esc(title(k))+'</b><small>'+esc(LV[h.lv])+', '+esc(h.diy)+'</small></button>'};
+    const row=k=>{const h=HOW[k];return '<button type="button" class="grow" data-guide="'+k+'"><span>'+esc(title(k))+'</span><small>'+DOT(h.lv)+esc(h.diy)+'</small></button>'};
+    openSheet('<div class="shead"><h2 id="sheetTitle">Fix it yourself</h2><button class="iconbtn" id="shClose" type="button" aria-label="Close">'+IC.close+'</button></div><p class="hint">The six repairs riders need most, shown step by step on a real bike.</p><div class="ggrid">'+main.map(tile).join('')+'</div><h4 class="gmore">Other repairs, written steps</h4><div class="grows">'+rest.map(row).join('')+'</div>',sh=>{sh.querySelector('#shClose').onclick=closeSheet});
   }
   const camT=c=>'translate(240px,151.7px) scale('+c[2]+') translate('+(-c[0])+'px,'+(-c[1])+'px)';
   function play(k){
