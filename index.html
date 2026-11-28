@@ -1008,9 +1008,9 @@ const IC={
   chev:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>',
   back:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>',
   close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>',
-  safe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7.500 12.500l3 3 6-7"/></svg>',
-  caution:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3L2 20h20z"/><path d="M12 10v4.500M12 17.500h.01"/></svg>',
-  stop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2h8l6 6v8l-6 6H8l-6-6V8z"/><path d="M8.500 8.500l7 7M15.500 8.500l-7 7"/></svg>',
+  safe:'<img class="sign3d" src="img/signs/safe.webp" alt="" width="56" height="56" decoding="async">',
+  caution:'<img class="sign3d" src="img/signs/caution.webp" alt="" width="56" height="56" decoding="async">',
+  stop:'<img class="sign3d" src="img/signs/stop.webp" alt="" width="56" height="56" decoding="async">',
   cam:'<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.500"/></svg>',
   out:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg>'
 };
@@ -1412,7 +1412,7 @@ function whOpen(){
     sh.querySelector('#shClose').onclick=closeSheet;
     const upd=()=>{const k=sh.querySelector('#whBrand').value,B=WH_BRANDS[k];sh.querySelector('#whOtherBox').hidden=k!=='other';
       sh.querySelector('#whModels').innerHTML=(B.models||[]).map(m=>'<option value="'+esc(m)+'">').join('');
-      sh.querySelector('#whBrandInfo').innerHTML=B.status?'<div class="card whwarn"><span class="label">Heads-up about '+esc(B.name)+'</span><p style="font-size:14px">'+esc(B.status)+'</p></div>':''};
+      sh.querySelector('#whBrandInfo').innerHTML=B.status?'<div class="card whwarn"><img class="wsign" src="img/signs/caution.webp" alt="" width="40" height="40"><span class="label">Heads-up about '+esc(B.name)+'</span><p style="font-size:14px">'+esc(B.status)+'</p></div>':''};
     const clr=()=>{sh.querySelector('#whRes').innerHTML='';sh.querySelector('#whOut').innerHTML='';sh.querySelector('#whMore').hidden=true};
     sh.querySelector('#whBrand').onchange=()=>{upd();clr()};upd();
     ['whArea','whDate','whFrom'].forEach(id=>sh.querySelector('#'+id).addEventListener('change',clr));
@@ -1896,6 +1896,10 @@ function decision(f){
 }
 
 /* ---------- Result view ---------- */
+function partLens(p){try{const c=document.querySelector('#bike .dot[data-part="'+p+'"] .core');const im=document.getElementById('bikePhoto');if(!c||!im)return '';
+  const x=+c.getAttribute('cx'),y=+c.getAttribute('cy'),src=im.getAttribute('href')||'img/bike-city.webp',R=110,L=96;
+  const bw=L*480/R,bh=bw*303.4/480,px=x/480*bw-L/2,py=y/303.4*bh-L/2;
+  return '<div class="plens" aria-hidden="true" style="background-image:url('+src+');background-size:'+bw.toFixed(1)+'px '+bh.toFixed(1)+'px;background-position:'+(-px).toFixed(1)+'px '+(-py).toFixed(1)+'px"><i></i></div>'}catch(e){return ''}}
 function gaugeSvg(conf){
   return '<div class="gauge"><svg viewBox="0 0 120 70" role="img" aria-label="Confidence '+conf+' percent"><path class="trk" d="M12 62 A48 48 0 0 1 108 62"/><path class="val" id="gVal" d="M12 62 A48 48 0 0 1 108 62" pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"/></svg><div class="pct">'+conf+'%</div><div class="cap">'+(conf>=75?'Fairly sure':conf>=50?'Likely':'Not sure yet')+'</div></div>';
 }
@@ -1919,7 +1923,7 @@ function renderResult(){
   let h='<div><button class="back" id="again" type="button">'+IC.back+'New check</button></div><ol class="steps" aria-label="Progress"><li class="done">Describe</li><li class="now" aria-current="step">Result</li><li>Find a shop</li></ol>';
   if(r.notice)h+='<p class="msg" role="status">'+esc(r.notice)+'</p>';
   const srcLabel=r.source==='ai'?'AI diagnosis':(r.source==='chosen'?'Your pick':'Guided match');
-  h+='<div '+rv()+'><div class="dx"><div class="dx-top"><div><div class="eyebrow">'+srcLabel+'</div><h2>'+esc(f.name)+'</h2>'+(r.reason?'<p class="why">'+esc(r.reason)+'</p>':'')+'</div>'+(r.source==='ai'?gaugeSvg(r.conf):'')+'</div>'+
+  h+='<div '+rv()+'><div class="dx"><div class="dx-top"><div><div class="eyebrow">'+srcLabel+'</div><h2>'+esc(f.name)+'</h2>'+(r.reason?'<p class="why">'+esc(r.reason)+'</p>':'')+'</div>'+(r.source==='ai'?gaugeSvg(r.conf):partLens(f.part))+'</div>'+
     '<div class="band '+sf.k+'" role="note">'+IC[sf.k]+'<div><b>'+sf.t+'</b><span>'+esc(r.escalate?'You mentioned brakes, steering or the frame. Check those before you ride. '+f.safetyMsg:f.safetyMsg)+'</span></div></div></div></div>';
 
   {
@@ -1946,7 +1950,7 @@ function renderResult(){
       h+='<div class="meter" style="margin-top:16px"><div class="label">Repair or replace?</div><p class="hint">Add what your bike cost to see the advice.</p><div class="btns" style="margin-top:8px;flex-wrap:nowrap"><label class="visually-hidden" for="cost2">Bike cost in euros</label><input id="cost2" class="field" type="number" inputmode="decimal" min="0" placeholder="Cost in €" style="min-width:0"><button class="btn dark" id="cost2Go" type="button" style="flex:none">Show</button></div></div>';
     }else{
       const x=Math.min(1,d.ratio)*100;
-      h+='<div class="meter"><div class="label">Repair or replace?</div><div class="mtrack" aria-hidden="true"><i class="z1"></i><i class="z2"></i><i class="z3"></i></div><div class="mmark" aria-hidden="true"><b id="mMark" style="--x:0%" data-x="'+x+'%"></b></div><div class="mlabels" aria-hidden="true"><span>Repair</span><span>Second quote</span><span>Replace</span></div>'+
+      h+='<div class="meter"><div class="label">Repair or replace?</div><div class="msigns" aria-hidden="true"><img class="ms ms1'+(d.key==='repair'?' on':'')+'" src="img/signs/safe.webp" alt=""><img class="ms ms2'+(d.key==='quote'?' on':'')+'" src="img/signs/caution.webp" alt=""><img class="ms ms3'+(d.key==='replace'?' on':'')+'" src="img/signs/stop.webp" alt=""></div><div class="mtrack" aria-hidden="true"><i class="z1"></i><i class="z2"></i><i class="z3"></i></div><div class="mmark" aria-hidden="true"><b id="mMark" style="--x:0%" data-x="'+x+'%"></b></div><div class="mlabels" aria-hidden="true"><span>Repair</span><span>Second quote</span><span>Replace</span></div>'+
       '<div class="verdict-h">'+esc(d.verdict)+'</div><p class="hint" style="margin-top:6px;font-size:14px">'+esc(d.detail)+'</p><p class="fine" style="margin-top:8px">Repair about '+eur(Math.round(d.mid))+' · bike worth about '+eur(Math.round(d.worth))+' now ('+eur(d.paid)+' paid'+(bikeValueInputs().name?', '+esc(bikeValueInputs().name):'')+', '+AGE_LABEL[String(d.factor)]+'). Rule of thumb: up to 40% repair, 40 to 70% second quote, over 70% think about replacing.</p></div>';
     }
     h+='</div></div>';
@@ -2845,6 +2849,30 @@ main .ticket .langt{border-color:var(--line);color:var(--ink)}
 main .ticket .scode{border-top-color:var(--line)}
 main .ticket .perf{border-top-color:var(--line)}
 main .ticket .btn:not(.primary){border-color:var(--line);color:var(--ink);background:color-mix(in srgb,var(--surface) 70%,transparent)}
+
+/* Real 3D signs for safety, the repair meter and a zoom on the part */
+.band .sign3d{width:56px;height:56px;flex:none;object-fit:contain;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25));transform-origin:50% 0;animation:signSwing 1.4s cubic-bezier(.3,1.6,.5,1) .15s both}
+@keyframes signSwing{0%{transform:translateY(-14px) rotate(-14deg);opacity:0}35%{opacity:1}55%{transform:rotate(7deg)}75%{transform:rotate(-3deg)}100%{transform:none}}
+.msigns{position:relative;height:46px;margin:6px 0 2px}
+.msigns .ms{position:absolute;bottom:0;height:34px;width:34px;object-fit:contain;transform:translateX(-50%) scale(.78);opacity:.38;filter:grayscale(.6) drop-shadow(0 3px 4px rgba(0,0,0,.15));transition:transform .5s cubic-bezier(.3,1.5,.5,1),opacity .4s,filter .4s}
+.msigns .ms1{left:20%}.msigns .ms2{left:55%}.msigns .ms3{left:85%}
+.msigns .ms.on{transform:translateX(-50%) scale(1.25);opacity:1;filter:drop-shadow(0 6px 8px rgba(0,0,0,.25));transition-delay:.7s}
+.mtrack{height:12px}
+.mtrack i{box-shadow:inset 0 2px 3px rgba(255,255,255,.35),inset 0 -2px 3px rgba(0,0,0,.12)}
+.mmark{height:16px}
+.mmark b{top:-14px;width:22px!important;height:22px!important;border:0!important;border-radius:50%;background:var(--surface);box-shadow:0 0 0 4px var(--ink),0 4px 10px rgba(0,0,0,.3)}
+.mmark b::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--signal)}
+.plens{position:relative;width:96px;height:96px;flex:none;border-radius:50%;background-repeat:no-repeat;background-color:var(--surface2);box-shadow:0 0 0 3px var(--surface),0 0 0 5px var(--signal),0 10px 22px rgba(0,0,0,.22);animation:lensIn .7s cubic-bezier(.3,1.4,.5,1) .2s both}
+.plens i{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.45),rgba(255,255,255,0) 42%)}
+.plens::after{content:"";position:absolute;left:50%;top:50%;width:10px;height:10px;margin:-5px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 4px rgba(255,107,44,.35)}
+@keyframes lensIn{from{transform:scale(.4);opacity:0}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.band .sign3d,.plens{animation:none}.msigns .ms{transition:none}}
+.dx .band{position:relative}
+.dx .band::after{content:"";position:absolute;left:0;right:0;bottom:0;height:5px;opacity:.9}
+.dx .band.caution::after{background:repeating-linear-gradient(-45deg,#F2C200 0 10px,#1b1b1b 10px 20px)}
+.dx .band.stop::after{background:repeating-linear-gradient(-45deg,#D7261E 0 10px,#fff 10px 20px)}
+.dx .band.safe::after{background:repeating-linear-gradient(90deg,var(--safe) 0 18px,transparent 18px 28px);opacity:.55}
+#whBrandInfo .card.whwarn{background:var(--caution-bg)!important;background-image:none!important;border-color:var(--caution-solid)!important}.whwarn{position:relative;padding-left:66px!important}.whwarn .wsign{position:absolute;left:14px;top:14px;width:40px;height:40px;object-fit:contain;filter:drop-shadow(0 4px 6px rgba(0,0,0,.2))}
 </style>
 <style id="fc360">
 #b360{position:absolute;z-index:3;display:none}
