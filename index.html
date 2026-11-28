@@ -688,7 +688,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
   </section>
 </main>
 <footer class="webfoot" id="about">
-  <details class="wf-more"><summary>How FietsCheck works</summary><section class="wf-band" aria-label="How FietsCheck works">
+  <details class="wf-more" id="howCard"><summary>How FietsCheck works</summary><section class="wf-band" aria-label="How FietsCheck works">
     <div class="eyebrow" style="color:var(--mute-asphalt)">How it works</div>
     <h2 style="margin-top:8px">Know the likely fault <em>before you pay.</em></h2>
     <div class="wf-steps">
@@ -698,7 +698,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
     </div>
   </section></details>
   <div class="wf-about">
-    <div class="card"><div class="eyebrow">About</div><h2 class="as-h3" style="margin-top:6px">Built for Groningen cyclists</h2><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a class="tap44" href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
+    <div class="card rt-card" id="aboutCard"><div class="eyebrow">About</div><h2 class="as-h3" style="margin-top:6px">Built for Groningen cyclists</h2><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a class="tap44" href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
     <div class="card rt-card" id="surveyCard"><img class="tobj tobj-survey" src="img/tiles/survey.webp" alt=""><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
   </div>
   <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.25 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
@@ -2803,5 +2803,15 @@ main .tools .tool.gfeat .gf-go{color:var(--signal-ink)}
 #home .heroFoot .linkbtn{color:var(--signal-ink)}
 #home .hero #scanTxt{fill:var(--ink)}#home .hero #scanLine{stroke:var(--signal)}
 main .tools .tool.gfeat::after{background:radial-gradient(120% 140% at 0% 50%,rgba(255,107,44,.12),transparent 55%)}
+
+/* Tool-symbol pattern on every themed card, like the page wallpaper */
+:root{--wallc:url(img/wall-card-light.svg);--tg:linear-gradient(105deg,color-mix(in srgb,var(--surface) 96%,transparent) 0%,color-mix(in srgb,var(--surface) 82%,transparent) 50%,color-mix(in srgb,var(--surface) 42%,transparent) 100%)}
+:root[data-theme="dark"]{--wallc:url(img/wall-card-dark.svg)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--wallc:url(img/wall-card-dark.svg)}}
+#home .hero{--tg:linear-gradient(170deg,color-mix(in srgb,var(--surface) 95%,transparent) 0%,color-mix(in srgb,var(--surface) 86%,transparent) 60%,color-mix(in srgb,var(--surface) 70%,transparent) 100%);--bgp:40% 60%}
+.card.rt-card#seasonCard[open],.card.rt-card#aboutCard{--tg:linear-gradient(105deg,color-mix(in srgb,var(--surface) 96%,transparent) 0%,color-mix(in srgb,var(--surface) 90%,transparent) 60%,color-mix(in srgb,var(--surface) 74%,transparent) 100%)}
+#aboutCard{--bgp:60% 30%}#howCard{--bgp:20% 50%}
+main .tools .tool,main .tools .tool.gfeat,.card.rt-card:not(.ticket):not(.band),.card.rt-card#seasonCard[open],#home .hero,#howCard>summary{background-color:var(--surface)!important;background-image:var(--wallc),var(--tg),url(img/tiles/bg.webp)!important;background-size:260px 260px,cover,cover!important;background-position:-30px -10px,0 0,var(--bgp,center)!important;background-repeat:repeat,no-repeat,no-repeat!important}
+#howCard>summary{position:relative;overflow:hidden}
 </style>
 </body></html>
