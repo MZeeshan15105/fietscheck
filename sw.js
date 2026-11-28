@@ -1,5 +1,5 @@
 /* FietsCheck offline support. Change VERSION whenever you upload new files. */
-const VERSION = 'fietscheck-v1.25.0';
+const VERSION = 'fietscheck-v1.26.0';
 const FILES = ['./', 'index.html', 'privacy.html', 'terms.html', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/favicon-32.png', 'icons/apple-touch-icon.png',
   'fonts/archivo-var-latin.woff2', 'img/bike-city.webp', 'img/bike-ebike.webp', 'img/wall-light.svg', 'img/wall-dark.svg', 'img/wall-hero.svg',
