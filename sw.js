@@ -1,9 +1,9 @@
 /* FietsCheck offline support. Change VERSION whenever you upload new files. */
-const VERSION = 'fietscheck-v1.25.0';
+const VERSION = 'fietscheck-v1.26.0';
 const FILES = ['./', 'index.html', 'privacy.html', 'terms.html', 'manifest.webmanifest',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/favicon-32.png', 'icons/apple-touch-icon.png',
   'fonts/archivo-var-latin.woff2', 'img/bike-city.webp', 'img/bike-ebike.webp', 'img/wall-light.svg', 'img/wall-dark.svg', 'img/wall-hero.svg',
-  'img/tiles/bg.webp', 'img/tiles/fix.webp', 'img/tiles/find.webp', 'img/tiles/warranty.webp', 'img/tiles/check.webp', 'img/tiles/example.webp'];
+  'img/tiles/bg.webp', 'img/tiles/fix.webp', 'img/tiles/find.webp', 'img/tiles/warranty.webp', 'img/tiles/check.webp', 'img/tiles/example.webp', 'img/tiles/winter.webp', 'img/tiles/survey.webp', 'img/wall-card-light.svg', 'img/wall-card-dark.svg', 'img/tiles/tag.webp', 'img/tiles/bell.webp'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });
