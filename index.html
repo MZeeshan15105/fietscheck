@@ -688,7 +688,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
   </section>
 </main>
 <footer class="webfoot" id="about">
-  <details class="wf-more" id="howCard"><summary>How FietsCheck works</summary><section class="wf-band" aria-label="How FietsCheck works">
+  <details class="wf-more" id="howCard"><summary><img class="tobj tobj-tag" src="img/tiles/tag.webp" alt="">How FietsCheck works</summary><section class="wf-band" aria-label="How FietsCheck works">
     <div class="eyebrow" style="color:var(--mute-asphalt)">How it works</div>
     <h2 style="margin-top:8px">Know the likely fault <em>before you pay.</em></h2>
     <div class="wf-steps">
@@ -698,7 +698,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
     </div>
   </section></details>
   <div class="wf-about">
-    <div class="card rt-card" id="aboutCard"><div class="eyebrow">About</div><h2 class="as-h3" style="margin-top:6px">Built for Groningen cyclists</h2><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a class="tap44" href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
+    <div class="card rt-card" id="aboutCard"><img class="tobj tobj-bell" src="img/tiles/bell.webp" alt=""><div class="eyebrow">About</div><h2 class="as-h3" style="margin-top:6px">Built for Groningen cyclists</h2><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a class="tap44" href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
     <div class="card rt-card" id="surveyCard"><img class="tobj tobj-survey" src="img/tiles/survey.webp" alt=""><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
   </div>
   <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.25 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
@@ -2830,5 +2830,10 @@ main .tools .tool,main .tools .tool.gfeat,.card.rt-card:not(.ticket):not(.band),
  .tools .tool.gfeat .tobj-fix{height:70px;right:110px;margin-top:-35px}
  #surveyCard .tobj-survey{height:150px;right:24px;top:20px}
 }
+
+/* Objects for How it works (price tag) and About (bike bell) */
+#howCard>summary .tobj-tag{position:absolute;z-index:0;pointer-events:none;height:78px;right:26px;top:-16px;transform:rotate(16deg);filter:drop-shadow(0 8px 12px rgba(0,0,0,.25)) drop-shadow(0 2px 3px rgba(0,0,0,.2))}
+#aboutCard .tobj-bell{height:66px;right:14px;bottom:14px;top:auto;transform:rotate(-10deg)}
+@media (min-width:760px){#howCard>summary .tobj-tag{height:96px;right:60px;top:-20px}#aboutCard .tobj-bell{height:96px;right:28px;bottom:22px}}
 </style>
 </body></html>
