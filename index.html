@@ -2776,7 +2776,7 @@ main .tools .tool{--tw:var(--surface);--tt:var(--ink);--ts:var(--mute);position:
 #whOpenBtn{--bgp:70% 40%}.tobj-warranty{height:60px;right:-12px;top:2px;transform:rotate(9deg)}
 #quickBtn{--bgp:40% 80%}.tobj-check{height:60px;right:-4px;top:2px;transform:rotate(-10deg)}
 #demo{--bgp:85% 70%}.tobj-example{height:74px;right:-14px;top:-10px;transform:rotate(6deg)}
-.tools .tool.gfeat{--tw:#11161C;--tt:#F2F5F8;--ts:rgba(242,245,248,.72);border-color:#11161C;background-color:#11161C!important;min-height:88px!important;--bgp:50% 30%}
+.tools .tool.gfeat{min-height:88px!important;--bgp:50% 30%}
 .tools .tool.gfeat .tobj-fix{height:62px;right:64px;top:50%;margin-top:-31px;transform:rotate(-12deg)}
 .tools .tool.gfeat .gf-t,.tools .tool.gfeat .gf-go{position:relative;z-index:2}
 .tools .tool.gfeat .gf-t{max-width:52%}.tools .tool.gfeat .gf-t small{max-width:100%}
@@ -2792,5 +2792,16 @@ main .tools .tool{--tw:var(--surface);--tt:var(--ink);--ts:var(--mute);position:
 #surveyCard{--bgp:75% 35%}
 #surveyCard .tobj-survey{height:104px;right:-10px;top:-6px;transform:rotate(10deg)}
 #surveyCard>p{max-width:68%}
+
+/* Hero and featured card follow the app theme, same blurred photo as the tiles */
+main .tools .tool.gfeat{color:var(--ink);border-color:var(--line);background:var(--surface)!important;background-image:linear-gradient(105deg,color-mix(in srgb,var(--surface) 96%,transparent) 0%,color-mix(in srgb,var(--surface) 80%,transparent) 50%,color-mix(in srgb,var(--surface) 40%,transparent) 100%),url(img/tiles/bg.webp)!important;background-position:0 0,var(--bgp,center)!important;background-size:cover,cover!important;background-repeat:no-repeat!important}
+main .tools .tool.gfeat small{color:var(--mute);opacity:1}
+main .tools .tool.gfeat .gf-go{color:var(--signal-ink)}
+#home .hero{--asphalt:var(--surface);--mute-asphalt:var(--mute);--line-asphalt:var(--line);--on-asphalt:var(--ink);color:var(--ink);background-color:var(--surface)!important;background-image:linear-gradient(170deg,color-mix(in srgb,var(--surface) 95%,transparent) 0%,color-mix(in srgb,var(--surface) 86%,transparent) 60%,color-mix(in srgb,var(--surface) 70%,transparent) 100%),url(img/tiles/bg.webp)!important;background-size:cover,cover!important;background-position:0 0,40% 60%!important;background-repeat:no-repeat!important;box-shadow:var(--shadow),inset 0 0 0 1px var(--line)!important}
+#home .hero .eyebrow{color:var(--mute)!important}
+#home .hero .mini{border-color:var(--line)}
+#home .heroFoot .linkbtn{color:var(--signal-ink)}
+#home .hero #scanTxt{fill:var(--ink)}#home .hero #scanLine{stroke:var(--signal)}
+main .tools .tool.gfeat::after{background:radial-gradient(120% 140% at 0% 50%,rgba(255,107,44,.12),transparent 55%)}
 </style>
 </body></html>
