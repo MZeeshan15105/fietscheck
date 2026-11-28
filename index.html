@@ -2763,7 +2763,8 @@ main .tools .tool.gfeat{grid-column:1/-1;flex-direction:row;align-items:center;g
 </script>
 
 <style id="fc360">
-#b360{position:absolute;z-index:3;border-radius:18px;overflow:hidden;display:none}
+#b360{position:absolute;z-index:3;border-radius:18px;overflow:hidden;display:none;background:#2e2e2e;-webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 72%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 72%,transparent 100%)}
+#b360 .b3layer{}
 #b360.on{display:block;animation:b360in .5s cubic-bezier(.2,.8,.2,1)}
 @keyframes b360in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
 #b360 .b3dot{position:absolute;left:0;top:0;width:13px;height:13px;min-width:0;min-height:0;margin:-6.5px 0 0 -6.5px;border-radius:50%;border:0;padding:0;background:var(--signal,#ff6b2c);box-shadow:0 0 0 4px rgba(255,107,44,.3),0 0 0 2px #1a1d21 inset;cursor:pointer;transition:opacity .2s}
@@ -2778,9 +2779,9 @@ function place(){if(!box)return;const pr=svg.parentNode.getBoundingClientRect(),
 async function on(){
   if(!box){box=document.createElement('div');box.id='b360';svg.parentNode.insertBefore(box,svg.nextSibling);place();
     if(window.ResizeObserver)new ResizeObserver(place).observe(svg);window.addEventListener('resize',place);
-    const {mount}=await import('./vendor/bike360.js');
+    const {mount}=await import('./vendor/spin360.js');
     const labels={};svg.querySelectorAll('.dot').forEach(g=>{if(!labels[g.dataset.part])labels[g.dataset.part]=g.getAttribute('aria-label')});
-    api=mount(box,{labels,onPart:p=>{const d=svg.querySelector('.dot[data-part="'+p+'"] .core');if(d)d.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+    api=window.FC360=mount(box,{labels,onPart:p=>{const d=svg.querySelector('.dot[data-part="'+p+'"] .core');if(d)d.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
     const h=document.createElement('div');h.className='hint360';h.textContent='Drag to turn · tap a dot';box.appendChild(h);setTimeout(()=>h.style.opacity=0,3500);}
   place();box.classList.add('on');svg.classList.add('hid360');}
 function off(){if(box)box.classList.remove('on');svg.classList.remove('hid360')}
