@@ -2838,12 +2838,12 @@ main .tools .tool,main .tools .tool.gfeat,.card.rt-card:not(.ticket):not(.band),
 </style>
 <style id="fc360">
 #b360{position:absolute;z-index:3;display:none}
-#b360:before{content:'';position:absolute;left:12%;right:12%;bottom:6%;height:12%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.55),rgba(0,0,0,0))}
+#b360:before{content:'';position:absolute;left:12%;right:12%;bottom:6%;height:12%;border-radius:50%;background:radial-gradient(closest-side,rgba(0,0,0,.35),rgba(0,0,0,0))}
 #b360 .b3layer{}
 #b360.on{display:block;animation:b360in .5s cubic-bezier(.2,.8,.2,1)}
 @keyframes b360in{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
-#b360 .b3dot{position:absolute;left:0;top:0;width:11px;height:11px;min-width:0;min-height:0;margin:-5.5px 0 0 -5.5px;border-radius:50%;border:0;padding:0;background:var(--signal,#ff6b2c);box-shadow:0 0 0 4px rgba(255,107,44,.3),0 0 0 2px #1a1d21 inset;cursor:pointer;}
-#b360 .hint360{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);font:600 12px/1 var(--f-body,system-ui);color:rgba(255,255,255,.75);background:rgba(0,0,0,.45);padding:6px 10px;border-radius:999px;pointer-events:none;transition:opacity .6s}
+#b360 .b3dot{position:absolute;left:0;top:0;width:11px;height:11px;min-width:0;min-height:0;margin:-5.5px 0 0 -5.5px;border-radius:50%;border:0;padding:0;background:var(--signal,#ff6b2c);box-shadow:0 0 0 4px rgba(255,107,44,.3),0 0 0 2px var(--surface,#1a1d21) inset;cursor:pointer;}
+#b360 .hint360{position:absolute;left:50%;bottom:6px;transform:translateX(-50%);font:600 12px/1 var(--f-body,system-ui);color:var(--ink);background:color-mix(in srgb,var(--surface) 80%,transparent);box-shadow:0 0 0 1px var(--line);padding:6px 10px;border-radius:999px;pointer-events:none;transition:opacity .6s}
 #bike.hid360{visibility:hidden}
 #b360 .b3dot:after{content:'';position:absolute;inset:-14px;border-radius:50%}
 </style>
@@ -2860,6 +2860,12 @@ async function on(){
     const h=document.createElement('div');h.className='hint360';h.textContent='Drag to turn · tap a dot';box.appendChild(h);setTimeout(()=>h.style.opacity=0,3500);}
   place();box.classList.add('on');svg.classList.add('hid360');}
 function off(){if(box)box.classList.remove('on');svg.classList.remove('hid360')}
-seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));b.dataset.v==='360'?on():off()});
+function setView(v){seg.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v===v)));v==='360'?on():off()}
+const tseg=document.getElementById('typeSeg');
+seg.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+  /* the 360 model is the e-bike, so switch the bike type to match */
+  if(b.dataset.v==='360'){const eb=tseg&&tseg.querySelector('[data-t="ebike"]');if(eb&&eb.getAttribute('aria-pressed')!=='true')eb.click()}
+  setView(b.dataset.v)});
+if(tseg)tseg.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&b.dataset.t==='city')setView('photo')});
 </script>
 </body></html>

@@ -14,7 +14,7 @@ export function mount(el,opts={}){
   const layer=document.createElement('div');layer.style.cssText='position:absolute;inset:0;pointer-events:none';el.appendChild(layer);
   const dots={};for(const p in A){const b=document.createElement('button');b.type='button';b.className='b3dot';b.dataset.part=p;b.setAttribute('aria-label',(opts.labels&&opts.labels[p])||p);
     b.onclick=e=>{e.stopPropagation();opts.onPart&&opts.onPart(p)};layer.appendChild(b);dots[p]=b}
-  let pos=-N,vel=0,drag=false,lx=0,last=performance.now(),raf,intro=true,show=0;
+  let t0=0,pos=-N,vel=0,drag=false,lx=0,last=performance.now(),raf,intro=true,show=0;
   const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
   cv.addEventListener('pointerdown',e=>{drag=true;intro=false;lx=e.clientX;vel=0;cv.setPointerCapture(e.pointerId);cv.style.cursor='grabbing'});
   cv.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-lx;lx=e.clientX;const step=-dx/el.clientWidth*N*1.1;pos+=step;vel=step});
@@ -25,9 +25,9 @@ export function mount(el,opts={}){
       const back=q.depth<-60;b.style.transform=`translate(${x}px,${y}px) scale(${back?.7:1})`;b.style.opacity=(back?0:1)*show;b.style.pointerEvents=(back||show<.5)?'none':'auto'}}
   function loop(now){const dt=Math.min(.05,(now-last)/1000);last=now;
     let moving=drag;
-    if(intro&&!drag){if(reduce||pos>=0){pos=0;intro=false}else{pos=Math.min(0,pos+dt*N/2.6*Math.max(.12,Math.min(1,-pos/N*1.6)));moving=true}}
+    if(intro&&!drag){if(!t0)t0=now;const k=reduce?1:Math.min(1,(now-t0)/1800);pos=-N*(1-(1-Math.pow(1-k,3)));if(k>=1){pos=0;intro=false}else moving=true}
     else if(!drag){if(Math.abs(vel)>.02){pos+=vel;vel*=.88;moving=true}else{const r=Math.round(pos);if(Math.abs(r-pos)>.01){pos+=(r-pos)*.3;moving=true}}}
-    show=Math.max(0,Math.min(1,show+(moving?-dt*6:dt*3)));
+    show=Math.max(0,Math.min(1,show+(moving?-dt*6:dt*4)));
     draw();raf=requestAnimationFrame(loop)}
   raf=requestAnimationFrame(loop);
   return {setFrame:f=>{pos=f;vel=0;intro=false;show=1;draw()},stop:()=>cancelAnimationFrame(raf)};
