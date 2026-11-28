@@ -699,7 +699,7 @@ body.lean .webfoot>*:not(.wf-legal){display:none}
   </section></details>
   <div class="wf-about">
     <div class="card"><div class="eyebrow">About</div><h2 class="as-h3" style="margin-top:6px">Built for Groningen cyclists</h2><p>FietsCheck was born in Groningen, the city of bikes. It helps riders understand a bike problem before they walk into a shop. It gives guidance, not a mechanic's inspection.</p><p style="margin-top:8px">Built by Zeeshan, a student who rides in Groningen every day. Every price and policy links to its source, and we earn nothing from the shops or brands we mention. Found a mistake? <a class="tap44" href="https://github.com/MZeeshan15105/fietscheck/issues" target="_blank" rel="noopener">Tell us</a>.</p><p style="margin-top:10px"><button class="btn" id="soundBtn" type="button" aria-pressed="true">Start-up bell: on</button></p><div class="wf-links"><a class="btn" href="#" id="installBtn" hidden>Install the app</a></div></div>
-    <div class="card"><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
+    <div class="card rt-card" id="surveyCard"><img class="tobj tobj-survey" src="img/tiles/survey.webp" alt=""><div class="eyebrow">Help us improve</div><h3 style="margin-top:6px">Two minutes, big help</h3><p>Tell us how you ride and what you need. The survey is anonymous: 19 quick taps, about 2 minutes. No names, no emails.</p><div class="wf-links"><a class="btn primary" href="https://docs.google.com/forms/d/e/1FAIpQLSefJd3zElslCvjRGRSAAn3g475yY-fl12nbJTRrJxc3Ce68pg/viewform" target="_blank" rel="noopener">Take the survey</a></div></div>
   </div>
   <div class="wf-legal"><span>© 2026 FietsCheck · Made in Groningen · Version 1.25 beta</span><span><a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a> · Guidance, not a mechanic's inspection.</span></div>
 </footer>
@@ -2027,7 +2027,7 @@ $('ovClose').addEventListener('click',()=>{$('overlay').hidden=true;setBg(false)
   function draw(){
     const n=items.filter((_,i)=>done[key+i]).length;
     const wasOpen=el.querySelector('details')&&el.querySelector('details').open;
-    el.innerHTML='<details class="card season fold"'+(wasOpen?' open':'')+'><summary>'+(winter?'Winter-ready checklist':'Spring check')+'<em>'+n+' of '+items.length+'</em></summary><div class="sbar" aria-hidden="true"><i style="width:'+(n/items.length*100)+'%"></i></div>'+items.map((x,i)=>'<label class="chk"><input type="checkbox" data-i="'+i+'"'+(done[key+i]?' checked':'')+'><span>'+esc(x)+'</span></label>').join('')+'</details>';
+    el.innerHTML='<details class="card season fold rt-card" id="seasonCard"'+(wasOpen?' open':'')+'><summary><img class="tobj tobj-winter" src="img/tiles/winter.webp" alt="">'+(winter?'Winter-ready checklist':'Spring check')+'<em>'+n+' of '+items.length+'</em></summary><div class="sbar" aria-hidden="true"><i style="width:'+(n/items.length*100)+'%"></i></div>'+items.map((x,i)=>'<label class="chk"><input type="checkbox" data-i="'+i+'"'+(done[key+i]?' checked':'')+'><span>'+esc(x)+'</span></label>').join('')+'</details>';
     el.querySelectorAll('input').forEach(c=>c.onchange=()=>{done[key+c.dataset.i]=c.checked;try{localStorage.setItem('fc_season',JSON.stringify(done))}catch(_){}draw()});
   }
   draw();
@@ -2781,5 +2781,16 @@ main .tools .tool{--tw:var(--surface);--tt:var(--ink);--ts:var(--mute);position:
 .tools .tool.gfeat .gf-t,.tools .tool.gfeat .gf-go{position:relative;z-index:2}
 .tools .tool.gfeat .gf-t{max-width:52%}.tools .tool.gfeat .gf-t small{max-width:100%}
 @media (prefers-reduced-motion:reduce){.tools .tool .tobj{transition:none}}
+
+/* Same real-object style on the Winter checklist and Survey cards */
+.card.rt-card:not(.ticket):not(.band){--tw:var(--surface);position:relative;overflow:hidden;isolation:isolate;background:var(--surface)!important;background-image:linear-gradient(105deg,color-mix(in srgb,var(--tw) 96%,transparent) 0%,color-mix(in srgb,var(--tw) 84%,transparent) 55%,color-mix(in srgb,var(--tw) 45%,transparent) 100%),url(img/tiles/bg.webp)!important;background-position:0 0,var(--bgp,center)!important;background-size:cover,cover!important;background-repeat:no-repeat!important}
+.rt-card>*:not(.tobj){position:relative;z-index:2}
+.rt-card .tobj{position:absolute;z-index:1;pointer-events:none;filter:drop-shadow(0 10px 14px rgba(0,0,0,.28)) drop-shadow(0 2px 3px rgba(0,0,0,.22))}
+#seasonCard{--bgp:30% 70%}#seasonCard>summary{position:static}#seasonCard>summary>*:not(.tobj){position:relative;z-index:2}
+#seasonCard .tobj-winter{height:74px;right:98px;top:-12px;transform:rotate(22deg);z-index:1}
+.card.rt-card#seasonCard[open]{background-image:linear-gradient(105deg,color-mix(in srgb,var(--tw) 96%,transparent) 0%,color-mix(in srgb,var(--tw) 90%,transparent) 60%,color-mix(in srgb,var(--tw) 76%,transparent) 100%),url(img/tiles/bg.webp)!important}
+#surveyCard{--bgp:75% 35%}
+#surveyCard .tobj-survey{height:104px;right:-10px;top:-6px;transform:rotate(10deg)}
+#surveyCard>p{max-width:68%}
 </style>
 </body></html>
