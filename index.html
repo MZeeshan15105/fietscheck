@@ -2770,14 +2770,15 @@ main .tools .tool{--tw:var(--surface);--tt:var(--ink);--ts:var(--mute);position:
 .tools .tool b{position:relative;z-index:2;color:var(--tt);font-family:var(--f-head);font-weight:700;font-size:15px;letter-spacing:-.01em;margin-top:auto;}
 .tools .tool small{position:relative;z-index:2;color:var(--ts);max-width:62%}
 .tools .tool .tobj{position:absolute;z-index:1;pointer-events:none;filter:drop-shadow(0 10px 14px rgba(0,0,0,.28)) drop-shadow(0 2px 3px rgba(0,0,0,.22));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
-.tools .tool:active .tobj{transform:scale(.96) rotate(-2deg)}
-@media (hover:hover){.tools .tool:hover .tobj{transform:scale(1.05) rotate(-3deg) translateY(-3px)}}
-#baOpenBtn{--bgp:20% 60%}.tobj-find{height:70px;right:-8px;top:-2px;transform:rotate(-8deg)}
-#whOpenBtn{--bgp:70% 40%}.tobj-warranty{height:60px;right:-12px;top:2px;transform:rotate(9deg)}
-#quickBtn{--bgp:40% 80%}.tobj-check{height:60px;right:-4px;top:2px;transform:rotate(-10deg)}
-#demo{--bgp:85% 70%}.tobj-example{height:74px;right:-14px;top:-10px;transform:rotate(6deg)}
+.tools .tool .tobj{transform:rotate(var(--r,0deg))}
+.tools .tool:active .tobj{transform:scale(.96) rotate(var(--r,0deg))}
+@media (hover:hover){.tools .tool:hover .tobj{transform:translateY(-3px) scale(1.05) rotate(calc(var(--r,0deg) - 3deg))}}
+#baOpenBtn{--bgp:20% 60%}.tobj-find{height:70px;right:-8px;top:-2px;--r:-8deg}
+#whOpenBtn{--bgp:70% 40%}.tobj-warranty{height:60px;right:-12px;top:2px;--r:9deg}
+#quickBtn{--bgp:40% 80%}.tobj-check{height:60px;right:-4px;top:2px;--r:-10deg}
+#demo{--bgp:85% 70%}.tobj-example{height:74px;right:-14px;top:-10px;--r:6deg}
 .tools .tool.gfeat{min-height:88px!important;--bgp:50% 30%}
-.tools .tool.gfeat .tobj-fix{height:62px;right:64px;top:50%;margin-top:-31px;transform:rotate(-12deg)}
+.tools .tool.gfeat .tobj-fix{height:62px;right:64px;top:50%;margin-top:-31px;--r:-12deg}
 .tools .tool.gfeat .gf-t,.tools .tool.gfeat .gf-go{position:relative;z-index:2}
 .tools .tool.gfeat .gf-t{max-width:52%}.tools .tool.gfeat .gf-t small{max-width:100%}
 @media (prefers-reduced-motion:reduce){.tools .tool .tobj{transition:none}}
@@ -2790,7 +2791,7 @@ main .tools .tool{--tw:var(--surface);--tt:var(--ink);--ts:var(--mute);position:
 #seasonCard .tobj-winter{height:74px;right:98px;top:-12px;transform:rotate(22deg);z-index:1}
 .card.rt-card#seasonCard[open]{background-image:linear-gradient(105deg,color-mix(in srgb,var(--tw) 96%,transparent) 0%,color-mix(in srgb,var(--tw) 90%,transparent) 60%,color-mix(in srgb,var(--tw) 76%,transparent) 100%),url(img/tiles/bg.webp)!important}
 #surveyCard{--bgp:75% 35%}
-#surveyCard .tobj-survey{height:104px;right:-10px;top:-6px;transform:rotate(10deg)}
+#surveyCard .tobj-survey{height:100px;right:-8px;top:6px;transform:rotate(10deg)}
 #surveyCard>p{max-width:68%}
 
 /* Hero and featured card follow the app theme, same blurred photo as the tiles */
@@ -2813,5 +2814,21 @@ main .tools .tool.gfeat::after{background:radial-gradient(120% 140% at 0% 50%,rg
 #aboutCard{--bgp:60% 30%}#howCard{--bgp:20% 50%}
 main .tools .tool,main .tools .tool.gfeat,.card.rt-card:not(.ticket):not(.band),.card.rt-card#seasonCard[open],#home .hero,#howCard>summary{background-color:var(--surface)!important;background-image:var(--wallc),var(--tg),url(img/tiles/bg.webp)!important;background-size:260px 260px,cover,cover!important;background-position:-30px -10px,0 0,var(--bgp,center)!important;background-repeat:repeat,no-repeat,no-repeat!important}
 #howCard>summary{position:relative;overflow:hidden}
+
+/* Inspection fixes */
+.tools #demo.tool{padding:14px}
+/* How it works band follows the theme too */
+.webfoot .wf-band{--asphalt:var(--surface);--asphalt2:color-mix(in srgb,var(--surface) 70%,transparent);--line-asphalt:var(--line);--mute-asphalt:var(--mute);--on-asphalt:var(--ink);color:var(--ink);background-color:var(--surface);background-image:var(--wallc),linear-gradient(170deg,color-mix(in srgb,var(--surface) 95%,transparent),color-mix(in srgb,var(--surface) 82%,transparent)),url(img/tiles/bg.webp);background-size:260px 260px,cover,cover;background-position:-30px -10px,0 0,30% 50%;background-repeat:repeat,no-repeat,no-repeat;box-shadow:var(--shadow),inset 0 0 0 1px var(--line)}
+.webfoot .wf-st{backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.webfoot .wf-st b{color:var(--signal-ink)}
+/* Wide screens: calmer photo, bigger objects kept inside the card */
+@media (min-width:760px){
+ :root{--tg:linear-gradient(100deg,color-mix(in srgb,var(--surface) 96%,transparent) 0%,color-mix(in srgb,var(--surface) 90%,transparent) 55%,color-mix(in srgb,var(--surface) 66%,transparent) 100%)}
+ main .tools .tool{min-height:120px}
+ .tobj-find{height:104px;right:18px;top:8px}.tobj-warranty{height:92px;right:22px;top:12px}
+ .tobj-check{height:92px;right:22px;top:12px}.tobj-example{height:108px;right:16px;top:4px}
+ .tools .tool.gfeat .tobj-fix{height:70px;right:110px;margin-top:-35px}
+ #surveyCard .tobj-survey{height:150px;right:24px;top:20px}
+}
 </style>
 </body></html>
