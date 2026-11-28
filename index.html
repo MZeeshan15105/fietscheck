@@ -2764,19 +2764,19 @@ main .tools .tool.gfeat{grid-column:1/-1;flex-direction:row;align-items:center;g
 
 <style id="fcRealTiles">
 /* Real-object tiles (Adobe Stock objects on a photo background) */
-main .tools .tool,main .tools .tool.gfeat{position:relative;overflow:hidden;isolation:isolate;min-height:104px;color:#fff;border:1px solid rgba(255,255,255,.08);
-  background:#121417!important;background-image:linear-gradient(105deg,rgba(14,16,19,.94) 0%,rgba(14,16,19,.74) 50%,rgba(14,16,19,.3) 100%),url(img/tiles/bg.webp)!important;background-position:0 0,var(--bgp,center)!important;background-size:cover,cover!important;background-repeat:no-repeat!important}
+main .tools .tool{--tw:var(--surface);--tt:var(--ink);--ts:var(--mute);position:relative;overflow:hidden;isolation:isolate;min-height:104px;color:var(--tt);border:1px solid var(--line);
+  background:var(--surface)!important;background-image:linear-gradient(105deg,color-mix(in srgb,var(--tw) 96%,transparent) 0%,color-mix(in srgb,var(--tw) 80%,transparent) 50%,color-mix(in srgb,var(--tw) 40%,transparent) 100%),url(img/tiles/bg.webp)!important;background-position:0 0,var(--bgp,center)!important;background-size:cover,cover!important;background-repeat:no-repeat!important}
 .tools .tool .tic{display:none}
-.tools .tool b{position:relative;z-index:2;color:#fff;font-family:var(--f-head);font-weight:700;font-size:15px;letter-spacing:-.01em;margin-top:auto;text-shadow:0 2px 12px rgba(0,0,0,.6)}
-.tools .tool small{position:relative;z-index:2;color:rgba(255,255,255,.78);max-width:62%;text-shadow:0 1px 8px rgba(0,0,0,.7)}
-.tools .tool .tobj{position:absolute;z-index:1;pointer-events:none;filter:drop-shadow(0 14px 18px rgba(0,0,0,.55)) drop-shadow(0 2px 4px rgba(0,0,0,.4));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.tools .tool b{position:relative;z-index:2;color:var(--tt);font-family:var(--f-head);font-weight:700;font-size:15px;letter-spacing:-.01em;margin-top:auto;}
+.tools .tool small{position:relative;z-index:2;color:var(--ts);max-width:62%}
+.tools .tool .tobj{position:absolute;z-index:1;pointer-events:none;filter:drop-shadow(0 10px 14px rgba(0,0,0,.28)) drop-shadow(0 2px 3px rgba(0,0,0,.22));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
 .tools .tool:active .tobj{transform:scale(.96) rotate(-2deg)}
 @media (hover:hover){.tools .tool:hover .tobj{transform:scale(1.05) rotate(-3deg) translateY(-3px)}}
 #baOpenBtn{--bgp:20% 60%}.tobj-find{height:70px;right:-8px;top:-2px;transform:rotate(-8deg)}
 #whOpenBtn{--bgp:70% 40%}.tobj-warranty{height:60px;right:-12px;top:2px;transform:rotate(9deg)}
 #quickBtn{--bgp:40% 80%}.tobj-check{height:60px;right:-4px;top:2px;transform:rotate(-10deg)}
 #demo{--bgp:85% 70%}.tobj-example{height:74px;right:-14px;top:-10px;transform:rotate(6deg)}
-.tools .tool.gfeat{min-height:88px!important;--bgp:50% 30%}
+.tools .tool.gfeat{--tw:#11161C;--tt:#F2F5F8;--ts:rgba(242,245,248,.72);border-color:#11161C;background-color:#11161C!important;min-height:88px!important;--bgp:50% 30%}
 .tools .tool.gfeat .tobj-fix{height:62px;right:64px;top:50%;margin-top:-31px;transform:rotate(-12deg)}
 .tools .tool.gfeat .gf-t,.tools .tool.gfeat .gf-go{position:relative;z-index:2}
 .tools .tool.gfeat .gf-t{max-width:52%}.tools .tool.gfeat .gf-t small{max-width:100%}
